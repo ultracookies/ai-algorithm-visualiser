@@ -2,6 +2,7 @@ import React from "react";
 import WeightTable from "./weight-table-components/weight-table";
 
 import "./globals.css";
+import WeightTableContainer from "./weight-table-components/weight-table-indv-container";
 
 function generateRandomArray(
   rowCount: number,
@@ -17,7 +18,7 @@ function generateRandomArray(
 }
 
 export default function Page() {
-  const layer = generateRandomArray(5, 5);
+  const weights = generateRandomArray(20, 5);
 
-  return <WeightTable layer={layer} />;
+  return <WeightTable weights={weights} />;
 }

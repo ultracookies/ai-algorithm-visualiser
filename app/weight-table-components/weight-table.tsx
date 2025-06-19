@@ -3,48 +3,74 @@
 import { FixedSizeGrid } from "react-window";
 
 import "./weighttablestyles.css";
+import { useState, CSSProperties } from "react";
 
-interface WeightTableProps {
-  layer: number[][];
+export interface WeightTableProps {
+  weights: number[][];
+}
+interface GridCellProps {
+  columnIndex: number;
+  data: number[][];
+  rowIndex: number;
+  style: CSSProperties;
 }
 
-export default function WeightTable({ layer }: WeightTableProps) {
-  const Cell = ({ columnIndex, rowIndex, style }) => (
-    <div
-      style={{
-        ...style,
-        padding: "1px", // creates a "gap" between cells
-        boxSizing: "border-box",
-      }}
-    >
+const CELL_WIDTH = 200;
+const CELL_HEIGHT = 50;
+
+const GRID_HEIGHT = 250;
+const GRID_WIDTH = 800;
+
+function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
+  if (columnIndex === 0 && rowIndex > 0) {
+    return (
       <div
         style={{
-          width: "100%",
-          height: "100%",
-          background: "white", // cell color
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          ...style,
         }}
+        className="cell"
       >
-        {layer[rowIndex][columnIndex]}
+        <div>{rowIndex}</div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (columnIndex > 0 && rowIndex === 0) {
+    return (
+      <div className="cell" style={{ ...style }}>
+        {columnIndex}
+      </div>
+    );
+  }
+
+  if (columnIndex > 0 && rowIndex > 0) {
+    return (
+      <div style={{ ...style }} className="cell">
+        {data[rowIndex - 1][columnIndex - 1]}
+      </div>
+    );
+  }
+
+  return null;
+}
+
+const WeightTable = ({ weights }: WeightTableProps) => {
+  const rowCount = weights.length;
+  const columnCount = weights[0].length;
 
   return (
     <FixedSizeGrid
-      rowCount={layer.length}
-      rowHeight={50}
-      columnCount={layer[0].length}
-      columnWidth={200}
-      height={250}
-      width={600}
-      style={{
-        background: "black",
-      }}
+      rowCount={rowCount + 1}
+      columnCount={columnCount + 1}
+      rowHeight={CELL_HEIGHT}
+      columnWidth={CELL_WIDTH}
+      height={GRID_HEIGHT}
+      width={GRID_WIDTH}
+      itemData={weights}
     >
-      {Cell}
+      {GridCell}
     </FixedSizeGrid>
   );
-}
+};
+
+export default WeightTable;
