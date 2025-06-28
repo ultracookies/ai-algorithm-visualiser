@@ -1,8 +1,12 @@
 import React from "react";
-import WeightTable from "./weight-table-components/weight-table";
 
 import "./globals.css";
-import WeightTableContainer from "./weight-table-components/weight-table-indv-container";
+import WeightTablesContainer from "./weight-table-components/weight-tables-container";
+import { WeightTableContainerProps } from "./weight-table-types";
+import NeuralNetworkSVG from "./neural-network-components/neural-network-visual";
+import { MediaControls, SeekBar } from "./playback-control-components/seek-bar";
+import { LineGraph } from "./training-metric-components";
+import hi from "./photos/hi.jpeg";
 
 function generateRandomArray(
   rowCount: number,
@@ -17,8 +21,77 @@ function generateRandomArray(
   return layer;
 }
 
-export default function Page() {
-  const weights = generateRandomArray(20, 5);
-
-  return <WeightTable weights={weights} />;
+function getDims(layers: WeightTableContainerProps[]): number[] {
+  const dims: number[] = [];
+  dims.push(layers[0].layerWeights.length, layers[0].layerWeights[0].length);
+  for (let i = 1; i < layers.length; ++i) {
+    dims.push(layers[i].layerWeights[0].length);
+  }
+  return dims;
 }
+
+export default function Page() {
+  const inputLayer: WeightTableContainerProps = {
+    layerName: "Input Layer",
+    layerWeights: generateRandomArray(5, 20),
+  };
+
+  const hiddenLayer: WeightTableContainerProps = {
+    layerName: "Hidden Layer",
+    layerWeights: generateRandomArray(20, 10),
+  };
+
+  const hiddenLayer2: WeightTableContainerProps = {
+    layerName: "Hidden Layer 2",
+    layerWeights: generateRandomArray(10, 5),
+  };
+
+  const outputLayer: WeightTableContainerProps = {
+    layerName: "Output Layer",
+    layerWeights: generateRandomArray(5, 3),
+  };
+
+  const network: WeightTableContainerProps[] = [
+    inputLayer,
+    hiddenLayer,
+    hiddenLayer2,
+    outputLayer,
+  ];
+
+  const networkDims = getDims(network);
+  return (
+    <div className="flex flex-row">
+      <div className="flex flex-col items-center" style={{ width: "45%" }}>
+        <NeuralNetworkSVG networkDims={networkDims} />
+        <MediaControls />
+        <SeekBar numEpisodes={200} />
+        <button className="bg-blue-500 text-white p-2 rounded-md w-50 m-4">
+          Play Greedy Simulation
+        </button>
+        <SimulationStream />
+        <LineGraph numEpisodes={200} />
+      </div>
+      <div className="flex flex-col" style={{ width: "55%" }}>
+        <WeightTablesContainer network={network} />
+        <LineGraph numEpisodes={200} />
+        <LineGraph numEpisodes={200} />
+        <LineGraph numEpisodes={200} />
+      </div>
+    </div>
+  );
+}
+
+const SimulationStream = () => {
+  return (
+    <div
+      className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
+      style={{ width: "auto" }}
+    >
+      <img
+        src={hi.src}
+        alt="Gym Environment Stream"
+        className="w-full h-full object-cover rounded-md"
+      />
+    </div>
+  );
+};

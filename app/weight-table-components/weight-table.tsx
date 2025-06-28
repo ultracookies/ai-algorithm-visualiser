@@ -3,11 +3,8 @@
 import { FixedSizeGrid } from "react-window";
 
 import "./weighttablestyles.css";
-import { useState, CSSProperties } from "react";
+import { CSSProperties } from "react";
 
-export interface WeightTableProps {
-  weights: number[][];
-}
 interface GridCellProps {
   columnIndex: number;
   data: number[][];
@@ -15,7 +12,7 @@ interface GridCellProps {
   style: CSSProperties;
 }
 
-const CELL_WIDTH = 200;
+const CELL_WIDTH = 175;
 const CELL_HEIGHT = 50;
 
 const GRID_HEIGHT = 250;
@@ -54,9 +51,9 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
   return null;
 }
 
-const WeightTable = ({ weights }: WeightTableProps) => {
-  const rowCount = weights.length;
-  const columnCount = weights[0].length;
+const WeightTable = ({ layerWeights }: { layerWeights: number[][] }) => {
+  const rowCount = layerWeights.length;
+  const columnCount = layerWeights[0].length;
 
   return (
     <FixedSizeGrid
@@ -66,7 +63,8 @@ const WeightTable = ({ weights }: WeightTableProps) => {
       columnWidth={CELL_WIDTH}
       height={GRID_HEIGHT}
       width={GRID_WIDTH}
-      itemData={weights}
+      itemData={layerWeights}
+      style={{ color: "white", fontSize: "12px" }}
     >
       {GridCell}
     </FixedSizeGrid>
