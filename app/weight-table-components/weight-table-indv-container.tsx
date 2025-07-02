@@ -17,7 +17,7 @@ export default function WeightTableContainer({
         border: "1px solid #fff",
         borderRadius: "20px",
       }}
-      className="items-center dark:bg-slate-800 float-right w-175 p-3 m-2"
+      className="items-center dark:bg-slate-800 float-right w-175 p-3"
     >
       <div className="flex gap-x-4">
         <button

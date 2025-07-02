@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 
 import "./globals.css";
 import WeightTablesContainer from "./weight-table-components/weight-tables-container";
@@ -60,26 +61,75 @@ export default function Page() {
 
   const networkDims = getDims(network);
   return (
-    <div className="flex flex-row">
-      <div className="flex flex-col items-center" style={{ width: "45%" }}>
-        <NeuralNetworkSVG networkDims={networkDims} />
-        <MediaControls />
-        <SeekBar numEpisodes={200} />
-        <button className="bg-blue-500 text-white p-2 rounded-md w-50 m-4">
-          Play Greedy Simulation
-        </button>
-        <SimulationStream />
-        <LineGraph numEpisodes={200} />
+    <>
+      <div className="flex justify-center">
+        <h1 className="text-white text-4xl font-bold m-4">Deep Q Network</h1>
       </div>
-      <div className="flex flex-col" style={{ width: "55%" }}>
-        <WeightTablesContainer network={network} />
-        <LineGraph numEpisodes={200} />
-        <LineGraph numEpisodes={200} />
-        <LineGraph numEpisodes={200} />
+
+      <div className="flex flex-col">
+        <div className="flex flex-row mt-5">
+          <div className="flex flex-col items-center" style={{ width: "45%" }}>
+            <NeuralNetworkSVG networkDims={networkDims} />
+            <MediaControls />
+            <SeekBar numEpisodes={200} />
+            <GreedySimulationContainer />
+          </div>
+          <NeuralNetworkTrainingMetricsDisplay network={network} />
+        </div>
+        <DeepQNetworkDescription />
       </div>
-    </div>
+    </>
   );
 }
+
+const GreedySimulationContainer = () => {
+  return (
+    <>
+      <button className="bg-blue-500 text-white p-2 rounded-md w-50 m-4">
+        Play Greedy Simulation
+      </button>
+      <SimulationStream />
+      <LineGraph numEpisodes={200} />
+    </>
+  );
+};
+
+const NeuralNetworkTrainingMetricsDisplay = ({
+  network,
+}: {
+  network: WeightTableContainerProps[];
+}) => {
+  return (
+    <div className="flex flex-col" style={{ width: "auto" }}>
+      <WeightTablesContainer network={network} />
+      <LineGraph numEpisodes={200} />
+      <LineGraph numEpisodes={200} />
+      <LineGraph numEpisodes={200} />
+    </div>
+  );
+};
+
+const DeepQNetworkDescription = () => {
+  return (
+    <>
+      <p className="text-white text-2xl font-bold m-4">
+        The Deep Q Network is a type of reinforcement learning algorithm that
+        uses a neural network to approximate the Q-function. The Q-function is a
+        function that maps a state and action to a scalar value, which
+        represents the expected reward for taking that action in that state.
+      </p>
+      <br />
+      <p className="text-white text-2xl font-bold m-4">
+        The Deep Q Network is a type of reinforcement learning algorithm that
+        uses a neural network to approximate the Q-function. The Q-function is a
+        function that maps a state and action to a scalar value, which
+        represents the expected reward for taking that action in that state. The
+        Deep Q Network is a type of reinforcement learning algorithm that uses a
+        neural network to approximate the Q-function.
+      </p>
+    </>
+  );
+};
 
 const SimulationStream = () => {
   return (

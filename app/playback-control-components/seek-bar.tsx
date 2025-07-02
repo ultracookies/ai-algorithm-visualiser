@@ -4,20 +4,35 @@ import { useState } from "react";
 
 // MediaControls.tsx
 import React from "react";
-import { Rewind, Pause, FastForward } from "lucide-react";
+import { Rewind, Pause, FastForward, Play } from "lucide-react";
 
 const iconButtonClasses =
   "flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-md transition";
 
-export function MediaControls() {
+const PlayPauseButton = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const toggle = () => setIsPlaying(!isPlaying);
+
   return (
-    <div className="flex gap-10 justify-center">
+    <button
+      className="flex justify-center items-center bg-blue-500 text-white w-12 h-12 rounded-full transition-all duration-300 ease-in-out hover:scale-110"
+      onClick={toggle}
+    >
+      {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+    </button>
+  );
+};
+
+export function MediaControls() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const toggle = () => setIsPlaying(!isPlaying);
+
+  return (
+    <div className="flex gap-10 justify-center mt-7">
       <button className={iconButtonClasses} aria-label="Rewind">
         <Rewind />
       </button>
-      <button className={iconButtonClasses} aria-label="Pause">
-        <Pause />
-      </button>
+      <PlayPauseButton />
       <button className={iconButtonClasses} aria-label="Fast Forward">
         <FastForward />
       </button>

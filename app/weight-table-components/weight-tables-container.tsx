@@ -8,16 +8,17 @@ export default function WeightTablesContainer({
 }) {
   return (
     <div
-      className="flex flex-col gap-4 w-full border-white border-2 rounded-md items-center"
-      style={{ overflow: "auto", height: "600px" }}
+      className="flex flex-col border-white border-2 p-6 rounded-md items-center bg-slate-900 overflow-scroll"
+      style={{ height: "500px" }}
     >
       {Array.from(network).map((layer, i) => {
         return (
-          <WeightTableContainer
-            key={i}
-            layerName={layer.layerName}
-            layerWeights={layer.layerWeights}
-          />
+          <div className="mt-4 mb-4" key={i}>
+            <WeightTableContainer
+              layerName={layer.layerName}
+              layerWeights={layer.layerWeights}
+            />
+          </div>
         );
       })}
     </div>
