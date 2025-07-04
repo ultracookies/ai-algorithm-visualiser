@@ -8,6 +8,7 @@ import NeuralNetworkSVG from "./neural-network-components/neural-network-visual"
 import { MediaControls, SeekBar } from "./playback-control-components/seek-bar";
 import { LineGraph } from "./training-metric-components";
 import hi from "./photos/hi.jpeg";
+import ClientNetworkController from "./ClientNetworkController";
 
 function generateRandomArray(
   rowCount: number,
@@ -86,51 +87,13 @@ export default function Page() {
       <div className="flex justify-center">
         <h1 className="text-white text-4xl font-bold m-4">Deep Q Network</h1>
       </div>
-
+      <ClientNetworkController networkDims={networkDims} network={network} />
       <div className="flex flex-col">
-        <div className="flex flex-row mt-5">
-          {/* parent component */}
-
-          <div className="flex flex-col items-center" style={{ width: "45%" }}>
-            <NeuralNetworkSVG networkDims={networkDims} />
-            <MediaControls />
-            <SeekBar numEpisodes={200} />
-          </div>
-          <NeuralNetworkTrainingMetricsDisplay network={network} />
-        </div>
-        <GreedySimulationContainer />
         <DeepQNetworkDescription />
       </div>
     </>
   );
 }
-
-const GreedySimulationContainer = () => {
-  return (
-    <>
-      <button className="bg-blue-500 text-white p-2 rounded-md w-50 m-4">
-        Play Greedy Simulation
-      </button>
-      <SimulationStream />
-      <LineGraph numEpisodes={200} />
-    </>
-  );
-};
-
-const NeuralNetworkTrainingMetricsDisplay = ({
-  network,
-}: {
-  network: WeightTableContainerProps[];
-}) => {
-  return (
-    <div className="flex flex-col" style={{ width: "auto" }}>
-      <WeightTablesContainer network={network} />
-      <LineGraph numEpisodes={200} />
-      <LineGraph numEpisodes={200} />
-      <LineGraph numEpisodes={200} />
-    </div>
-  );
-};
 
 const DeepQNetworkDescription = () => {
   return (
@@ -151,20 +114,5 @@ const DeepQNetworkDescription = () => {
         neural network to approximate the Q-function.
       </p>
     </>
-  );
-};
-
-const SimulationStream = () => {
-  return (
-    <div
-      className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
-      style={{ width: "auto" }}
-    >
-      <img
-        src={hi.src}
-        alt="Gym Environment Stream"
-        className="w-full h-full object-cover rounded-md"
-      />
-    </div>
   );
 };
