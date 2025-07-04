@@ -1,5 +1,6 @@
-import React from "react";
-import { WeightTableContainerProps } from "../weight-table-types";
+"use client";
+
+import React, { useState } from "react";
 
 const layerRadius = 8;
 const verticalSpacing = 30;
@@ -14,6 +15,10 @@ const getNeuronYPositions = (count: number): number[] => {
 };
 
 const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
+  const [selectedNeurons, setSelectedNeurons] = useState<Set<string>>(
+    new Set()
+  );
+
   const layerCount = networkDims.length;
   const layerPositions = Array.from({ length: layerCount }, (_, i) => {
     if (layerCount === 1) return 300;
@@ -27,8 +32,53 @@ const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
     getNeuronYPositions(count)
   );
 
+  const handleNeuronClick = (layerIndex: number, neuronIndex: number) => {
+    const neuronKey = `${layerIndex}-${neuronIndex}`;
+    setSelectedNeurons((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(neuronKey)) {
+        newSet.delete(neuronKey);
+      } else {
+        newSet.add(neuronKey);
+      }
+      return newSet;
+    });
+  };
+
+  const getNeuronFill = (layerIndex: number, neuronIndex: number) => {
+    const neuronKey = `${layerIndex}-${neuronIndex}`;
+    return selectedNeurons.has(neuronKey) ? "#ef4444" : "#1d4ed8";
+  };
+
+  const getNeuronClass = (layerIndex: number, neuronIndex: number) => {
+    const neuronKey = `${layerIndex}-${neuronIndex}`;
+    return selectedNeurons.has(neuronKey) ? "neuron selected" : "neuron";
+  };
+
   return (
     <div className="flex flex-col gap-4">
+      <style jsx>{`
+        .neuron {
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .neuron.selected {
+          filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 16px #ef4444);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%,
+          100% {
+            filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 16px #ef4444);
+          }
+          50% {
+            filter: drop-shadow(0 0 12px #ef4444) drop-shadow(0 0 24px #ef4444);
+          }
+        }
+      `}</style>
+
       <svg viewBox="0 0 600 600" className="w-150 h-auto">
         {/* Connections */}
         {neurons.map((layer, layerIndex) => {
@@ -57,7 +107,9 @@ const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
               cx={layerPositions[layerIndex]}
               cy={y}
               r={layerRadius}
-              fill="#1d4ed8"
+              fill={getNeuronFill(layerIndex, i)}
+              onClick={() => handleNeuronClick(layerIndex, i)}
+              className={getNeuronClass(layerIndex, i)}
             />
           ))
         )}

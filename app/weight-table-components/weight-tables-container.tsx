@@ -1,3 +1,5 @@
+"use client";
+
 import { WeightTableContainerProps } from "../weight-table-types";
 import WeightTableContainer from "./weight-table-indv-container";
 
