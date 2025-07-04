@@ -18,6 +18,7 @@ function generateRandomArray(
     const row: number[] = [];
     for (let j = 0; j < columnCount; ++j) row.push(Math.random());
     layer.push(row);
+    layer;
   }
   return layer;
 }
@@ -60,6 +61,26 @@ export default function Page() {
   ];
 
   const networkDims = getDims(network);
+
+  // const [selectedNeurons, setSelectedNeurons] = useState(() => {
+  //   const networkLayers: Set<number>[] = [];
+  //   Array.from({ length: network.length }, (_, i) => {
+  //     networkLayers.push(new Set());
+  //   });
+  //   return networkLayers;
+  // });
+
+  // const handleNeuronClick = (layerIndex: number, neuronIndex: number) => {
+  //   setSelectedNeurons((prev) => {
+  //     if (prev[layerIndex].has(neuronIndex)) {
+  //       prev[layerIndex].delete(neuronIndex);
+  //     } else {
+  //       prev[layerIndex].add(neuronIndex);
+  //     }
+  //     return [...prev];
+  //   });
+  // };
+
   return (
     <>
       <div className="flex justify-center">
@@ -68,14 +89,16 @@ export default function Page() {
 
       <div className="flex flex-col">
         <div className="flex flex-row mt-5">
+          {/* parent component */}
+
           <div className="flex flex-col items-center" style={{ width: "45%" }}>
             <NeuralNetworkSVG networkDims={networkDims} />
             <MediaControls />
             <SeekBar numEpisodes={200} />
-            <GreedySimulationContainer />
           </div>
           <NeuralNetworkTrainingMetricsDisplay network={network} />
         </div>
+        <GreedySimulationContainer />
         <DeepQNetworkDescription />
       </div>
     </>
