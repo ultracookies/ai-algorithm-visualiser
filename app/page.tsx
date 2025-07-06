@@ -1,13 +1,7 @@
 import React from "react";
-import { useState } from "react";
 
 import "./globals.css";
-import WeightTablesContainer from "./weight-table-components/weight-tables-container";
 import { WeightTableContainerProps } from "./weight-table-types";
-import NeuralNetworkSVG from "./neural-network-components/neural-network-visual";
-import { MediaControls, SeekBar } from "./playback-control-components/seek-bar";
-import { LineGraph } from "./training-metric-components";
-import hi from "./photos/hi.jpeg";
 import ClientNetworkController from "./ClientNetworkController";
 
 function generateRandomArray(
@@ -22,15 +16,6 @@ function generateRandomArray(
     layer;
   }
   return layer;
-}
-
-function getDims(layers: WeightTableContainerProps[]): number[] {
-  const dims: number[] = [];
-  dims.push(layers[0].layerWeights.length, layers[0].layerWeights[0].length);
-  for (let i = 1; i < layers.length; ++i) {
-    dims.push(layers[i].layerWeights[0].length);
-  }
-  return dims;
 }
 
 export default function Page() {
@@ -61,33 +46,12 @@ export default function Page() {
     outputLayer,
   ];
 
-  const networkDims = getDims(network);
-
-  // const [selectedNeurons, setSelectedNeurons] = useState(() => {
-  //   const networkLayers: Set<number>[] = [];
-  //   Array.from({ length: network.length }, (_, i) => {
-  //     networkLayers.push(new Set());
-  //   });
-  //   return networkLayers;
-  // });
-
-  // const handleNeuronClick = (layerIndex: number, neuronIndex: number) => {
-  //   setSelectedNeurons((prev) => {
-  //     if (prev[layerIndex].has(neuronIndex)) {
-  //       prev[layerIndex].delete(neuronIndex);
-  //     } else {
-  //       prev[layerIndex].add(neuronIndex);
-  //     }
-  //     return [...prev];
-  //   });
-  // };
-
   return (
     <>
       <div className="flex justify-center">
         <h1 className="text-white text-4xl font-bold m-4">Deep Q Network</h1>
       </div>
-      <ClientNetworkController networkDims={networkDims} network={network} />
+      <ClientNetworkController network={network} />
       <div className="flex flex-col">
         <DeepQNetworkDescription />
       </div>

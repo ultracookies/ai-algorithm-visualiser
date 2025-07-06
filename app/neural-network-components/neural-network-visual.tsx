@@ -1,7 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
-
 const layerRadius = 8;
 const verticalSpacing = 30;
 
@@ -14,11 +12,15 @@ const getNeuronYPositions = (count: number): number[] => {
   return Array.from({ length: count }, (_, i) => startY + i * verticalSpacing);
 };
 
-const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
-  const [selectedNeurons, setSelectedNeurons] = useState<Set<string>>(
-    new Set()
-  );
-
+const NeuralNetworkSVG = ({
+  networkDims,
+  onChange,
+  selectedNeurons,
+}: {
+  networkDims: number[];
+  onChange: (layerIndex: number, neuronIndex: number) => void;
+  selectedNeurons: Set<number>[];
+}) => {
   const layerCount = networkDims.length;
   const layerPositions = Array.from({ length: layerCount }, (_, i) => {
     if (layerCount === 1) return 300;
@@ -32,27 +34,14 @@ const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
     getNeuronYPositions(count)
   );
 
-  const handleNeuronClick = (layerIndex: number, neuronIndex: number) => {
-    const neuronKey = `${layerIndex}-${neuronIndex}`;
-    setSelectedNeurons((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(neuronKey)) {
-        newSet.delete(neuronKey);
-      } else {
-        newSet.add(neuronKey);
-      }
-      return newSet;
-    });
-  };
-
   const getNeuronFill = (layerIndex: number, neuronIndex: number) => {
-    const neuronKey = `${layerIndex}-${neuronIndex}`;
-    return selectedNeurons.has(neuronKey) ? "#ef4444" : "#1d4ed8";
+    return selectedNeurons[layerIndex].has(neuronIndex) ? "#ef4444" : "#1d4ed8";
   };
 
   const getNeuronClass = (layerIndex: number, neuronIndex: number) => {
-    const neuronKey = `${layerIndex}-${neuronIndex}`;
-    return selectedNeurons.has(neuronKey) ? "neuron selected" : "neuron";
+    return selectedNeurons[layerIndex].has(neuronIndex)
+      ? "neuron selected"
+      : "neuron";
   };
 
   return (
@@ -108,7 +97,7 @@ const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
               cy={y}
               r={layerRadius}
               fill={getNeuronFill(layerIndex, i)}
-              onClick={() => handleNeuronClick(layerIndex, i)}
+              onClick={() => onChange(layerIndex, i)}
               className={getNeuronClass(layerIndex, i)}
             />
           ))
