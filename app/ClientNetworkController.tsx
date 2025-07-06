@@ -55,7 +55,13 @@ export default function ClientNetworkController({
         <SeekBar numEpisodes={200} />
         <GreedySimulationContainer />
       </div>
-      <NeuralNetworkTrainingMetricsDisplay network={network} />
+      <div className="flex flex-col" style={{ width: "auto" }}>
+        <WeightTablesContainer
+          network={network}
+          selectedNeurons={selectedNeurons}
+        />
+        <NeuralNetworkTrainingMetricsDisplay />
+      </div>
     </div>
   );
 }
@@ -72,18 +78,13 @@ const GreedySimulationContainer = () => {
   );
 };
 
-const NeuralNetworkTrainingMetricsDisplay = ({
-  network,
-}: {
-  network: WeightTableContainerProps[];
-}) => {
+const NeuralNetworkTrainingMetricsDisplay = () => {
   return (
-    <div className="flex flex-col" style={{ width: "auto" }}>
-      <WeightTablesContainer network={network} />
+    <>
       <LineGraph numEpisodes={200} />
       <LineGraph numEpisodes={200} />
       <LineGraph numEpisodes={200} />
-    </div>
+    </>
   );
 };
 

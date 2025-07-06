@@ -2,14 +2,21 @@
 
 import { useState } from "react";
 import WeightTable from "./weight-table";
-import { WeightTableContainerProps } from "../weight-table-types";
+// import { WeightTableContainerProps } from "../weight-table-types";
 
 import "./weight-tables-style.css";
+
+interface WeightTableContainerProps2 {
+  layerName: string;
+  layerWeights: number[][];
+  selectedNeuronSets: Set<number>[];
+}
 
 export default function WeightTableContainer({
   layerName,
   layerWeights,
-}: WeightTableContainerProps) {
+  selectedNeuronSets,
+}: WeightTableContainerProps2) {
   const [isDropped, setIsDropped] = useState(true);
   return (
     <div
@@ -22,7 +29,6 @@ export default function WeightTableContainer({
       <div className="flex gap-x-4">
         <button
           onClick={() => setIsDropped((prev) => !prev)}
-          // style={{ color: "white" }}
           className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600"
         >
           {isDropped ? (
@@ -39,7 +45,10 @@ export default function WeightTableContainer({
           isDropped ? "open" : "closed"
         } mx-auto flex mt-3 max-w-200 items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10`}
       >
-        <WeightTable layerWeights={layerWeights} />
+        <WeightTable
+          layerWeights={layerWeights}
+          selectedNeuronSets={selectedNeuronSets}
+        />
       </div>
     </div>
   );
