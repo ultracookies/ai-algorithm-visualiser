@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { title } from "process";
+import { useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -24,15 +25,14 @@ ChartJS.register(
 );
 
 export function LineGraph({ numEpisodes }: { numEpisodes: number }) {
-  const data = {
-    labels: Array.from({ length: numEpisodes }, (_, i) => i),
+  const chartRef = useRef(null);
+
+  const initialData = {
+    labels: [],
     datasets: [
       {
         label: "Epsilon",
-        data: Array.from(
-          { length: numEpisodes },
-          () => Math.random() * 0.5 + 0.5
-        ),
+        data: [],
         borderColor: "blue",
       },
     ],
@@ -56,9 +56,32 @@ export function LineGraph({ numEpisodes }: { numEpisodes: number }) {
     },
   };
 
+  useEffect(() => {
+    let count = 0;
+    const chart = chartRef.current;
+    if (!chart) return;
+    const chartData = chart.data;
+
+    const interval = setInterval(() => {
+      chartData.datasets[0].data.push(Math.random() * 100);
+      chartData.labels.push(count++);
+      chart.update();
+      if (count == numEpisodes) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
+
   return (
     <div style={{ height: "200px", width: "100%" }}>
-      <Line data={data} options={options} className="mt-5" />
+      <Line
+        ref={chartRef}
+        data={initialData}
+        options={options}
+        className="mt-5"
+      />
     </div>
   );
 }

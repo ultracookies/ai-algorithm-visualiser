@@ -43,7 +43,49 @@ export default function WeightTable({
     selectedNeuronSetsCopy.push(setCopy);
   });
 
-  const data: GridCellData = { layerWeights, selectedNeuronSetsCopy };
+  const gridCellData: GridCellData = { layerWeights, selectedNeuronSetsCopy };
+
+  const GridCell = ({ columnIndex, data, rowIndex, style }: GridCellProps) => {
+    const { layerWeights, selectedNeuronSetsCopy } = data;
+
+    const inputNeuronSet = selectedNeuronSetsCopy[0];
+    const gridCellStyle = { ...style };
+
+    if (inputNeuronSet.has(rowIndex)) {
+      const outputNeuronSet = selectedNeuronSetsCopy[1];
+      if (outputNeuronSet.size === 0 || outputNeuronSet.has(columnIndex)) {
+        gridCellStyle.backgroundColor = "cyan";
+      } else {
+        gridCellStyle.backgroundColor = "transparent";
+      }
+    }
+
+    if (columnIndex === 0 && rowIndex > 0) {
+      return (
+        <div style={{ ...style }} className="cell">
+          <div>{rowIndex}</div>
+        </div>
+      );
+    }
+
+    if (columnIndex > 0 && rowIndex === 0) {
+      return (
+        <div className="cell" style={{ ...style }}>
+          {columnIndex}
+        </div>
+      );
+    }
+
+    if (columnIndex > 0 && rowIndex > 0) {
+      return (
+        <div style={{ ...gridCellStyle }} className="cell">
+          {layerWeights[rowIndex - 1][columnIndex - 1]}
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <FixedSizeGrid
@@ -53,52 +95,10 @@ export default function WeightTable({
       columnWidth={CELL_WIDTH}
       height={GRID_HEIGHT}
       width={GRID_WIDTH}
-      itemData={data}
+      itemData={gridCellData}
       style={{ color: "white", fontSize: "12px" }}
     >
       {GridCell}
     </FixedSizeGrid>
   );
-}
-
-function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
-  const { layerWeights, selectedNeuronSetsCopy } = data;
-
-  const inputNeuronSet = selectedNeuronSetsCopy[0];
-  const gridCellStyle = { ...style };
-
-  if (inputNeuronSet.has(rowIndex)) {
-    const outputNeuronSet = selectedNeuronSetsCopy[1];
-    if (outputNeuronSet.size === 0 || outputNeuronSet.has(columnIndex)) {
-      gridCellStyle.backgroundColor = "cyan";
-    } else {
-      gridCellStyle.backgroundColor = "transparent";
-    }
-  }
-
-  if (columnIndex === 0 && rowIndex > 0) {
-    return (
-      <div style={{ ...style }} className="cell">
-        <div>{rowIndex}</div>
-      </div>
-    );
-  }
-
-  if (columnIndex > 0 && rowIndex === 0) {
-    return (
-      <div className="cell" style={{ ...style }}>
-        {columnIndex}
-      </div>
-    );
-  }
-
-  if (columnIndex > 0 && rowIndex > 0) {
-    return (
-      <div style={{ ...gridCellStyle }} className="cell">
-        {layerWeights[rowIndex - 1][columnIndex - 1]}
-      </div>
-    );
-  }
-
-  return null;
 }

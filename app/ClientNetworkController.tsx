@@ -6,7 +6,7 @@ import { WeightTableContainerProps } from "./weight-table-types";
 import { LineGraph } from "./training-metric-components";
 import WeightTablesContainer from "./weight-table-components/weight-tables-container";
 import hi from "./photos/hi.jpeg";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 export default function ClientNetworkController({
   network,
@@ -60,7 +60,7 @@ export default function ClientNetworkController({
           network={network}
           selectedNeurons={selectedNeurons}
         />
-        <NeuralNetworkTrainingMetricsDisplay />
+        <NeuralNetworkTrainingMetricsDisplay numEpisodes={200} />
       </div>
     </div>
   );
@@ -78,15 +78,17 @@ const GreedySimulationContainer = () => {
   );
 };
 
-const NeuralNetworkTrainingMetricsDisplay = () => {
-  return (
-    <>
-      <LineGraph numEpisodes={200} />
-      <LineGraph numEpisodes={200} />
-      <LineGraph numEpisodes={200} />
-    </>
-  );
-};
+const NeuralNetworkTrainingMetricsDisplay = memo(
+  ({ numEpisodes }: { numEpisodes: number }) => {
+    return (
+      <>
+        <LineGraph numEpisodes={numEpisodes} />
+        <LineGraph numEpisodes={numEpisodes} />
+        <LineGraph numEpisodes={numEpisodes} />
+      </>
+    );
+  }
+);
 
 const SimulationStream = () => {
   return (
