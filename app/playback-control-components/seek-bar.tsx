@@ -5,6 +5,7 @@ import { memo, useState } from "react";
 // MediaControls.tsx
 import React from "react";
 import { Rewind, Pause, FastForward, Play } from "lucide-react";
+import { emitter } from "../utils/eventBus";
 
 const iconButtonClasses =
   "flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-md transition";
@@ -44,6 +45,7 @@ export function SeekBar({ numEpisodes }: { numEpisodes: number }) {
   const [currentEpisode, setCurrentEpisode] = useState(0);
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentEpisode(parseInt(e.target.value));
+    emitter.emit("indexUpdate", parseInt(e.target.value));
   };
   const formatEpisode = (episode: number) => {
     return `Episode: ${episode}`;

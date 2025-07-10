@@ -10,9 +10,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { title } from "process";
 import { useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
+import { emitter } from "./utils/eventBus";
 
 ChartJS.register(
   CategoryScale,
@@ -26,6 +26,11 @@ ChartJS.register(
 
 export function LineGraph({ numEpisodes }: { numEpisodes: number }) {
   const chartRef = useRef(null);
+
+  const values = Array.from(
+    { length: numEpisodes },
+    (_) => Math.random() * 100
+  );
 
   const initialData = {
     labels: [],
@@ -57,21 +62,37 @@ export function LineGraph({ numEpisodes }: { numEpisodes: number }) {
   };
 
   useEffect(() => {
-    let count = 0;
     const chart = chartRef.current;
     if (!chart) return;
     const chartData = chart.data;
-
-    const interval = setInterval(() => {
-      chartData.datasets[0].data.push(Math.random() * 100);
-      chartData.labels.push(count++);
-      chart.update();
-      if (count == numEpisodes) {
-        clearInterval(interval);
+    const x: number[] = chartData.labels;
+    const y: number[] = chartData.datasets[0].data;
+    emitter.on("indexUpdate", (i) => {
+      if (i < x.length) {
+        for (let j = 0; j < i; ++j) {
+          x.pop();
+          y.pop();
+        }
+      } else {
+        for (let j = x.length; j < i; ++j) {
+          y.push(values[j]);
+          x.push(j + 1);
+        }
       }
-    }, 1000);
 
-    return () => clearInterval(interval);
+      chart.update();
+    });
+
+    // const interval = setInterval(() => {
+    //   chartData.datasets[0].data.push(Math.random() * 100);
+    //   chartData.labels.push(count++);
+    //   chart.update();
+    //   if (count == numEpisodes) {
+    //     clearInterval(interval);
+    //   }
+    // }, 1000);
+
+    // return () => clearInterval(interval);
   });
 
   return (
