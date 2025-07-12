@@ -6,20 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/rl-algos/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/rl-algos/layout.js"
-    ],
-    "/rl-algos/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/rl-algos/page.js"
     ],
     "/rl-algos/dqn/layout": [
       "static/chunks/webpack.js",
@@ -31,11 +21,6 @@
       "static/chunks/main-app.js",
       "static/css/app/rl-algos/dqn/page.css",
       "static/chunks/app/rl-algos/dqn/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
