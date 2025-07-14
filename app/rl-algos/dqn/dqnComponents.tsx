@@ -3,7 +3,7 @@ import hi from "../../utils/photos/hi.jpeg";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
 
-const NeuralNetworkTrainingMetricsDisplay = ({
+export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
 }: {
   network: WeightTableContainerProps[];
@@ -18,10 +18,17 @@ const NeuralNetworkTrainingMetricsDisplay = ({
   );
 };
 
-export const GreedySimulationContainer = () => {
+export const GreedySimulationContainer = ({
+  isPaused,
+}: {
+  isPaused: boolean;
+}) => {
   return (
     <>
-      <button className="bg-blue-500 text-white p-2 rounded-md w-50 m-4">
+      <button
+        className="bg-blue-500 text-white p-2 rounded-md w-50 m-4"
+        disabled={!isPaused}
+      >
         Play Greedy Simulation
       </button>
       <SimulationStream />
@@ -30,7 +37,7 @@ export const GreedySimulationContainer = () => {
   );
 };
 
-export const SimulationStream = () => {
+const SimulationStream = () => {
   return (
     <div
       className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
@@ -46,7 +53,7 @@ export const SimulationStream = () => {
 };
 
 // maybe incorporate this into the layout.tsx?
-const DeepQNetworkDescription = () => {
+export const DeepQNetworkDescription = () => {
   return (
     <>
       <p className="text-white text-2xl font-bold m-4">
