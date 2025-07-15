@@ -9,7 +9,15 @@ import "./weight-tables-style.css";
 export default function WeightTableContainer({
   layerName,
   layerWeights,
-}: WeightTableContainerProps) {
+  selectedNeuronsLayer,
+}: {
+  layerName: string;
+  layerWeights: number[][];
+  selectedNeuronsLayer: {
+    inputNeurons: Set<number>;
+    outputNeurons: Set<number>;
+  };
+}) {
   const [isDropped, setIsDropped] = useState(true);
   return (
     <div
@@ -39,7 +47,10 @@ export default function WeightTableContainer({
           isDropped ? "open" : "closed"
         } mx-auto flex mt-3 max-w-200 items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10`}
       >
-        <WeightTable layerWeights={layerWeights} />
+        <WeightTable
+          layerWeights={layerWeights}
+          selectedNeuronsLayer={selectedNeuronsLayer}
+        />
       </div>
     </div>
   );

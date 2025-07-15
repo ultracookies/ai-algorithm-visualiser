@@ -5,12 +5,17 @@ import WeightTablesContainer from "../../utils/weight-table-components/weight-ta
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
+  selectedNeurons,
 }: {
   network: WeightTableContainerProps[];
+  selectedNeurons: Set<number>[];
 }) => {
   return (
     <div className="flex flex-col" style={{ width: "auto" }}>
-      <WeightTablesContainer network={network} />
+      <WeightTablesContainer
+        network={network}
+        selectedNeurons={selectedNeurons}
+      />
       <LineGraph numEpisodes={200} />
       <LineGraph numEpisodes={200} />
       <LineGraph numEpisodes={200} />

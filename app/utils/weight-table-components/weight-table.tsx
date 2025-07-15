@@ -7,9 +7,15 @@ import { CSSProperties } from "react";
 
 interface GridCellProps {
   columnIndex: number;
-  data: number[][];
   rowIndex: number;
   style: CSSProperties;
+  data: {
+    networkWeights: number[][];
+    selectedNeuronsLayer: {
+      inputNeurons: Set<number>;
+      outputNeurons: Set<number>;
+    };
+  };
 }
 
 const CELL_WIDTH = 175;
@@ -19,7 +25,31 @@ const GRID_HEIGHT = 250;
 const GRID_WIDTH = 800;
 
 function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
+  // rowIndex is the input node
+  // columnIndex is the output node
+
+  const networkWeights = data.networkWeights;
+  const selectedNeuronsLayer = data.selectedNeuronsLayer;
+
+  const gridCellStyle = { ...style };
+
+  const inputNeurons = selectedNeuronsLayer.inputNeurons;
+  const outputNeurons = selectedNeuronsLayer.outputNeurons;
+
+  if (rowIndex > 0 && columnIndex > 0) {
+    if (inputNeurons.has(rowIndex - 1)) {
+      if (outputNeurons.size === 0 || outputNeurons.has(columnIndex - 1)) {
+        gridCellStyle.background = "cyan";
+        gridCellStyle.color = "black";
+      } else {
+        gridCellStyle.background = "transparent";
+        gridCellStyle.color = "white";
+      }
+    }
+  }
+
   if (columnIndex === 0 && rowIndex > 0) {
+    // row labels
     return (
       <div
         style={{
@@ -32,6 +62,7 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
     );
   }
 
+  // column labels
   if (columnIndex > 0 && rowIndex === 0) {
     return (
       <div className="cell" style={{ ...style }}>
@@ -42,8 +73,8 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
 
   if (columnIndex > 0 && rowIndex > 0) {
     return (
-      <div style={{ ...style }} className="cell">
-        {data[rowIndex - 1][columnIndex - 1]}
+      <div style={gridCellStyle} className="cell">
+        {networkWeights[rowIndex - 1][columnIndex - 1]}
       </div>
     );
   }
@@ -51,7 +82,16 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
   return null;
 }
 
-const WeightTable = ({ layerWeights }: { layerWeights: number[][] }) => {
+const WeightTable = ({
+  layerWeights,
+  selectedNeuronsLayer,
+}: {
+  layerWeights: number[][];
+  selectedNeuronsLayer: {
+    inputNeurons: Set<number>;
+    outputNeurons: Set<number>;
+  };
+}) => {
   const rowCount = layerWeights.length;
   const columnCount = layerWeights[0].length;
 
@@ -63,7 +103,10 @@ const WeightTable = ({ layerWeights }: { layerWeights: number[][] }) => {
       columnWidth={CELL_WIDTH}
       height={GRID_HEIGHT}
       width={GRID_WIDTH}
-      itemData={layerWeights}
+      itemData={{
+        networkWeights: layerWeights,
+        selectedNeuronsLayer: selectedNeuronsLayer,
+      }}
       style={{ color: "white", fontSize: "12px" }}
     >
       {GridCell}
