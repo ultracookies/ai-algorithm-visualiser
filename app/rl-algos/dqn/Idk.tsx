@@ -3,17 +3,20 @@
 import React, { useCallback, useState } from "react";
 
 import NeuralNetworkSVG from "../../utils/neural-network-components/neural-network-visual";
-import { initMockNetwork } from "./mockNetworkUtils";
 import {
   NeuralNetworkTrainingMetricsDisplay,
   DeepQNetworkDescription,
 } from "./dqnComponents";
 import { Idk } from "../../utils/playback-control-components/seek-bar";
+import { WeightTableContainerProps } from "../../utils/weight-table-types";
 
-export const Idk2 = () => {
-  const networkDims = [5, 20, 10, 5, 3];
-  const network = initMockNetwork(networkDims);
-
+export const Idk2 = ({
+  networkDims,
+  network,
+}: {
+  networkDims: number[];
+  network: WeightTableContainerProps[];
+}) => {
   const [selectedNeurons, setSelectedNeurons] = useState(() => {
     const networkNodeLayers: Set<number>[] = [];
     for (let i = 0; i < networkDims.length; ++i) {

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import WeightTable from "./weight-table";
-import { WeightTableContainerProps } from "../weight-table-types";
 
 import "./weight-tables-style.css";
 
