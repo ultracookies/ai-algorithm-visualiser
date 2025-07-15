@@ -5,8 +5,10 @@ import WeightTableContainer from "./weight-table-indv-container";
 
 export default function WeightTablesContainer({
   network,
+  selectedNeurons,
 }: {
   network: WeightTableContainerProps[];
+  selectedNeurons: Set<number>[];
 }) {
   return (
     <div
@@ -19,6 +21,10 @@ export default function WeightTablesContainer({
             <WeightTableContainer
               layerName={layer.layerName}
               layerWeights={layer.layerWeights}
+              selectedNeuronsLayer={{
+                inputNeurons: selectedNeurons[i],
+                outputNeurons: selectedNeurons[i + 1],
+              }}
             />
           </div>
         );

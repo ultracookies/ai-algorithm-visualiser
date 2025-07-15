@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import NeuralNetworkSVG from "../../utils/neural-network-components/neural-network-visual";
 import { initMockNetwork } from "./mockNetworkUtils";
@@ -14,31 +14,34 @@ export const Idk2 = () => {
   const networkDims = [5, 20, 10, 5, 3];
   const network = initMockNetwork(networkDims);
 
-  const [selectedNeurons, setSelectedNeurons] = useState<Set<number>[]>(() => {
-    const networkLayers: Set<number>[] = [];
+  const [selectedNeurons, setSelectedNeurons] = useState(() => {
+    const networkNodeLayers: Set<number>[] = [];
     for (let i = 0; i < networkDims.length; ++i) {
-      networkLayers.push(new Set<number>());
+      networkNodeLayers.push(new Set<number>());
     }
-    return networkLayers;
+    return networkNodeLayers;
   });
 
-  const handleNeuronClick = (layerIndex: number, neuronIndex: number) => {
-    setSelectedNeurons((prev) => {
-      const newSelectedNeurons = prev.map((layer, index) => {
-        if (index === layerIndex) {
-          const newLayer = new Set(layer);
-          if (newLayer.has(neuronIndex)) {
-            newLayer.delete(neuronIndex);
-          } else {
-            newLayer.add(neuronIndex);
+  const handleNeuronClick = useCallback(
+    (layerIndex: number, neuronIndex: number) => {
+      setSelectedNeurons((prev) => {
+        const newSelectedNeurons = prev.map((layer, index) => {
+          if (index === layerIndex) {
+            const newLayer = new Set(layer);
+            if (newLayer.has(neuronIndex)) {
+              newLayer.delete(neuronIndex);
+            } else {
+              newLayer.add(neuronIndex);
+            }
+            return newLayer;
           }
-          return newLayer;
-        }
-        return layer;
+          return layer;
+        });
+        return newSelectedNeurons;
       });
-      return newSelectedNeurons;
-    });
-  };
+    },
+    []
+  );
 
   return (
     <>
@@ -56,7 +59,10 @@ export const Idk2 = () => {
             />
             <Idk numEpisodes={200} />
           </div>
-          <NeuralNetworkTrainingMetricsDisplay network={network} />
+          <NeuralNetworkTrainingMetricsDisplay
+            network={network}
+            selectedNeurons={selectedNeurons}
+          />
         </div>
         <DeepQNetworkDescription />
       </div>
