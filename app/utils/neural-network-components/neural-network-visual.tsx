@@ -14,11 +14,15 @@ const getNeuronYPositions = (count: number): number[] => {
   return Array.from({ length: count }, (_, i) => startY + i * verticalSpacing);
 };
 
-const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
-  const [selectedNeurons, setSelectedNeurons] = useState<Set<string>>(
-    new Set()
-  );
-
+const NeuralNetworkSVG = ({
+  networkDims,
+  selectedNeurons,
+  handleNeuronClick,
+}: {
+  networkDims: number[];
+  selectedNeurons: Set<number>[];
+  handleNeuronClick: (i: number, j: number) => void;
+}) => {
   const layerCount = networkDims.length;
   const layerPositions = Array.from({ length: layerCount }, (_, i) => {
     if (layerCount === 1) return 300;
@@ -32,27 +36,14 @@ const NeuralNetworkSVG = ({ networkDims }: { networkDims: number[] }) => {
     getNeuronYPositions(count)
   );
 
-  const handleNeuronClick = (layerIndex: number, neuronIndex: number) => {
-    const neuronKey = `${layerIndex}-${neuronIndex}`;
-    setSelectedNeurons((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(neuronKey)) {
-        newSet.delete(neuronKey);
-      } else {
-        newSet.add(neuronKey);
-      }
-      return newSet;
-    });
-  };
-
   const getNeuronFill = (layerIndex: number, neuronIndex: number) => {
-    const neuronKey = `${layerIndex}-${neuronIndex}`;
-    return selectedNeurons.has(neuronKey) ? "#ef4444" : "#1d4ed8";
+    return selectedNeurons[layerIndex].has(neuronIndex) ? "#ef4444" : "#1d4ed8";
   };
 
   const getNeuronClass = (layerIndex: number, neuronIndex: number) => {
-    const neuronKey = `${layerIndex}-${neuronIndex}`;
-    return selectedNeurons.has(neuronKey) ? "neuron selected" : "neuron";
+    return selectedNeurons[layerIndex].has(neuronIndex)
+      ? "neuron selected"
+      : "neuron";
   };
 
   return (
