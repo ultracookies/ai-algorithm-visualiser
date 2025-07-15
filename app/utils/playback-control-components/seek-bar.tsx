@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // MediaControls.tsx
 import React from "react";
@@ -15,7 +15,9 @@ export const Idk = memo(({ numEpisodes }: { numEpisodes: number }) => {
   const [currentEpisode, setCurrentEpisode] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const handlePauseBtn = () => setIsPaused(!isPaused);
+  const handlePauseBtn = useCallback(() => setIsPaused(!isPaused), [isPaused]);
+
+  console.log("Idk re-render");
 
   const handleCurrentEpisodeChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -48,26 +50,29 @@ export const Idk = memo(({ numEpisodes }: { numEpisodes: number }) => {
     </>
   );
 });
-
-function MediaControls({
-  isPaused,
-  handlePauseBtn,
-}: {
-  isPaused: boolean;
-  handlePauseBtn: () => void;
-}) {
-  return (
-    <div className="flex gap-10 justify-center mt-7">
-      <button className={iconButtonClasses} aria-label="Rewind">
-        <Rewind />
-      </button>
-      <PlayPauseButton isPaused={isPaused} handlePauseBtn={handlePauseBtn} />
-      <button className={iconButtonClasses} aria-label="Fast Forward">
-        <FastForward />
-      </button>
-    </div>
-  );
-}
+// memoize this
+export const MediaControls = memo(
+  ({
+    isPaused,
+    handlePauseBtn,
+  }: {
+    isPaused: boolean;
+    handlePauseBtn: () => void;
+  }) => {
+    console.log("mediacontrols re-render");
+    return (
+      <div className="flex gap-10 justify-center mt-7">
+        <button className={iconButtonClasses} aria-label="Rewind">
+          <Rewind />
+        </button>
+        <PlayPauseButton isPaused={isPaused} handlePauseBtn={handlePauseBtn} />
+        <button className={iconButtonClasses} aria-label="Fast Forward">
+          <FastForward />
+        </button>
+      </div>
+    );
+  }
+);
 
 function SeekBar({
   numEpisodes,
@@ -88,6 +93,8 @@ function SeekBar({
     return `Episode: ${episode}`;
   };
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  console.log("seekbar re-render");
 
   useEffect(() => {
     if (isPaused) return;
@@ -130,6 +137,8 @@ const PlayPauseButton = ({
   handlePauseBtn: () => void;
 }) => {
   const toggle = () => handlePauseBtn();
+
+  console.log("playpause re-render");
 
   return (
     <button
