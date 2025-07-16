@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo } from "react";
 
 // MediaControls.tsx
 import React from "react";
@@ -111,14 +111,12 @@ const PlayPauseButton = ({
   isPaused: boolean;
   handlePauseBtn: () => void;
 }) => {
-  const toggle = () => handlePauseBtn();
-
   console.log("playpause re-render");
 
   return (
     <button
       className="flex justify-center items-center bg-blue-500 text-white w-12 h-12 rounded-full transition-all duration-300 ease-in-out hover:scale-110"
-      onClick={toggle}
+      onClick={handlePauseBtn}
     >
       {isPaused ? <Play size={32} /> : <Pause size={32} />}
     </button>

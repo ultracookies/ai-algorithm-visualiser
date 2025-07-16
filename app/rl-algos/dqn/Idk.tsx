@@ -9,7 +9,7 @@ import {
 } from "./dqnComponents";
 import { Idk } from "../../utils/playback-control-components/seek-bar";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
-import { getDims } from "./mockNetworkUtils";
+import { getDims, updateMockNetwork } from "./mockNetworkUtils";
 
 export const Idk2 = ({
   network,
@@ -87,12 +87,15 @@ export const Idk2 = ({
     pauseTheUpdates();
   };
 
+  const [joemama, setJoemama] = useState<WeightTableContainerProps[]>(network);
+
   useEffect(() => {
     if (isPaused) return;
 
     intervalRef.current = setInterval(() => {
       incrementCurrentEpisode();
       appendToChartData(Math.random() * 100);
+      setJoemama(updateMockNetwork(joemama));
     }, 2000);
 
     return () => clearInterval(intervalRef.current!);
@@ -122,7 +125,7 @@ export const Idk2 = ({
             />
           </div>
           <NeuralNetworkTrainingMetricsDisplay
-            network={network}
+            network={joemama}
             selectedNeurons={selectedNeurons}
             chartData={chartData}
           />
