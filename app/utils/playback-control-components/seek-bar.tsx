@@ -11,45 +11,40 @@ import { GreedySimulationContainer } from "../../rl-algos/dqn/dqnComponents";
 const iconButtonClasses =
   "flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-md transition";
 
-export const Idk = memo(({ numEpisodes }: { numEpisodes: number }) => {
-  const [currentEpisode, setCurrentEpisode] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+export const Idk = memo(
+  ({
+    numEpisodes,
+    currentEpisode,
+    handleCurrentEpisodeChange,
+    handleMouseDown,
+    isPaused,
+    handlePauseBtn,
+  }: {
+    numEpisodes: number;
+    currentEpisode: number;
+    handleCurrentEpisodeChange: (
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => void;
+    handleMouseDown: () => void;
+    isPaused: boolean;
+    handlePauseBtn: () => void;
+  }) => {
+    console.log("Idk re-render");
 
-  const handlePauseBtn = useCallback(() => setIsPaused(!isPaused), [isPaused]);
-
-  console.log("Idk re-render");
-
-  const handleCurrentEpisodeChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCurrentEpisode(Number(e.target.value));
-  };
-
-  const incrementCurrentEpisode = () => {
-    const newEpisode =
-      currentEpisode < numEpisodes ? currentEpisode + 1 : currentEpisode;
-    setCurrentEpisode(newEpisode);
-  };
-
-  const pauseTheUpdates = () => {
-    setIsPaused(true);
-  };
-
-  return (
-    <>
-      <MediaControls isPaused={isPaused} handlePauseBtn={handlePauseBtn} />
-      <SeekBar
-        numEpisodes={numEpisodes}
-        currentEpisode={currentEpisode}
-        handleCurrentEpisodeChange={handleCurrentEpisodeChange}
-        incrementCurrentEpisode={incrementCurrentEpisode}
-        pauseTheUpdates={pauseTheUpdates}
-        isPaused={isPaused}
-      />
-      <GreedySimulationContainer isPaused={isPaused} />
-    </>
-  );
-});
+    return (
+      <>
+        <MediaControls isPaused={isPaused} handlePauseBtn={handlePauseBtn} />
+        <SeekBar
+          numEpisodes={numEpisodes}
+          currentEpisode={currentEpisode}
+          handleCurrentEpisodeChange={handleCurrentEpisodeChange}
+          handleMouseDown={handleMouseDown}
+        />
+        <GreedySimulationContainer isPaused={isPaused} />
+      </>
+    );
+  }
+);
 // memoize this
 export const MediaControls = memo(
   ({
@@ -77,39 +72,19 @@ export const MediaControls = memo(
 function SeekBar({
   numEpisodes,
   currentEpisode,
-  incrementCurrentEpisode,
   handleCurrentEpisodeChange,
-  isPaused,
-  pauseTheUpdates,
+  handleMouseDown,
 }: {
   numEpisodes: number;
   currentEpisode: number;
-  incrementCurrentEpisode: () => void;
   handleCurrentEpisodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isPaused: boolean;
-  pauseTheUpdates: () => void;
+  handleMouseDown: () => void;
 }) {
   const formatEpisode = (episode: number) => {
     return `Episode: ${episode}`;
   };
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   console.log("seekbar re-render");
-
-  useEffect(() => {
-    if (isPaused) return;
-
-    intervalRef.current = setInterval(() => {
-      incrementCurrentEpisode();
-    }, 2000);
-
-    return () => clearInterval(intervalRef.current!);
-  });
-
-  const handleMouseDown = () => {
-    clearInterval(intervalRef.current!);
-    pauseTheUpdates();
-  };
 
   return (
     <div className="flex flex-col gap-2 w-full">
