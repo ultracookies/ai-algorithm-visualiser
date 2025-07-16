@@ -23,16 +23,13 @@ ChartJS.register(
   Legend
 );
 
-export function LineGraph({ numEpisodes }: { numEpisodes: number }) {
+export function LineGraph({ chartData }: { chartData: number[] }) {
   const data = {
-    labels: Array.from({ length: numEpisodes }, (_, i) => i),
+    labels: Array.from(chartData, (_, i) => i),
     datasets: [
       {
         label: "Epsilon",
-        data: Array.from(
-          { length: numEpisodes },
-          () => Math.random() * 0.5 + 0.5
-        ),
+        data: chartData,
         borderColor: "blue",
       },
     ],

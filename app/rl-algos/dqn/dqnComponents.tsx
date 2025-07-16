@@ -6,9 +6,11 @@ import WeightTablesContainer from "../../utils/weight-table-components/weight-ta
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
   selectedNeurons,
+  chartData,
 }: {
   network: WeightTableContainerProps[];
   selectedNeurons: Set<number>[];
+  chartData: number[];
 }) => {
   return (
     <div className="flex flex-col" style={{ width: "auto" }}>
@@ -16,9 +18,9 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
         network={network}
         selectedNeurons={selectedNeurons}
       />
-      <LineGraph numEpisodes={200} />
-      <LineGraph numEpisodes={200} />
-      <LineGraph numEpisodes={200} />
+      <LineGraph chartData={chartData} />
+      <LineGraph chartData={chartData} />
+      <LineGraph chartData={chartData} />
     </div>
   );
 };
@@ -37,7 +39,7 @@ export const GreedySimulationContainer = ({
         Play Greedy Simulation
       </button>
       <SimulationStream />
-      <LineGraph numEpisodes={200} />
+      <LineGraph chartData={[]} />
     </>
   );
 };

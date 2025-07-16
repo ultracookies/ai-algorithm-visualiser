@@ -35,7 +35,7 @@ function generateRandomArray(
   return layer;
 }
 
-function getDims(layers: WeightTableContainerProps[]): number[] {
+export function getDims(layers: WeightTableContainerProps[]): number[] {
   const dims: number[] = [];
   dims.push(layers[0].layerWeights.length, layers[0].layerWeights[0].length);
   for (let i = 1; i < layers.length; ++i) {
