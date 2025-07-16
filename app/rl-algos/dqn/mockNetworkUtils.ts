@@ -1,5 +1,27 @@
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 
+export function updateMockNetwork(
+  network: WeightTableContainerProps[]
+): WeightTableContainerProps[] {
+  const newNetwork: WeightTableContainerProps[] = [];
+  for (let i = 0; i < network.length; ++i) {
+    const newLayer: WeightTableContainerProps = {
+      layerName: network[i].layerName,
+      layerWeights: [],
+    };
+    const oldLayerWeights = network[i].layerWeights;
+    for (let j = 0; j < oldLayerWeights.length; ++j) {
+      const idk: number[] = [];
+      for (let k = 0; k < oldLayerWeights[j].length; ++k) {
+        idk.push(Math.random());
+      }
+      newLayer.layerWeights.push(idk);
+    }
+    newNetwork.push(newLayer);
+  }
+  return newNetwork;
+}
+
 export function initMockNetwork(nDims: number[]): WeightTableContainerProps[] {
   const network: WeightTableContainerProps[] = [];
   let j = 1;
