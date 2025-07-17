@@ -1,8 +1,17 @@
-import { Idk2 } from "./Idk";
-import { initMockNetwork } from "./mockNetworkUtils";
+import DataReceiverEmulator from "./DataReceiverEmulator";
 
 export default function Page() {
   const networkDims = [5, 20, 10, 5, 3];
-  const network = initMockNetwork(networkDims);
-  return <Idk2 network={network} numEpisodes={200} />;
+  const numEpisodes = 200;
+  const chartDataValues: number[] = Array.from(
+    { length: numEpisodes },
+    () => Math.random() * 100
+  );
+  return (
+    <DataReceiverEmulator
+      networkDims={networkDims}
+      numEpisodes={numEpisodes}
+      chartDataValues={chartDataValues}
+    />
+  );
 }
