@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import NeuralNetworkSVG from "../../utils/neural-network-components/neural-network-visual";
 import {
@@ -9,21 +9,29 @@ import {
 } from "./dqnComponents";
 import { Idk } from "../../utils/playback-control-components/seek-bar";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
-import { getDims, updateMockNetwork } from "./mockNetworkUtils";
 
-export const Idk2 = ({
+export const UIRoot = ({
   network,
   numEpisodes,
+  chartDataValues,
+  networkDims,
+  currentEpisode,
+  handleCurrentEpisodeChange,
+  isPaused,
+  handlePauseBtn,
+  handleMouseDown,
 }: {
   network: WeightTableContainerProps[];
   numEpisodes: number;
+  chartDataValues: number[];
+  networkDims: number[];
+  currentEpisode: number;
+  handleCurrentEpisodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isPaused: boolean;
+  handlePauseBtn: () => void;
+  handleMouseDown: () => void;
 }) => {
-  const [chartData, setChartData] = useState<number[]>([]);
-  const [currentEpisode, setCurrentEpisode] = useState(0);
-
-  const networkDims = getDims(network);
-
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  console.log("hi i re-rendered");
 
   const [selectedNeurons, setSelectedNeurons] = useState(() => {
     const networkNodeLayers: Set<number>[] = [];
@@ -32,34 +40,6 @@ export const Idk2 = ({
     }
     return networkNodeLayers;
   });
-
-  const [isPaused, setIsPaused] = useState(false);
-
-  const handlePauseBtn = useCallback(() => setIsPaused(!isPaused), [isPaused]);
-
-  const pauseTheUpdates = () => {
-    setIsPaused(true);
-  };
-
-  const appendToChartData = (dataPoint: number) => {
-    setChartData((prev) => {
-      const data = [...prev];
-      data.push(dataPoint);
-      return data;
-    });
-  };
-
-  const handleCurrentEpisodeChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCurrentEpisode(Number(e.target.value));
-  };
-
-  const incrementCurrentEpisode = () => {
-    const newEpisode =
-      currentEpisode < numEpisodes ? currentEpisode + 1 : currentEpisode;
-    setCurrentEpisode(newEpisode);
-  };
 
   const handleNeuronClick = useCallback(
     (layerIndex: number, neuronIndex: number) => {
@@ -81,25 +61,6 @@ export const Idk2 = ({
     },
     []
   );
-
-  const handleMouseDown = () => {
-    clearInterval(intervalRef.current!);
-    pauseTheUpdates();
-  };
-
-  const [joemama, setJoemama] = useState<WeightTableContainerProps[]>(network);
-
-  useEffect(() => {
-    if (isPaused) return;
-
-    intervalRef.current = setInterval(() => {
-      incrementCurrentEpisode();
-      appendToChartData(Math.random() * 100);
-      setJoemama(updateMockNetwork(joemama));
-    }, 2000);
-
-    return () => clearInterval(intervalRef.current!);
-  });
 
   return (
     <>
@@ -125,9 +86,9 @@ export const Idk2 = ({
             />
           </div>
           <NeuralNetworkTrainingMetricsDisplay
-            network={joemama}
+            network={network}
             selectedNeurons={selectedNeurons}
-            chartData={chartData}
+            chartData={chartDataValues}
           />
         </div>
         <DeepQNetworkDescription />
