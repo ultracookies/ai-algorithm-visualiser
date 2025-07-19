@@ -20,6 +20,9 @@ export default function DataReceiverEmulator({
   const [currentEpisode, setCurrentEpisode] = useState<number>(0);
   const [chartData, setChartData] = useState<number[]>([]);
   const [isPaused, setIsPaused] = useState(false);
+  const [greedyChartDataValues, setGreedyChartDataValues] = useState<number[]>(
+    []
+  );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCurrentEpisodeChange = (
@@ -41,6 +44,13 @@ export default function DataReceiverEmulator({
   const handleMouseDown = () => {
     clearInterval(intervalRef.current!);
     setIsPaused(true);
+  };
+
+  const playGreedySimulationHandler = () => {
+    console.log("bye");
+    setGreedyChartDataValues(() => {
+      return Array.from({ length: numEpisodes }, () => Math.random() * 100);
+    });
   };
 
   useEffect(() => {
@@ -66,6 +76,8 @@ export default function DataReceiverEmulator({
       isPaused={isPaused}
       handlePauseBtn={handlePauseBtn}
       handleMouseDown={handleMouseDown}
+      greedyChartDataValues={greedyChartDataValues}
+      playGreedySimulationHandler={playGreedySimulationHandler}
     />
   );
 }

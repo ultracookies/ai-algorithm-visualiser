@@ -2,6 +2,7 @@ import { LineGraph } from "../../utils/training-metric-components";
 import hi from "../../utils/photos/hi.jpeg";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
+import { useEffect, useRef, useState, memo } from "react";
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
@@ -27,22 +28,55 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
 
 export const GreedySimulationContainer = ({
   isPaused,
+  greedyChartDataValues,
+  playGreedySimulationHandler,
 }: {
   isPaused: boolean;
+  greedyChartDataValues: number[];
+  playGreedySimulationHandler: () => void;
 }) => {
   return (
     <>
       <button
-        className="bg-blue-500 text-white p-2 rounded-md w-50 m-4"
+        className="bg-blue-500 text-white p-2 rounded-md w-50 m-4 disabled:bg-gray-400 disabled:cursor-not-allowed"
         disabled={!isPaused}
+        onClick={playGreedySimulationHandler}
       >
         Play Greedy Simulation
       </button>
       <SimulationStream />
-      <LineGraph chartData={[]} />
+      <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
     </>
   );
 };
+
+// i want this to re-render only when needed
+export const GreedyCumulativeRewardsGraph = memo(
+  ({ chartDataValues }: { chartDataValues: number[] }) => {
+    const chartDataRef = useRef<number[]>([]);
+    const indexRef = useRef(0);
+    const [, forceRender] = useState(0);
+    console.log("fuck");
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        console.log("hhddhd");
+        if (indexRef.current === chartDataValues.length) return;
+        chartDataRef.current.push(chartDataValues[indexRef.current++]);
+        forceRender((prev) => prev + 1);
+      }, 1000);
+
+      return () => {
+        console.log("JHFDSH");
+        clearInterval(interval);
+        indexRef.current = 0;
+        chartDataRef.current = [];
+      };
+    }, [chartDataValues]);
+
+    return <LineGraph chartData={chartDataRef.current} />;
+  }
+);
 
 const SimulationStream = () => {
   return (

@@ -19,6 +19,8 @@ export const Idk = memo(
     handleMouseDown,
     isPaused,
     handlePauseBtn,
+    greedyChartDataValues,
+    playGreedySimulationHandler,
   }: {
     numEpisodes: number;
     currentEpisode: number;
@@ -28,6 +30,8 @@ export const Idk = memo(
     handleMouseDown: () => void;
     isPaused: boolean;
     handlePauseBtn: () => void;
+    greedyChartDataValues: number[];
+    playGreedySimulationHandler: () => void;
   }) => {
     console.log("Idk re-render");
 
@@ -40,7 +44,11 @@ export const Idk = memo(
           handleCurrentEpisodeChange={handleCurrentEpisodeChange}
           handleMouseDown={handleMouseDown}
         />
-        <GreedySimulationContainer isPaused={isPaused} />
+        <GreedySimulationContainer
+          isPaused={isPaused}
+          greedyChartDataValues={greedyChartDataValues}
+          playGreedySimulationHandler={playGreedySimulationHandler}
+        />
       </>
     );
   }

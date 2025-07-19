@@ -20,6 +20,8 @@ export const UIRoot = ({
   isPaused,
   handlePauseBtn,
   handleMouseDown,
+  greedyChartDataValues,
+  playGreedySimulationHandler,
 }: {
   network: WeightTableContainerProps[];
   numEpisodes: number;
@@ -30,6 +32,8 @@ export const UIRoot = ({
   isPaused: boolean;
   handlePauseBtn: () => void;
   handleMouseDown: () => void;
+  greedyChartDataValues: number[];
+  playGreedySimulationHandler: () => void;
 }) => {
   console.log("hi i re-rendered");
 
@@ -83,6 +87,8 @@ export const UIRoot = ({
               handleMouseDown={handleMouseDown}
               handlePauseBtn={handlePauseBtn}
               isPaused={isPaused}
+              greedyChartDataValues={greedyChartDataValues}
+              playGreedySimulationHandler={playGreedySimulationHandler}
             />
           </div>
           <NeuralNetworkTrainingMetricsDisplay
