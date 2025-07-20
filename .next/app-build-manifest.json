@@ -6,16 +6,21 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
+    "/rl-algos/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/page.css",
-      "static/chunks/app/page.js"
+      "static/chunks/app/rl-algos/layout.js"
     ],
-    "/_not-found/page": [
+    "/rl-algos/dqn/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/rl-algos/dqn/layout.js"
+    ],
+    "/rl-algos/dqn/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/rl-algos/dqn/page.css",
+      "static/chunks/app/rl-algos/dqn/page.js"
     ]
   }
 }

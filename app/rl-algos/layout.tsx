@@ -3,5 +3,5 @@ export default function RLAlgosLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div></div>;
+  return <div>{children}</div>;
 }
