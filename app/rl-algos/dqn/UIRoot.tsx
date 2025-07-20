@@ -25,7 +25,7 @@ export const UIRoot = ({
 }: {
   network: WeightTableContainerProps[];
   numEpisodes: number;
-  chartDataValues: number[];
+  chartDataValues: TrainingMetricsChartData;
   networkDims: number[];
   currentEpisode: number;
   handleCurrentEpisodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
