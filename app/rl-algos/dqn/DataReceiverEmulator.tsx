@@ -12,13 +12,17 @@ export default function DataReceiverEmulator({
 }: {
   networkDims: number[];
   numEpisodes: number;
-  chartDataValues: number[];
+  chartDataValues: TrainingMetricsChartData;
 }) {
   const [currentNetworkWeights, setCurrentNetworkWeights] = useState<
     WeightTableContainerProps[]
   >([]);
   const [currentEpisode, setCurrentEpisode] = useState<number>(0);
-  const [chartData, setChartData] = useState<number[]>([]);
+  const [chartData, setChartData] = useState<TrainingMetricsChartData>({
+    epsilonDecay: [],
+    lossFn: [],
+    cumulativeRewards: [],
+  });
   const [isPaused, setIsPaused] = useState(false);
   const [greedyChartDataValues, setGreedyChartDataValues] = useState<number[]>(
     []
@@ -30,7 +34,14 @@ export default function DataReceiverEmulator({
   ) => {
     const episode = Number(e.target.value);
     setCurrentEpisode(episode);
-    setChartData(chartDataValues.slice(0, episode));
+    setChartData(() => {
+      const newState: TrainingMetricsChartData = {
+        epsilonDecay: chartDataValues.epsilonDecay.slice(0, episode),
+        lossFn: chartDataValues.lossFn.slice(0, episode),
+        cumulativeRewards: chartDataValues.cumulativeRewards.slice(0, episode),
+      };
+      return newState;
+    });
   };
 
   const incrementCurrentEpisode = () => {
@@ -47,7 +58,6 @@ export default function DataReceiverEmulator({
   };
 
   const playGreedySimulationHandler = () => {
-    console.log("bye");
     setGreedyChartDataValues(() => {
       return Array.from({ length: numEpisodes }, () => Math.random() * 100);
     });
@@ -58,7 +68,17 @@ export default function DataReceiverEmulator({
 
     intervalRef.current = setInterval(() => {
       incrementCurrentEpisode();
-      setChartData(chartDataValues.slice(0, currentEpisode));
+      setChartData(() => {
+        const newState: TrainingMetricsChartData = {
+          epsilonDecay: chartDataValues.epsilonDecay.slice(0, currentEpisode),
+          lossFn: chartDataValues.lossFn.slice(0, currentEpisode),
+          cumulativeRewards: chartDataValues.cumulativeRewards.slice(
+            0,
+            currentEpisode
+          ),
+        };
+        return newState;
+      });
       setCurrentNetworkWeights(updateMockNetwork(initMockNetwork(networkDims)));
     }, 2000);
 

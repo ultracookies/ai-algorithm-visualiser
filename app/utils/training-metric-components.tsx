@@ -23,12 +23,18 @@ ChartJS.register(
   Legend
 );
 
-export function LineGraph({ chartData }: { chartData: number[] }) {
+export function LineGraph({
+  chartData,
+  label,
+}: {
+  chartData: number[];
+  label: string;
+}) {
   const data = {
     labels: Array.from(chartData, (_, i) => i),
     datasets: [
       {
-        label: "Epsilon",
+        label: label,
         data: chartData,
         borderColor: "blue",
       },
