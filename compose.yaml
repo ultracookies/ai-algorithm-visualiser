@@ -1,0 +1,11 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: yarn dev
