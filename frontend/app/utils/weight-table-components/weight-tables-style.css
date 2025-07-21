@@ -1,0 +1,33 @@
+.arrow {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.grid-container {
+  width: "60%";
+  height: 400;
+  background: "blue";
+}
+
+.grid-slide-container {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  max-height: 1000px; /* adjust to max expected height */
+}
+
+.grid-slide-container.closed {
+  max-height: 0;
+  padding: 0;
+}
