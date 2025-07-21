@@ -1,4 +1,4 @@
-// File: /Users/ismailajaz/Documents/webprojects/ai-algorithm-visualiser/app/rl-algos/layout.tsx
+// File: /Users/ismailajaz/Documents/webprojects/ai-algorithm-visualiser/frontend/app/rl-algos/layout.tsx
 import * as entry from '../../../../app/rl-algos/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

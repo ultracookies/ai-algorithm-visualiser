@@ -1,3 +1,4 @@
 {
+  "/page": "app/page.js",
   "/rl-algos/dqn/page": "app/rl-algos/dqn/page.js"
 }
