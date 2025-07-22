@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-socketio
+pytest
+pytest-asyncio
+httpx
+asgi-lifespan 
+coverage
