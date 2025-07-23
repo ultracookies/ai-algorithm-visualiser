@@ -4,6 +4,7 @@ from app.core.socket import sio_app
 import socketio
 
 app = FastAPI()
+print('hi')
 
 # Mount Socket.IO ASGI app
 app.mount("/ws", socketio.ASGIApp(sio_app))
