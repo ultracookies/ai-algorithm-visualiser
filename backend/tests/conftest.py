@@ -13,4 +13,4 @@ async def sio_client():
     sio = socketio.AsyncClient()
     await sio.connect('http://localhost:8000')
     yield sio
-    # await sio.disconnect()
+    await sio.disconnect()
