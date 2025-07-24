@@ -1,6 +1,6 @@
 import socketio
 
-sio_app = socketio.AsyncServer(async_mode="asgi")
+sio_app = socketio.AsyncServer(async_mode='asgi')
 
 @sio_app.event
 async def connect(sid, environ):
