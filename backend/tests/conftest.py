@@ -1,16 +1,19 @@
 import pytest
-from httpx import AsyncClient
-from app.main import app  # FastAPI app
 import socketio
+from app.main import app
+
+from fastapi.testclient import TestClient
 
 @pytest.fixture
-async def async_client():
-    async with AsyncClient(base_url='http://localhost:8000') as client:
-        yield client
+def client():
+    client = TestClient(app)
+    yield client
+    client.close()
+    
 
 @pytest.fixture
 async def sio_client():
     sio = socketio.AsyncClient()
-    await sio.connect('http://localhost:8000')
+    await sio.connect('http://test')
     yield sio
     await sio.disconnect()
