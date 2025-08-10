@@ -7,3 +7,5 @@ httpx
 asgi-lifespan 
 coverage
 python-socketio[asyncio_client]
+pydantic
+orjson
