@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-import json
+import orjson
 from fastapi.responses import ORJSONResponse
 
 from pathlib import Path
@@ -10,10 +10,9 @@ router = APIRouter()
 async def ping():
     return {"message": "pong"}
 
-@router.get('/rl/vdqn')
+@router.get('/rl/vdqn', response_class=ORJSONResponse)
 async def vdqn():
-    data = {}
-    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'vdqn.json'
-    with open(file_path, 'r') as f:
-        data.update(json.load(f))
-    return data
+    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'ddqn.bin'
+    with open(file_path, 'rb') as f:
+        obj = orjson.loads(f.read())
+        return ORJSONResponse(obj)
