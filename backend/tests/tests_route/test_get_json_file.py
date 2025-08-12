@@ -1,10 +1,10 @@
 import hashlib
 
-EXPECTED_FILE_SIZE = 25605
-EXPECTED_FILE_HASH = '8f7f7aface65890bfb583ec83f8598748524fc3e3e8f422bfdf63fb4b3129145'
+def test_get_bin_file(client):
+    EXPECTED_FILE_SIZE = 8267837
+    EXPECTED_FILE_HASH = 'd0ee99e551305ca73dbbd56e49675d9820085e41f9ff2faf0836be9decd121de'
 
-def test_get_json_file(client):
-    response = client.get('rl/vdqn')
+    response = client.get('/rl/vdqn')
     assert response.status_code == 200
 
     content_length = response.headers['Content-Length']
@@ -12,5 +12,3 @@ def test_get_json_file(client):
 
     content_hash = hashlib.sha256(response.content).hexdigest()
     assert content_hash == EXPECTED_FILE_HASH
-
-    
