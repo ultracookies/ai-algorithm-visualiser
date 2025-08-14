@@ -1,11 +1,15 @@
 fastapi
 uvicorn[standard]
-python-socketio
 pytest
 pytest-asyncio
 httpx
 asgi-lifespan 
 coverage
-python-socketio[asyncio_client]
 pydantic
 orjson
+gymnasium
+gymnasium[classic-control]
+torch
+torchvision
+imageio
+imageio[ffmpeg]

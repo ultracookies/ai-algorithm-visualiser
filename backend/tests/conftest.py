@@ -1,5 +1,4 @@
 import pytest
-import socketio
 from app.main import app
 
 from fastapi.testclient import TestClient
@@ -11,9 +10,9 @@ def client():
     client.close()
     
 
-@pytest.fixture
-async def sio_client():
-    sio = socketio.AsyncClient()
-    await sio.connect('http://test')
-    yield sio
-    await sio.disconnect()
+# @pytest.fixture
+# async def sio_client():
+#     sio = socketio.AsyncClient()
+#     await sio.connect('http://test')
+#     yield sio
+#     await sio.disconnect()
