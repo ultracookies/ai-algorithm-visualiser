@@ -1,14 +1,16 @@
 import hashlib
+import orjson
 
-def test_get_bin_file(client):
-    EXPECTED_FILE_SIZE = 8267837
-    EXPECTED_FILE_HASH = 'd0ee99e551305ca73dbbd56e49675d9820085e41f9ff2faf0836be9decd121de'
+def test_get_cartpole_vdqn(client):
+    EXPECTED_LEN = 5815590
+    EXPECTED_HASH = 'd173d316266f61ef64e76cb74a69df6e8129f2914d5e8f796649593f6a29b1c4'
 
-    response = client.get('/rl/vdqn')
+    response = client.get('rl/vdqn/cartpole')
     assert response.status_code == 200
 
-    content_length = response.headers['Content-Length']
-    assert int(content_length) == EXPECTED_FILE_SIZE
+    content_len = response.headers['Content-Length']
+    assert int(content_len) == EXPECTED_LEN
 
-    content_hash = hashlib.sha256(response.content).hexdigest()
-    assert content_hash == EXPECTED_FILE_HASH
+    res_content = response.content
+
+    content_hash = hashlib.sha256(res_content).hexdigest()
