@@ -11,6 +11,7 @@ interface GridCellProps {
   style: CSSProperties;
   data: {
     networkWeights: number[][];
+    networkBiases: number[];
     selectedNeuronsLayer: {
       inputNeurons: Set<number>;
       outputNeurons: Set<number>;
@@ -29,6 +30,7 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
   // columnIndex is the output node
 
   const networkWeights = data.networkWeights;
+  const networkBiases = data.networkBiases;
   const selectedNeuronsLayer = data.selectedNeuronsLayer;
 
   const gridCellStyle = { ...style };
@@ -50,6 +52,18 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
 
   if (columnIndex === 0 && rowIndex > 0) {
     // row labels
+    if (rowIndex === networkWeights.length + 1) {
+      return (
+        <div
+          style={{
+            ...style,
+          }}
+          className="cell"
+        >
+          <div>Bias</div>
+        </div>
+      );
+    }
     return (
       <div
         style={{
@@ -71,6 +85,14 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
     );
   }
 
+  if (rowIndex === networkWeights.length + 1 && columnIndex > 0) {
+    return (
+      <div style={gridCellStyle} className="cell">
+        {networkBiases[columnIndex - 1]}
+      </div>
+    );
+  }
+
   if (columnIndex > 0 && rowIndex > 0) {
     return (
       <div style={gridCellStyle} className="cell">
@@ -84,9 +106,11 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
 
 const WeightTable = ({
   layerWeights,
+  layerBiases,
   selectedNeuronsLayer,
 }: {
   layerWeights: number[][];
+  layerBiases;
   selectedNeuronsLayer: {
     inputNeurons: Set<number>;
     outputNeurons: Set<number>;
@@ -97,7 +121,7 @@ const WeightTable = ({
 
   return (
     <FixedSizeGrid
-      rowCount={rowCount + 1}
+      rowCount={rowCount + 2} // account for bias terms
       columnCount={columnCount + 1}
       rowHeight={CELL_HEIGHT}
       columnWidth={CELL_WIDTH}
@@ -105,6 +129,7 @@ const WeightTable = ({
       width={GRID_WIDTH}
       itemData={{
         networkWeights: layerWeights,
+        networkBiases: layerBiases,
         selectedNeuronsLayer: selectedNeuronsLayer,
       }}
       style={{ color: "white", fontSize: "12px" }}

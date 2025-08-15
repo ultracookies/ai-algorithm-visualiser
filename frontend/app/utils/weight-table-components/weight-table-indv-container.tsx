@@ -8,10 +8,12 @@ import "./weight-tables-style.css";
 export default function WeightTableContainer({
   layerName,
   layerWeights,
+  layerBiases,
   selectedNeuronsLayer,
 }: {
   layerName: string;
   layerWeights: number[][];
+  layerBiases: number[];
   selectedNeuronsLayer: {
     inputNeurons: Set<number>;
     outputNeurons: Set<number>;
@@ -48,6 +50,7 @@ export default function WeightTableContainer({
       >
         <WeightTable
           layerWeights={layerWeights}
+          layerBiases={layerBiases}
           selectedNeuronsLayer={selectedNeuronsLayer}
         />
       </div>
