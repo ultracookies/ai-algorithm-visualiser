@@ -7,3 +7,6 @@ def test_get_greedy_sim(client):
     content_json = response.content
     content = orjson.loads(content_json)
     assert content['total_rewards'].__len__() == 5
+
+def test_get_greedy_sim_with_epsilon(client):
+    pass
