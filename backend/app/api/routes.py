@@ -15,20 +15,20 @@ router = APIRouter()
 async def ping():
     return {"message": "pong"}
 
-@router.get('/rl/vdqn', response_class=ORJSONResponse)
+@router.get('/rl/vdqn/cartpole', response_class=ORJSONResponse)
 async def vdqn():
-    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'ddqn.bin'
+    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_data.bin'
     with open(file_path, 'rb') as f:
         obj = orjson.loads(f.read())
         return ORJSONResponse(obj)
 
-@router.get('/rl/vdqn/cartpole/{index}')
+@router.get('/rl/vdqn/cartpole/greedy_simulation/{index}')
 async def greedy_simulation(index: int, epsilon: float = 0.0):
-    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'ddqn.bin'
+    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_data.bin'
     with open(file_path, 'rb') as f:
         obj = orjson.loads(f.read())
         index_network_instance = obj['network_instances'][index]
-        simulation_frames, total_rewards = greedy_sim.simulate_cartpole(index_network_instance, epsilon, steps=300)
+        simulation_frames, total_rewards = greedy_sim.simulate_cartpole(index_network_instance, epsilon, steps=100)
         video_buffer = io.BytesIO()
         with iio.imopen(video_buffer, 'w', extension='.mp4') as writer:
             for frame in simulation_frames:

@@ -9,17 +9,20 @@ def simulate_cartpole(network_instance: dict, epsilon: float, num_episodes=5, st
     total_rewards = []
     env = gym.make('CartPole-v1', render_mode='rgb_array')
 
-    # for k, v in network_instance.items():
-    #     network_instance[k] = torch.tensor(v)
+    model = gymenvs_neuralnets.cartpole_model
+
+    # load weights into model
+    for k, v in network_instance.items():
+        network_instance[k] = torch.tensor(v)
     
-    # model.load_state_dict(network_instance)
+    model.load_state_dict(network_instance)
 
     for _ in range(num_episodes):
         obs, _ = env.reset()
         total_reward = 0
         for _ in range(steps):
             obs_tensor = torch.tensor(obs)
-            q_values = gymenvs_neuralnets.cartpole_model(obs_tensor)
+            q_values = model(obs_tensor)
             greedy_action = torch.argmax(q_values).item()
             action = greedy_action
             if np.random.rand() < epsilon:
