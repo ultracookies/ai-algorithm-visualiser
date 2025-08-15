@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pytest
+pytest-asyncio
+httpx
+asgi-lifespan 
+coverage
+pydantic
+orjson
+gymnasium
+gymnasium[classic-control]
+torch
+torchvision
+imageio
+imageio[ffmpeg]
