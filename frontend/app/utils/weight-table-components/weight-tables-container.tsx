@@ -21,6 +21,7 @@ export default function WeightTablesContainer({
             <WeightTableContainer
               layerName={layer.layerName}
               layerWeights={layer.layerWeights}
+              layerBiases={layer.layerBiases}
               selectedNeuronsLayer={{
                 inputNeurons: selectedNeurons[i],
                 outputNeurons: selectedNeurons[i + 1],

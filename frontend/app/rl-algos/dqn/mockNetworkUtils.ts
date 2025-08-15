@@ -8,6 +8,7 @@ export function updateMockNetwork(
     const newLayer: WeightTableContainerProps = {
       layerName: network[i].layerName,
       layerWeights: [],
+      layerBiases: [],
     };
     const oldLayerWeights = network[i].layerWeights;
     for (let j = 0; j < oldLayerWeights.length; ++j) {
@@ -17,6 +18,11 @@ export function updateMockNetwork(
       }
       newLayer.layerWeights.push(idk);
     }
+    const oldBiases = network[i].layerBiases;
+    for (let j = 0; j < oldBiases.length; ++j) {
+      newLayer.layerBiases.push(Math.random());
+    }
+
     newNetwork.push(newLayer);
   }
   return newNetwork;
@@ -36,11 +42,21 @@ export function initMockNetwork(nDims: number[]): WeightTableContainerProps[] {
     }
     const layer: WeightTableContainerProps = {
       layerName: layerName,
-      layerWeights: generateRandomArray(nDims[i], nDims[j++]),
+      layerWeights: generateRandomArray(nDims[i], nDims[j]),
+      layerBiases: generateRandomList(nDims[j]),
     };
+    j++;
     network.push(layer);
   }
   return network;
+}
+
+function generateRandomList(numItems: number) {
+  const list: number[] = [];
+  for (let i = 0; i < numItems; ++i) {
+    list.push(Math.random());
+  }
+  return list;
 }
 
 function generateRandomArray(
