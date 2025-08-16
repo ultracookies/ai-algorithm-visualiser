@@ -51,7 +51,7 @@ export function initMockNetwork(nDims: number[]): WeightTableContainerProps[] {
   return network;
 }
 
-function generateRandomList(numItems: number) {
+export function generateRandomList(numItems: number) {
   const list: number[] = [];
   for (let i = 0; i < numItems; ++i) {
     list.push(Math.random());
