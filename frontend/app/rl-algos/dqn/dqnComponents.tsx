@@ -59,18 +59,15 @@ export const GreedyCumulativeRewardsGraph = memo(
     const chartDataRef = useRef<number[]>([]);
     const indexRef = useRef(0);
     const [, forceRender] = useState(0);
-    console.log("fuck");
 
     useEffect(() => {
       const interval = setInterval(() => {
-        console.log("hhddhd");
         if (indexRef.current === chartDataValues.length) return;
         chartDataRef.current.push(chartDataValues[indexRef.current++]);
         forceRender((prev) => prev + 1);
       }, 1000);
 
       return () => {
-        console.log("JHFDSH");
         clearInterval(interval);
         indexRef.current = 0;
         chartDataRef.current = [];

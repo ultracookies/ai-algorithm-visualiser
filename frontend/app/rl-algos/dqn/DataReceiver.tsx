@@ -13,7 +13,7 @@ export default function DataReceiver({
   chartDataValues: TrainingMetricsChartData;
 }) {
   const networkDims = getDims(networkInstances[0]);
-  const numEpisodes = networkInstances.length;
+  const numEpisodes = networkInstances.length - 1;
 
   const [currentNetworkWeights, setCurrentNetworkWeights] = useState<
     WeightTableContainerProps[]
@@ -46,8 +46,10 @@ export default function DataReceiver({
   };
 
   const incrementCurrentEpisode = () => {
+    console.log("if " + currentEpisode + " < " + numEpisodes);
     const newEpisode =
       currentEpisode < numEpisodes ? currentEpisode + 1 : currentEpisode;
+    console.log(newEpisode);
     setCurrentEpisode(newEpisode);
   };
 
@@ -63,8 +65,6 @@ export default function DataReceiver({
       return Array.from({ length: numEpisodes }, () => Math.random() * 100);
     });
   };
-
-  //   let data = {}
 
   useEffect(() => {
     if (isPaused) return;
@@ -86,7 +86,7 @@ export default function DataReceiver({
     }, 2000);
 
     return () => clearInterval(intervalRef.current!);
-  }, []);
+  });
 
   return (
     <UIRoot
