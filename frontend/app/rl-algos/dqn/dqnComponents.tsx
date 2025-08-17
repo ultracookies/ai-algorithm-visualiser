@@ -12,6 +12,7 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
   network: WeightTableContainerProps[];
   selectedNeurons: Set<number>[];
   chartData: TrainingMetricsChartData;
+  chart;
 }) => {
   return (
     <div className="flex flex-col" style={{ width: "auto" }}>
@@ -19,11 +20,23 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
         network={network}
         selectedNeurons={selectedNeurons}
       />
-      <LineGraph chartData={chartData.epsilonDecay} label="Epsilon" />
-      <LineGraph chartData={chartData.lossFn} label="Loss" />
+      <LineGraph
+        chartData={chartData.epsilonDecay}
+        chartTitle="Epsilon Decay"
+        xlabel="Episode"
+        ylabel="Epsilon"
+      />
+      <LineGraph
+        chartData={chartData.lossFn}
+        chartTitle="Loss Curve"
+        xlabel="Episode"
+        ylabel="Loss"
+      />
       <LineGraph
         chartData={chartData.cumulativeRewards}
-        label="Cumulative Rewards Per Episode"
+        chartTitle="Cumulative Rewards Per Episode"
+        xlabel="Episode"
+        ylabel="Cumulative Reward"
       />
     </div>
   );
@@ -77,7 +90,12 @@ export const GreedyCumulativeRewardsGraph = memo(
     }, [chartDataValues]);
 
     return (
-      <LineGraph chartData={chartDataRef.current} label="Greedy Rewards" />
+      <LineGraph
+        chartData={chartDataRef.current}
+        chartTitle="Greedy Rewards Per Episode"
+        xlabel="Episode"
+        ylabel="Greedy Reward"
+      />
     );
   }
 );
