@@ -106,7 +106,7 @@ function SeekBar({
       <input
         type="range"
         min="0"
-        max={numEpisodes}
+        max={numEpisodes - 1}
         value={currentEpisode}
         onMouseDown={handleMouseDown}
         onChange={handleCurrentEpisodeChange}

@@ -34,7 +34,7 @@ export function LineGraph({
   ylabel: string;
 }) {
   const data = {
-    labels: Array.from(chartData, (_, i) => i),
+    labels: Array.from(chartData, (_, i) => i + 1),
     datasets: [
       {
         label: chartTitle,
