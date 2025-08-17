@@ -21,6 +21,7 @@ export const Idk = memo(
     handlePauseBtn,
     greedyChartDataValues,
     playGreedySimulationHandler,
+    greedySimURL,
   }: {
     numEpisodes: number;
     currentEpisode: number;
@@ -32,6 +33,7 @@ export const Idk = memo(
     handlePauseBtn: () => void;
     greedyChartDataValues: number[];
     playGreedySimulationHandler: () => void;
+    greedySimURL: string;
   }) => {
     console.log("Idk re-render");
 
@@ -48,6 +50,7 @@ export const Idk = memo(
           isPaused={isPaused}
           greedyChartDataValues={greedyChartDataValues}
           playGreedySimulationHandler={playGreedySimulationHandler}
+          greedySimURL={greedySimURL}
         />
       </>
     );

@@ -31,8 +31,7 @@ async def greedy_simulation(index: int, epsilon: float = 0.0):
         simulation_frames, total_rewards = greedy_sim.simulate_cartpole(index_network_instance, epsilon, steps=100)
         video_buffer = io.BytesIO()
         with iio.imopen(video_buffer, 'w', extension='.mp4') as writer:
-            for frame in simulation_frames:
-                writer.write(frame)
+            writer.write(simulation_frames)
 
         video_bytes = video_buffer.getvalue()
         video_b64 = base64.b64encode(video_bytes).decode('ascii')
