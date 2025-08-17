@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import { UIRoot } from "./UIRoot";
 import { getDims } from "./mockNetworkUtils";
+import { getGreedySimulation } from "./client";
 
 export default function DataReceiver({
   networkInstances,
@@ -28,6 +29,7 @@ export default function DataReceiver({
   const [greedyChartDataValues, setGreedyChartDataValues] = useState<number[]>(
     []
   );
+  const [greedySimURL, setGreedySimURL] = useState<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCurrentEpisodeChange = (
@@ -46,10 +48,8 @@ export default function DataReceiver({
   };
 
   const incrementCurrentEpisode = () => {
-    console.log("if " + currentEpisode + " < " + numEpisodes);
     const newEpisode =
       currentEpisode < numEpisodes ? currentEpisode + 1 : currentEpisode;
-    console.log(newEpisode);
     setCurrentEpisode(newEpisode);
   };
 
@@ -60,10 +60,19 @@ export default function DataReceiver({
     setIsPaused(true);
   };
 
+  const fetchGreedySimData = async () => {
+    const greedySimData = await getGreedySimulation(currentEpisode);
+    const greedySimChartData: number[] = greedySimData.total_rewards;
+    const greedySimVidBytes = greedySimData.simulation;
+    setGreedyChartDataValues(greedySimChartData);
+
+    const blob = base64ToBlob(greedySimVidBytes, "video/mp4");
+    const url = URL.createObjectURL(blob);
+    setGreedySimURL(url);
+  };
+
   const playGreedySimulationHandler = () => {
-    setGreedyChartDataValues(() => {
-      return Array.from({ length: numEpisodes }, () => Math.random() * 100);
-    });
+    fetchGreedySimData();
   };
 
   useEffect(() => {
@@ -101,6 +110,12 @@ export default function DataReceiver({
       handleMouseDown={handleMouseDown}
       greedyChartDataValues={greedyChartDataValues}
       playGreedySimulationHandler={playGreedySimulationHandler}
+      greedySimURL={greedySimURL}
     />
   );
+}
+
+function base64ToBlob(base64: string, mime = "video/mp4"): Blob {
+  const buf = Buffer.from(base64, "base64");
+  return new Blob([buf], { type: mime });
 }

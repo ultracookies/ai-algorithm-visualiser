@@ -33,10 +33,12 @@ export const GreedySimulationContainer = ({
   isPaused,
   greedyChartDataValues,
   playGreedySimulationHandler,
+  greedySimURL,
 }: {
   isPaused: boolean;
   greedyChartDataValues: number[];
   playGreedySimulationHandler: () => void;
+  greedySimURL: string;
 }) => {
   return (
     <>
@@ -47,7 +49,7 @@ export const GreedySimulationContainer = ({
       >
         Play Greedy Simulation
       </button>
-      <SimulationStream />
+      <SimulationStream greedySimURL={greedySimURL} />
       <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
     </>
   );
@@ -80,16 +82,16 @@ export const GreedyCumulativeRewardsGraph = memo(
   }
 );
 
-const SimulationStream = () => {
+const SimulationStream = ({ greedySimURL }: { greedySimURL: string }) => {
   return (
     <div
       className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
       style={{ width: "auto" }}
     >
-      <img
-        src={hi.src}
-        alt="Gym Environment Stream"
+      <video
+        src={greedySimURL}
         className="w-full h-full object-cover rounded-md"
+        controls
       />
     </div>
   );
