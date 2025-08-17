@@ -98,6 +98,7 @@ export default function DataReceiverEmulator({
       handleMouseDown={handleMouseDown}
       greedyChartDataValues={greedyChartDataValues}
       playGreedySimulationHandler={playGreedySimulationHandler}
+      greedySimURL={null}
     />
   );
 }

@@ -14,7 +14,7 @@ export default function DataReceiver({
   chartDataValues: TrainingMetricsChartData;
 }) {
   const networkDims = getDims(networkInstances[0]);
-  const numEpisodes = networkInstances.length - 1;
+  const numEpisodes = networkInstances.length;
 
   const [currentNetworkWeights, setCurrentNetworkWeights] = useState<
     WeightTableContainerProps[]
@@ -37,11 +37,15 @@ export default function DataReceiver({
   ) => {
     const episode = Number(e.target.value);
     setCurrentEpisode(episode);
+    setCurrentNetworkWeights(networkInstances[episode]);
     setChartData(() => {
       const newState: TrainingMetricsChartData = {
-        epsilonDecay: chartDataValues.epsilonDecay.slice(0, episode),
-        lossFn: chartDataValues.lossFn.slice(0, episode),
-        cumulativeRewards: chartDataValues.cumulativeRewards.slice(0, episode),
+        epsilonDecay: chartDataValues.epsilonDecay.slice(0, episode + 1),
+        lossFn: chartDataValues.lossFn.slice(0, episode + 1),
+        cumulativeRewards: chartDataValues.cumulativeRewards.slice(
+          0,
+          episode + 1
+        ),
       };
       return newState;
     });
@@ -49,7 +53,7 @@ export default function DataReceiver({
 
   const incrementCurrentEpisode = () => {
     const newEpisode =
-      currentEpisode < numEpisodes ? currentEpisode + 1 : currentEpisode;
+      currentEpisode < numEpisodes - 1 ? currentEpisode + 1 : currentEpisode;
     setCurrentEpisode(newEpisode);
   };
 
@@ -78,20 +82,23 @@ export default function DataReceiver({
   useEffect(() => {
     if (isPaused) return;
 
+    setCurrentNetworkWeights(networkInstances[currentEpisode]);
     intervalRef.current = setInterval(() => {
       incrementCurrentEpisode();
       setChartData(() => {
         const newState: TrainingMetricsChartData = {
-          epsilonDecay: chartDataValues.epsilonDecay.slice(0, currentEpisode),
-          lossFn: chartDataValues.lossFn.slice(0, currentEpisode),
+          epsilonDecay: chartDataValues.epsilonDecay.slice(
+            0,
+            currentEpisode + 1
+          ),
+          lossFn: chartDataValues.lossFn.slice(0, currentEpisode + 1),
           cumulativeRewards: chartDataValues.cumulativeRewards.slice(
             0,
-            currentEpisode
+            currentEpisode + 1
           ),
         };
         return newState;
       });
-      setCurrentNetworkWeights(networkInstances[currentEpisode]);
     }, 2000);
 
     return () => clearInterval(intervalRef.current!);

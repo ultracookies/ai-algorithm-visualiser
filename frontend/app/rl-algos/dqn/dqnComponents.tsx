@@ -12,7 +12,6 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
   network: WeightTableContainerProps[];
   selectedNeurons: Set<number>[];
   chartData: TrainingMetricsChartData;
-  chart;
 }) => {
   return (
     <div className="flex flex-col" style={{ width: "auto" }}>
