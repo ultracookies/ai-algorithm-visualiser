@@ -14,6 +14,7 @@ export default function DataReceiver({
   chartDataValues: TrainingMetricsChartData;
 }) {
   const networkDims = getDims(networkInstances[0]);
+
   const numEpisodes = networkInstances.length;
 
   const [currentNetworkWeights, setCurrentNetworkWeights] = useState<
