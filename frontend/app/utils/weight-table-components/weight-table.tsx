@@ -26,8 +26,8 @@ const GRID_HEIGHT = 250;
 const GRID_WIDTH = 800;
 
 function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
-  // rowIndex is the input node
-  // columnIndex is the output node
+  // columnIndex is the input node
+  // rowIndex is the output node
 
   const networkWeights = data.networkWeights;
   const networkBiases = data.networkBiases;
@@ -50,9 +50,9 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
     }
   }
 
-  if (columnIndex === 0 && rowIndex > 0) {
+  if (columnIndex > 0 && rowIndex === 0) {
     // row labels
-    if (rowIndex === networkWeights.length + 1) {
+    if (columnIndex === networkWeights.length + 1) {
       return (
         <div
           style={{
@@ -71,24 +71,24 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
         }}
         className="cell"
       >
-        <div>{rowIndex}</div>
+        <div>{columnIndex}</div>
       </div>
     );
   }
 
   // column labels
-  if (columnIndex > 0 && rowIndex === 0) {
+  if (columnIndex === 0 && rowIndex > 0) {
     return (
       <div className="cell" style={{ ...style }}>
-        {columnIndex}
+        {rowIndex}
       </div>
     );
   }
 
-  if (rowIndex === networkWeights.length + 1 && columnIndex > 0) {
+  if (columnIndex === networkWeights.length + 1 && rowIndex > 0) {
     return (
       <div style={gridCellStyle} className="cell">
-        {networkBiases[columnIndex - 1]}
+        {networkBiases[rowIndex - 1]}
       </div>
     );
   }
@@ -96,7 +96,7 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
   if (columnIndex > 0 && rowIndex > 0) {
     return (
       <div style={gridCellStyle} className="cell">
-        {networkWeights[rowIndex - 1][columnIndex - 1]}
+        {networkWeights[columnIndex - 1][rowIndex - 1]}
       </div>
     );
   }
@@ -116,13 +116,13 @@ const WeightTable = ({
     outputNeurons: Set<number>;
   };
 }) => {
-  const rowCount = layerWeights.length;
-  const columnCount = layerWeights[0].length;
+  const rowCount = layerWeights[0].length;
+  const columnCount = layerWeights.length;
 
   return (
     <FixedSizeGrid
-      rowCount={rowCount + 2} // account for bias terms
-      columnCount={columnCount + 1}
+      rowCount={rowCount + 1}
+      columnCount={columnCount + 2} // account for bias terms
       rowHeight={CELL_HEIGHT}
       columnWidth={CELL_WIDTH}
       height={GRID_HEIGHT}
