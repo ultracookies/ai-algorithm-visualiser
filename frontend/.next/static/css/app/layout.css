@@ -215,6 +215,9 @@
   .relative {
     position: relative;
   }
+  .sticky {
+    position: sticky;
+  }
   .-inset-0\.5 {
     inset: calc(var(--spacing) * -0.5);
   }
