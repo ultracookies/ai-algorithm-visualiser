@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 const layerRadius = 8;
 const verticalSpacing = 30;
@@ -47,7 +47,13 @@ const NeuralNetworkSVG = ({
   };
 
   return (
-    <div className="flex overflow-auto">
+    <div
+      className="flex"
+      style={{
+        width: "400px",
+        height: "auto",
+      }}
+    >
       <style jsx>{`
         .neuron {
           cursor: pointer;
@@ -70,7 +76,7 @@ const NeuralNetworkSVG = ({
         }
       `}</style>
 
-      <svg viewBox="0 0 600 600" className="w-150 h-auto" role="img">
+      <svg viewBox="0 0 600 600" className="h-150">
         {/* Connections */}
         {neurons.map((layer, layerIndex) => {
           if (layerIndex === neurons.length - 1) return null;

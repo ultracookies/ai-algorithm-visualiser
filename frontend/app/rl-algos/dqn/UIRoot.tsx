@@ -37,8 +37,6 @@ export const UIRoot = ({
   playGreedySimulationHandler: () => void;
   greedySimURL: string;
 }) => {
-  console.log("hi i re-rendered");
-
   const [selectedNeurons, setSelectedNeurons] = useState(() => {
     const networkNodeLayers: Set<number>[] = [];
     for (let i = 0; i < networkDims.length; ++i) {
@@ -77,11 +75,13 @@ export const UIRoot = ({
         <div className="flex flex-row mt-5">
           {/* parent component */}
           <div className="flex flex-col items-center" style={{ width: "45%" }}>
-            <NeuralNetworkSVG
-              networkDims={networkDims}
-              selectedNeurons={selectedNeurons}
-              handleNeuronClick={handleNeuronClick}
-            />
+            <div style={{ overflow: "hidden" }}>
+              <NeuralNetworkSVG
+                networkDims={networkDims}
+                selectedNeurons={selectedNeurons}
+                handleNeuronClick={handleNeuronClick}
+              />
+            </div>
             <Idk
               numEpisodes={numEpisodes}
               currentEpisode={currentEpisode}

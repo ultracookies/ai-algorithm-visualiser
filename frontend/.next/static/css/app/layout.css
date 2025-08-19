@@ -10,6 +10,10 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-50: oklch(97.1% 0.013 17.38);
+    --color-red-100: oklch(93.6% 0.032 17.717);
+    --color-red-400: oklch(70.4% 0.191 22.216);
+    --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-slate-600: oklch(44.6% 0.043 257.281);
@@ -268,9 +272,6 @@
   .flex {
     display: flex;
   }
-  .grid {
-    display: grid;
-  }
   .hidden {
     display: none;
   }
@@ -293,8 +294,20 @@
   .h-16 {
     height: calc(var(--spacing) * 16);
   }
+  .h-50 {
+    height: calc(var(--spacing) * 50);
+  }
   .h-96 {
     height: calc(var(--spacing) * 96);
+  }
+  .h-150 {
+    height: calc(var(--spacing) * 150);
+  }
+  .h-200 {
+    height: calc(var(--spacing) * 200);
+  }
+  .h-400 {
+    height: calc(var(--spacing) * 400);
   }
   .h-auto {
     height: auto;
@@ -319,6 +332,21 @@
   }
   .w-175 {
     width: calc(var(--spacing) * 175);
+  }
+  .w-200 {
+    width: calc(var(--spacing) * 200);
+  }
+  .w-350 {
+    width: calc(var(--spacing) * 350);
+  }
+  .w-400 {
+    width: calc(var(--spacing) * 400);
+  }
+  .w-550 {
+    width: calc(var(--spacing) * 550);
+  }
+  .w-700 {
+    width: calc(var(--spacing) * 700);
   }
   .w-auto {
     width: auto;
@@ -359,6 +387,9 @@
   .gap-2 {
     gap: calc(var(--spacing) * 2);
   }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
   .gap-10 {
     gap: calc(var(--spacing) * 10);
   }
@@ -378,9 +409,6 @@
       margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
       margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
     }
-  }
-  .overflow-auto {
-    overflow: auto;
   }
   .overflow-scroll {
     overflow: scroll;
@@ -408,6 +436,9 @@
   .border-white {
     border-color: var(--color-white);
   }
+  .bg-blue-400 {
+    background-color: var(--color-blue-400);
+  }
   .bg-blue-500 {
     background-color: var(--color-blue-500);
   }
@@ -416,6 +447,15 @@
   }
   .bg-gray-900 {
     background-color: var(--color-gray-900);
+  }
+  .bg-red-50 {
+    background-color: var(--color-red-50);
+  }
+  .bg-red-100 {
+    background-color: var(--color-red-100);
+  }
+  .bg-red-400 {
+    background-color: var(--color-red-400);
   }
   .bg-slate-900 {
     background-color: var(--color-slate-900);
