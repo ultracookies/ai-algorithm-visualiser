@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
+import { Box, Button } from "@mui/material";
 
 import NeuralNetworkSVG from "../../utils/neural-network-components/neural-network-visual";
-import {
-  NeuralNetworkTrainingMetricsDisplay,
-  DeepQNetworkDescription,
-} from "./dqnComponents";
+import { TrainingMetrics, GreedySimulationComponent } from "./dqnComponents";
+import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
 import { Idk } from "../../utils/playback-control-components/seek-bar";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 
@@ -68,40 +67,61 @@ export const UIRoot = ({
 
   return (
     <>
-      <div className="flex justify-center">
-        <h1 className="text-white text-4xl font-bold m-4">Deep Q Network</h1>
-      </div>
-      <div className="flex flex-col">
-        <div className="flex flex-row mt-5">
-          {/* parent component */}
-          <div className="flex flex-col items-center" style={{ width: "45%" }}>
-            <div style={{ overflow: "hidden" }}>
-              <NeuralNetworkSVG
-                networkDims={networkDims}
-                selectedNeurons={selectedNeurons}
-                handleNeuronClick={handleNeuronClick}
-              />
-            </div>
-            <Idk
-              numEpisodes={numEpisodes}
-              currentEpisode={currentEpisode}
-              handleCurrentEpisodeChange={handleCurrentEpisodeChange}
-              handleMouseDown={handleMouseDown}
-              handlePauseBtn={handlePauseBtn}
-              isPaused={isPaused}
-              greedyChartDataValues={greedyChartDataValues}
-              playGreedySimulationHandler={playGreedySimulationHandler}
-              greedySimURL={greedySimURL}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+        }}
+      >
+        <Box
+          sx={{
+            bgcolor: "blue",
+            ml: 1,
+          }}
+        >
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <NeuralNetworkSVG
+              networkDims={networkDims}
+              selectedNeurons={selectedNeurons}
+              handleNeuronClick={handleNeuronClick}
             />
-          </div>
-          <NeuralNetworkTrainingMetricsDisplay
+          </Box>
+
+          <Idk
+            numEpisodes={numEpisodes}
+            currentEpisode={currentEpisode}
+            handleCurrentEpisodeChange={handleCurrentEpisodeChange}
+            handleMouseDown={handleMouseDown}
+            isPaused={isPaused}
+            handlePauseBtn={handlePauseBtn}
+          />
+        </Box>
+        <Box sx={{ m: 3 }}>
+          <WeightTablesContainer
             network={network}
             selectedNeurons={selectedNeurons}
-            chartData={chartDataValues}
           />
-        </div>
-        <DeepQNetworkDescription />
-      </div>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column-reverse", md: "row" },
+        }}
+      >
+        <Box sx={{ width: "50%" }}>
+          <Button variant="outlined" onClick={playGreedySimulationHandler}>
+            Play Greedy Simulation
+          </Button>
+          <GreedySimulationComponent
+            greedySimURL={greedySimURL}
+            greedyChartDataValues={greedyChartDataValues}
+          />
+        </Box>
+        <Box sx={{ width: "50%" }}>
+          <TrainingMetrics chartData={chartDataValues} />
+        </Box>
+      </Box>
     </>
   );
 };

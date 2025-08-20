@@ -13,7 +13,7 @@ export default function WeightTablesContainer({
   return (
     <div
       className="flex flex-col border-white border-2 p-6 rounded-md items-center bg-slate-900 overflow-scroll"
-      style={{ height: "500px" }}
+      style={{ height: "100vh" }}
     >
       {Array.from(network).map((layer, i) => {
         return (

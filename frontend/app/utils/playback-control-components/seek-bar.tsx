@@ -6,7 +6,7 @@ import { memo } from "react";
 import React from "react";
 import { Rewind, Pause, FastForward, Play } from "lucide-react";
 
-import { GreedySimulationContainer } from "../../rl-algos/dqn/dqnComponents";
+import { Box } from "@mui/material";
 
 const iconButtonClasses =
   "flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-md transition";
@@ -19,9 +19,6 @@ export const Idk = memo(
     handleMouseDown,
     isPaused,
     handlePauseBtn,
-    greedyChartDataValues,
-    playGreedySimulationHandler,
-    greedySimURL,
   }: {
     numEpisodes: number;
     currentEpisode: number;
@@ -31,14 +28,9 @@ export const Idk = memo(
     handleMouseDown: () => void;
     isPaused: boolean;
     handlePauseBtn: () => void;
-    greedyChartDataValues: number[];
-    playGreedySimulationHandler: () => void;
-    greedySimURL: string;
   }) => {
-    console.log("Idk re-render");
-
     return (
-      <>
+      <Box>
         <MediaControls isPaused={isPaused} handlePauseBtn={handlePauseBtn} />
         <SeekBar
           numEpisodes={numEpisodes}
@@ -46,18 +38,12 @@ export const Idk = memo(
           handleCurrentEpisodeChange={handleCurrentEpisodeChange}
           handleMouseDown={handleMouseDown}
         />
-        <GreedySimulationContainer
-          isPaused={isPaused}
-          greedyChartDataValues={greedyChartDataValues}
-          playGreedySimulationHandler={playGreedySimulationHandler}
-          greedySimURL={greedySimURL}
-        />
-      </>
+      </Box>
     );
   }
 );
 // memoize this
-export const MediaControls = memo(
+const MediaControls = memo(
   ({
     isPaused,
     handlePauseBtn,
