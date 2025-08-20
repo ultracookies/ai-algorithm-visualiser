@@ -3,6 +3,7 @@ import hi from "../../utils/photos/hi.jpeg";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
 import { useEffect, useRef, useState, memo } from "react";
+import { Box } from "@mui/material";
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
@@ -19,6 +20,32 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
         network={network}
         selectedNeurons={selectedNeurons}
       />
+    </div>
+  );
+};
+
+export const GreedySimulationComponent = ({
+  greedySimURL,
+  greedyChartDataValues,
+}: {
+  greedySimURL: string;
+  greedyChartDataValues: number[];
+}) => {
+  return (
+    <>
+      <SimulationStream greedySimURL={greedySimURL} />
+      <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
+    </>
+  );
+};
+
+export const TrainingMetrics = ({
+  chartData,
+}: {
+  chartData: TrainingMetricsChartData;
+}) => {
+  return (
+    <Box>
       <LineGraph
         chartData={chartData.epsilonDecay}
         chartTitle="Epsilon Decay"
@@ -37,7 +64,7 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
         xlabel="Episode"
         ylabel="Cumulative Reward"
       />
-    </div>
+    </Box>
   );
 };
 
@@ -99,7 +126,11 @@ export const GreedyCumulativeRewardsGraph = memo(
   }
 );
 
-const SimulationStream = ({ greedySimURL }: { greedySimURL: string }) => {
+export const SimulationStream = ({
+  greedySimURL,
+}: {
+  greedySimURL: string;
+}) => {
   return (
     <div
       className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"

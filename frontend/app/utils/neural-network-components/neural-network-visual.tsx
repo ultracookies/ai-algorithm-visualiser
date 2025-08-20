@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 
 const layerRadius = 8;
 const verticalSpacing = 30;
@@ -52,6 +52,7 @@ const NeuralNetworkSVG = ({
       style={{
         width: "400px",
         height: "auto",
+        backgroundColor: "green",
       }}
     >
       <style jsx>{`
