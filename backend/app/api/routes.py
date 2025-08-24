@@ -17,7 +17,7 @@ async def ping():
 
 @router.get('/rl/vdqn/cartpole', response_class=ORJSONResponse)
 async def vdqn():
-    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_data2.bin'
+    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_transposed_data.bin'
     with open(file_path, 'rb') as f:
         obj = orjson.loads(f.read())
         return ORJSONResponse(obj)

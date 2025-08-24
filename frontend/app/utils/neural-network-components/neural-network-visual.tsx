@@ -52,7 +52,6 @@ const NeuralNetworkSVG = ({
       style={{
         width: "400px",
         height: "auto",
-        backgroundColor: "green",
       }}
     >
       <style jsx>{`

@@ -9,9 +9,13 @@ import { getGreedySimulation } from "./client";
 export default function DataReceiver({
   networkInstances,
   chartDataValues,
+  isLoading,
+  toggleIsLoading,
 }: {
   networkInstances: WeightTableContainerProps[][];
   chartDataValues: TrainingMetricsChartData;
+  isLoading: boolean;
+  toggleIsLoading: () => void;
 }) {
   const networkDims = getDims(networkInstances[0]);
 
@@ -66,14 +70,21 @@ export default function DataReceiver({
   };
 
   const fetchGreedySimData = async () => {
-    const greedySimData = await getGreedySimulation(currentEpisode);
-    const greedySimChartData: number[] = greedySimData.total_rewards;
-    const greedySimVidBytes = greedySimData.simulation;
-    setGreedyChartDataValues(greedySimChartData);
+    toggleIsLoading();
+    try {
+      const greedySimData = await getGreedySimulation(currentEpisode);
+      const greedySimChartData: number[] = greedySimData.total_rewards;
+      const greedySimVidBytes = greedySimData.simulation;
+      setGreedyChartDataValues(greedySimChartData);
 
-    const blob = base64ToBlob(greedySimVidBytes, "video/mp4");
-    const url = URL.createObjectURL(blob);
-    setGreedySimURL(url);
+      const blob = base64ToBlob(greedySimVidBytes, "video/mp4");
+      const url = URL.createObjectURL(blob);
+      setGreedySimURL(url);
+    } catch (error) {
+      console.error("Error fetching greedy simulation data: ", error);
+    } finally {
+      toggleIsLoading();
+    }
   };
 
   const playGreedySimulationHandler = () => {
@@ -119,6 +130,7 @@ export default function DataReceiver({
       greedyChartDataValues={greedyChartDataValues}
       playGreedySimulationHandler={playGreedySimulationHandler}
       greedySimURL={greedySimURL}
+      isLoading={isLoading}
     />
   );
 }

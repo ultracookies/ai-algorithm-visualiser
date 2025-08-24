@@ -22,6 +22,7 @@ export const UIRoot = ({
   greedyChartDataValues,
   playGreedySimulationHandler,
   greedySimURL,
+  isLoading,
 }: {
   network: WeightTableContainerProps[];
   numEpisodes: number;
@@ -35,6 +36,7 @@ export const UIRoot = ({
   greedyChartDataValues: number[];
   playGreedySimulationHandler: () => void;
   greedySimURL: string;
+  isLoading: boolean;
 }) => {
   const [selectedNeurons, setSelectedNeurons] = useState(() => {
     const networkNodeLayers: Set<number>[] = [];
@@ -75,16 +77,15 @@ export const UIRoot = ({
       >
         <Box
           sx={{
-            bgcolor: "blue",
             ml: 1,
           }}
         >
           <Box display="flex" justifyContent="center" alignItems="center">
-            <NeuralNetworkSVG
+            {/* <NeuralNetworkSVG
               networkDims={networkDims}
               selectedNeurons={selectedNeurons}
               handleNeuronClick={handleNeuronClick}
-            />
+            /> */}
           </Box>
 
           <Idk
@@ -116,6 +117,7 @@ export const UIRoot = ({
           <GreedySimulationComponent
             greedySimURL={greedySimURL}
             greedyChartDataValues={greedyChartDataValues}
+            isLoading={isLoading}
           />
         </Box>
         <Box sx={{ width: "50%" }}>

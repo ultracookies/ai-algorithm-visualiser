@@ -2,8 +2,8 @@ import hashlib
 import orjson
 
 def test_get_cartpole_vdqn(client):
-    EXPECTED_LEN = 5817814
-    EXPECTED_HASH = '483fbb81e0570435670d9ac593fc8f9f2ff095b1651cf19eecf6b2ad73e1ad84'
+    EXPECTED_LEN = 5818370
+    EXPECTED_HASH = '5592bf90805bf9869dcaae3b1d0edb7aecaf3f4b3495d5e5ba984a94684abaa0'
 
     response = client.get('rl/vdqn/cartpole')
     assert response.status_code == 200
