@@ -32,7 +32,6 @@ const ROW_LABEL_WIDTH = 50;
 const GRID_HEIGHT = 350;
 
 const CELL_WIDTH = 175;
-const CELL_HEIGHT = 50;
 
 function rowContent(_index: number, row: number[]) {
   return (
