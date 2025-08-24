@@ -46,8 +46,6 @@ export const UIRoot = ({
     return networkNodeLayers;
   });
 
-  console.log(networkDims);
-
   const handleNeuronClick = useCallback(
     (layerIndex: number, neuronIndex: number) => {
       setSelectedNeurons((prev) => {
@@ -112,7 +110,7 @@ export const UIRoot = ({
           flexDirection: { xs: "column-reverse", md: "row" },
         }}
       >
-        <Box sx={{ width: "50%" }}>
+        <Box sx={{ width: { xs: "100%", md: "50%" } }}>
           <Button variant="outlined" onClick={playGreedySimulationHandler}>
             Play Greedy Simulation
           </Button>
@@ -122,7 +120,7 @@ export const UIRoot = ({
             isLoading={isLoading}
           />
         </Box>
-        <Box sx={{ width: "50%" }}>
+        <Box sx={{ width: { xs: "100%", md: "50%" } }}>
           <TrainingMetrics chartData={chartDataValues} />
         </Box>
       </Box>

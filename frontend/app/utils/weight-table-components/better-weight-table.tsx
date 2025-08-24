@@ -1,4 +1,4 @@
-import * as React from "react";
+import { memo, Fragment, forwardRef } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import { TableVirtuoso, TableComponents } from "react-virtuoso";
 
 const VirtuosoTableComponents: TableComponents<number[]> = {
-  Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
+  Scroller: forwardRef<HTMLDivElement>((props, ref) => (
     <TableContainer component={Paper} {...props} ref={ref} />
   )),
   Table: (props) => (
@@ -18,11 +18,11 @@ const VirtuosoTableComponents: TableComponents<number[]> = {
       sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
     />
   ),
-  TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+  TableHead: forwardRef<HTMLTableSectionElement>((props, ref) => (
     <TableHead {...props} ref={ref} />
   )),
   TableRow,
-  TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+  TableBody: forwardRef<HTMLTableSectionElement>((props, ref) => (
     <TableBody {...props} ref={ref} />
   )),
 };
@@ -31,7 +31,30 @@ const ROW_LABEL_WIDTH = 50;
 const GRID_HEIGHT = 350;
 const CELL_WIDTH = 180;
 
-export default function BetterWeightTable({
+const BetterWeightTable = memo(
+  ({
+    layerWeights,
+    layerBiases,
+    selectedNeuronsLayer,
+  }: {
+    layerWeights: number[][];
+    layerBiases;
+    selectedNeuronsLayer: {
+      inputNeurons: Set<number>;
+      outputNeurons: Set<number>;
+    };
+  }) => {
+    return BetterWeightTable2({
+      layerWeights,
+      layerBiases,
+      selectedNeuronsLayer,
+    });
+  }
+);
+
+export default BetterWeightTable;
+
+function BetterWeightTable2({
   layerWeights,
   layerBiases,
   selectedNeuronsLayer,
@@ -55,7 +78,7 @@ export default function BetterWeightTable({
             <TableCell
               variant="head"
               align={"center"}
-              style={{ width: ROW_LABEL_WIDTH }}
+              style={{ width: ROW_LABEL_WIDTH, position: "sticky", left: 0 }}
               sx={{
                 backgroundColor: "oklch(27.9% 0.041 260.031)",
                 color: "white",
@@ -96,7 +119,7 @@ export default function BetterWeightTable({
           </TableRow>
         )}
         itemContent={(_index, row) => (
-          <React.Fragment>
+          <Fragment>
             <TableCell
               align="center"
               style={{
@@ -148,7 +171,7 @@ export default function BetterWeightTable({
             >
               {layerBiases[_index]}
             </TableCell>
-          </React.Fragment>
+          </Fragment>
         )}
         style={{ backgroundColor: "oklch(27.9% 0.041 260.031)" }}
       />
