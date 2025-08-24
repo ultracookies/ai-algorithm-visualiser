@@ -75,9 +75,12 @@ function generateRandomArray(
 
 export function getDims(layers: WeightTableContainerProps[]): number[] {
   const dims: number[] = [];
-  dims.push(layers[0].layerWeights[0].length, layers[0].layerWeights.length);
-  for (let i = 1; i < layers.length; ++i) {
-    dims.push(layers[i].layerWeights.length);
+  dims.push(layers[0].layerWeights.length);
+  for (let i = 1; i < layers.length - 1; ++i) {
+    dims.push(
+      layers[i].layerWeights.length,
+      layers[i + 1].layerWeights[0].length
+    );
   }
   return dims;
 }

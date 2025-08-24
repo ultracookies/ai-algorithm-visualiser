@@ -46,6 +46,8 @@ export const UIRoot = ({
     return networkNodeLayers;
   });
 
+  console.log(networkDims);
+
   const handleNeuronClick = useCallback(
     (layerIndex: number, neuronIndex: number) => {
       setSelectedNeurons((prev) => {
@@ -81,11 +83,11 @@ export const UIRoot = ({
           }}
         >
           <Box display="flex" justifyContent="center" alignItems="center">
-            {/* <NeuralNetworkSVG
+            <NeuralNetworkSVG
               networkDims={networkDims}
               selectedNeurons={selectedNeurons}
               handleNeuronClick={handleNeuronClick}
-            /> */}
+            />
           </Box>
 
           <Idk
