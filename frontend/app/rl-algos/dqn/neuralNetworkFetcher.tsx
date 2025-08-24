@@ -21,12 +21,21 @@ export default function NeuralNetworkFetcher() {
       cumulativeRewards: generateRandomList(5),
     },
   };
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [display, setDisplay] = useState(displayData);
+
+  const toggleIsLoading = () => {
+    setIsLoading((prev) => !prev);
+  };
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getTrainingMetrics();
-      setDisplay(preprocessRetrievedData(data, displayData));
+      try {
+        const data = await getTrainingMetrics();
+        setDisplay(preprocessRetrievedData(data, displayData));
+      } catch (error) {
+        console.error("Error fetching network data:", error);
+      }
     };
 
     getData();
@@ -36,6 +45,8 @@ export default function NeuralNetworkFetcher() {
     <DataReceiver
       networkInstances={display.networkInstances}
       chartDataValues={display.chartDataValues}
+      isLoading={isLoading}
+      toggleIsLoading={toggleIsLoading}
     />
   );
 }

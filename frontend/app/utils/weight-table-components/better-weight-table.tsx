@@ -1,0 +1,126 @@
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { TableVirtuoso, TableComponents } from "react-virtuoso";
+
+const VirtuosoTableComponents: TableComponents<number[]> = {
+  Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
+    <TableContainer component={Paper} {...props} ref={ref} />
+  )),
+  Table: (props) => (
+    <Table
+      {...props}
+      sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
+    />
+  ),
+  TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+    <TableHead {...props} ref={ref} />
+  )),
+  TableRow,
+  TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+    <TableBody {...props} ref={ref} />
+  )),
+};
+
+const ROW_LABEL_WIDTH = 50;
+
+const GRID_HEIGHT = 350;
+
+const CELL_WIDTH = 175;
+const CELL_HEIGHT = 50;
+
+function rowContent(_index: number, row: number[]) {
+  return (
+    <React.Fragment>
+      <TableCell
+        align="center"
+        style={{
+          width: ROW_LABEL_WIDTH,
+          position: "sticky",
+          left: 0,
+          backgroundColor: "oklch(27.9% 0.041 260.031)",
+          color: "white",
+          border: " 1px white solid",
+        }}
+      >
+        {_index + 1}
+      </TableCell>
+      {Array.from({ length: row.length }, (_, i) => (
+        <TableCell
+          key={`R${i + 1}`}
+          align={"center"}
+          sx={{
+            backgroundColor: "oklch(27.9% 0.041 260.031)",
+            color: "white",
+            borderRight: "1px white solid",
+          }}
+        >
+          {row[i]}
+        </TableCell>
+      ))}
+    </React.Fragment>
+  );
+}
+
+export default function BetterWeightTable({
+  layerWeights,
+  layerBiases,
+  selectedNeuronsLayer,
+}: {
+  layerWeights: number[][];
+  layerBiases;
+  selectedNeuronsLayer: {
+    inputNeurons: Set<number>;
+    outputNeurons: Set<number>;
+  };
+}) {
+  const ROW_LENGTH = layerWeights[0].length;
+
+  return (
+    <Paper style={{ height: GRID_HEIGHT, width: "100%" }}>
+      <TableVirtuoso
+        data={layerWeights}
+        components={VirtuosoTableComponents}
+        fixedHeaderContent={() => (
+          <TableRow>
+            <TableCell
+              variant="head"
+              align={"center"}
+              style={{ width: ROW_LABEL_WIDTH }}
+              sx={{
+                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                color: "white",
+                borderRight: "1px white solid",
+              }}
+            >
+              #
+            </TableCell>
+            {Array.from({ length: ROW_LENGTH }, (_, i) => (
+              <TableCell
+                key={`C${i + 1}`}
+                variant="head"
+                align={"center"}
+                style={{ width: CELL_WIDTH }}
+                sx={{
+                  backgroundColor: "oklch(27.9% 0.041 260.031)",
+                  color: "white",
+                  borderRight: "1px white solid",
+                  borderTop: "1px white solid",
+                }}
+              >
+                {i + 1}
+              </TableCell>
+            ))}
+          </TableRow>
+        )}
+        itemContent={rowContent}
+        style={{ backgroundColor: "oklch(27.9% 0.041 260.031)" }}
+      />
+    </Paper>
+  );
+}
