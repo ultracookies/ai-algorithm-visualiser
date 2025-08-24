@@ -29,7 +29,7 @@ const VirtuosoTableComponents: TableComponents<number[]> = {
 
 const ROW_LABEL_WIDTH = 50;
 const GRID_HEIGHT = 350;
-const CELL_WIDTH = 175;
+const CELL_WIDTH = 180;
 
 export default function BetterWeightTable({
   layerWeights,
@@ -115,8 +115,23 @@ export default function BetterWeightTable({
                 key={`R${i + 1}`}
                 align={"center"}
                 sx={{
-                  backgroundColor: "oklch(27.9% 0.041 260.031)",
-                  color: "white",
+                  // backgroundColor: "oklch(27.9% 0.041 260.031)",
+                  backgroundColor: isSelected(
+                    _index,
+                    i,
+                    selectedNeuronsLayer.inputNeurons,
+                    selectedNeuronsLayer.outputNeurons
+                  )
+                    ? "cyan"
+                    : "oklch(27.9% 0.041 260.031)",
+                  color: isSelected(
+                    _index,
+                    i,
+                    selectedNeuronsLayer.inputNeurons,
+                    selectedNeuronsLayer.outputNeurons
+                  )
+                    ? "black"
+                    : "white",
                   borderRight: "1px white solid",
                 }}
               >
@@ -139,4 +154,18 @@ export default function BetterWeightTable({
       />
     </Paper>
   );
+}
+
+function isSelected(
+  index: number,
+  i: number,
+  inputNeurons: Set<Number>,
+  outputNeurons: Set<Number>
+): boolean {
+  if (inputNeurons.has(index)) {
+    if (outputNeurons.size === 0 || outputNeurons.has(i)) {
+      return true;
+    }
+  }
+  return false;
 }
