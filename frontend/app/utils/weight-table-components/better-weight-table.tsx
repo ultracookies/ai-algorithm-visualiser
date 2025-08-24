@@ -28,43 +28,8 @@ const VirtuosoTableComponents: TableComponents<number[]> = {
 };
 
 const ROW_LABEL_WIDTH = 50;
-
 const GRID_HEIGHT = 350;
-
 const CELL_WIDTH = 175;
-
-function rowContent(_index: number, row: number[]) {
-  return (
-    <React.Fragment>
-      <TableCell
-        align="center"
-        style={{
-          width: ROW_LABEL_WIDTH,
-          position: "sticky",
-          left: 0,
-          backgroundColor: "oklch(27.9% 0.041 260.031)",
-          color: "white",
-          border: " 1px white solid",
-        }}
-      >
-        {_index + 1}
-      </TableCell>
-      {Array.from({ length: row.length }, (_, i) => (
-        <TableCell
-          key={`R${i + 1}`}
-          align={"center"}
-          sx={{
-            backgroundColor: "oklch(27.9% 0.041 260.031)",
-            color: "white",
-            borderRight: "1px white solid",
-          }}
-        >
-          {row[i]}
-        </TableCell>
-      ))}
-    </React.Fragment>
-  );
-}
 
 export default function BetterWeightTable({
   layerWeights,
@@ -115,9 +80,61 @@ export default function BetterWeightTable({
                 {i + 1}
               </TableCell>
             ))}
+            <TableCell
+              variant="head"
+              align={"center"}
+              style={{ width: CELL_WIDTH }}
+              sx={{
+                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                color: "white",
+                borderRight: "1px white solid",
+                borderTop: "1px white solid",
+              }}
+            >
+              Bias
+            </TableCell>
           </TableRow>
         )}
-        itemContent={rowContent}
+        itemContent={(_index, row) => (
+          <React.Fragment>
+            <TableCell
+              align="center"
+              style={{
+                width: ROW_LABEL_WIDTH,
+                position: "sticky",
+                left: 0,
+                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                color: "white",
+                border: " 1px white solid",
+              }}
+            >
+              {_index + 1}
+            </TableCell>
+            {Array.from({ length: row.length }, (_, i) => (
+              <TableCell
+                key={`R${i + 1}`}
+                align={"center"}
+                sx={{
+                  backgroundColor: "oklch(27.9% 0.041 260.031)",
+                  color: "white",
+                  borderRight: "1px white solid",
+                }}
+              >
+                {row[i]}
+              </TableCell>
+            ))}
+            <TableCell
+              align={"center"}
+              sx={{
+                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                color: "white",
+                borderRight: "1px white solid",
+              }}
+            >
+              {layerBiases[_index]}
+            </TableCell>
+          </React.Fragment>
+        )}
         style={{ backgroundColor: "oklch(27.9% 0.041 260.031)" }}
       />
     </Paper>
