@@ -90,12 +90,9 @@ const TrainingMetricsInteractivity = ({
       setCurrentNetworkInstance(trainingNetworkInstances[value]);
       setTrainingMetricsChartValues(() => {
         const newState: TrainingMetricsChartData = {
-          epsilonDecay: trainingMetricsChartValues.epsilonDecay.slice(
-            0,
-            value + 1
-          ),
-          lossFn: trainingMetricsChartValues.lossFn.slice(0, value + 1),
-          cumulativeRewards: trainingMetricsChartValues.cumulativeRewards.slice(
+          epsilonDecay: trainingMetricsData.epsilonDecay.slice(0, value + 1),
+          lossFn: trainingMetricsData.lossFn.slice(0, value + 1),
+          cumulativeRewards: trainingMetricsData.cumulativeRewards.slice(
             0,
             value + 1
           ),
@@ -154,16 +151,11 @@ const TrainingMetricsInteractivity = ({
           network={currentNetworkInstance}
           selectedNeurons={selectedNeurons}
         />
+        <TrainingMetrics chartData={trainingMetricsChartValues} />
       </Box>
     </Box>
   );
 };
-
-const TrainingMetricsCharts = memo(
-  (trainingMetricsChartValues: TrainingMetricsChartData) => {
-    return <TrainingMetrics chartData={trainingMetricsChartValues} />;
-  }
-);
 
 const NeuralNetworkDiagram = memo(
   ({
