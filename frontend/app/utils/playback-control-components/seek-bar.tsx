@@ -51,7 +51,6 @@ const MediaControls = memo(
     isPaused: boolean;
     handlePauseBtn: () => void;
   }) => {
-    console.log("mediacontrols re-render");
     return (
       <div className="flex gap-10 justify-center mt-7">
         <button className={iconButtonClasses} aria-label="Rewind">
