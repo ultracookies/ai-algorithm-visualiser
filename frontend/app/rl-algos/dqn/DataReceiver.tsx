@@ -37,39 +37,40 @@ export default function DataReceiver({
   const [greedySimURL, setGreedySimURL] = useState<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleCurrentEpisodeChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const episode = Number(e.target.value);
-    setCurrentEpisode(episode);
-    setCurrentNetworkWeights(networkInstances[episode]);
-    setChartData(() => {
-      const newState: TrainingMetricsChartData = {
-        epsilonDecay: chartDataValues.epsilonDecay.slice(0, episode + 1),
-        lossFn: chartDataValues.lossFn.slice(0, episode + 1),
-        cumulativeRewards: chartDataValues.cumulativeRewards.slice(
-          0,
-          episode + 1
-        ),
-      };
-      return newState;
-    });
-  };
+  const handleCurrentEpisodeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const episode = Number(e.target.value);
+      setCurrentEpisode(episode);
+      setCurrentNetworkWeights(networkInstances[episode]);
+      setChartData(() => {
+        const newState: TrainingMetricsChartData = {
+          epsilonDecay: chartDataValues.epsilonDecay.slice(0, episode + 1),
+          lossFn: chartDataValues.lossFn.slice(0, episode + 1),
+          cumulativeRewards: chartDataValues.cumulativeRewards.slice(
+            0,
+            episode + 1
+          ),
+        };
+        return newState;
+      });
+    },
+    [currentNetworkWeights]
+  );
 
-  const incrementCurrentEpisode = () => {
+  const incrementCurrentEpisode = useCallback(() => {
     const newEpisode =
       currentEpisode < numEpisodes - 1 ? currentEpisode + 1 : currentEpisode;
     setCurrentEpisode(newEpisode);
-  };
+  }, [currentEpisode]);
 
   const handlePauseBtn = useCallback(() => setIsPaused(!isPaused), [isPaused]);
 
-  const handleMouseDown = () => {
+  const handleMouseDown = useCallback(() => {
     clearInterval(intervalRef.current!);
     setIsPaused(true);
-  };
+  }, []);
 
-  const fetchGreedySimData = async () => {
+  const fetchGreedySimData = useCallback(async () => {
     toggleIsLoading();
     try {
       const greedySimData = await getGreedySimulation(currentEpisode);
@@ -85,11 +86,11 @@ export default function DataReceiver({
     } finally {
       toggleIsLoading();
     }
-  };
+  }, [currentEpisode]);
 
-  const playGreedySimulationHandler = () => {
+  const playGreedySimulationHandler = useCallback(() => {
     fetchGreedySimData();
-  };
+  }, []);
 
   useEffect(() => {
     if (isPaused) return;

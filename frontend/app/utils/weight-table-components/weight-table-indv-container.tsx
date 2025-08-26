@@ -49,16 +49,16 @@ export default function WeightTableContainer({
           isDropped ? "open" : "closed"
         } mx-auto flex mt-3 max-w-200 items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10`}
       >
-        {/* <BetterWeightTable
-          layerBiases={layerBiases}
-          layerWeights={layerWeights}
-          selectedNeuronsLayer={selectedNeuronsLayer}
-        /> */}
-        <WeightTable
+        <BetterWeightTable
           layerBiases={layerBiases}
           layerWeights={layerWeights}
           selectedNeuronsLayer={selectedNeuronsLayer}
         />
+        {/* <WeightTable
+          layerBiases={layerBiases}
+          layerWeights={layerWeights}
+          selectedNeuronsLayer={selectedNeuronsLayer}
+        /> */}
       </div>
     </div>
   );

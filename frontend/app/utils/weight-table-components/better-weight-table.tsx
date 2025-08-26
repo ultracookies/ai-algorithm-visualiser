@@ -31,30 +31,30 @@ const ROW_LABEL_WIDTH = 50;
 const GRID_HEIGHT = 350;
 const CELL_WIDTH = 180;
 
-const BetterWeightTable = memo(
-  ({
-    layerWeights,
-    layerBiases,
-    selectedNeuronsLayer,
-  }: {
-    layerWeights: number[][];
-    layerBiases;
-    selectedNeuronsLayer: {
-      inputNeurons: Set<number>;
-      outputNeurons: Set<number>;
-    };
-  }) => {
-    return BetterWeightTable2({
-      layerWeights,
-      layerBiases,
-      selectedNeuronsLayer,
-    });
-  }
-);
+// const BetterWeightTable = memo(
+//   ({
+//     layerWeights,
+//     layerBiases,
+//     selectedNeuronsLayer,
+//   }: {
+//     layerWeights: number[][];
+//     layerBiases;
+//     selectedNeuronsLayer: {
+//       inputNeurons: Set<number>;
+//       outputNeurons: Set<number>;
+//     };
+//   }) => {
+//     return BetterWeightTable2({
+//       layerWeights,
+//       layerBiases,
+//       selectedNeuronsLayer,
+//     });
+//   }
+// );
 
-export default BetterWeightTable;
+// export default BetterWeightTable;
 
-function BetterWeightTable2({
+export default function BetterWeightTable({
   layerWeights,
   layerBiases,
   selectedNeuronsLayer,
