@@ -1,4 +1,4 @@
-import { memo, Fragment, forwardRef } from "react";
+import { Fragment, forwardRef } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -30,29 +30,6 @@ const VirtuosoTableComponents: TableComponents<number[]> = {
 const ROW_LABEL_WIDTH = 50;
 const GRID_HEIGHT = 350;
 const CELL_WIDTH = 180;
-
-// const BetterWeightTable = memo(
-//   ({
-//     layerWeights,
-//     layerBiases,
-//     selectedNeuronsLayer,
-//   }: {
-//     layerWeights: number[][];
-//     layerBiases;
-//     selectedNeuronsLayer: {
-//       inputNeurons: Set<number>;
-//       outputNeurons: Set<number>;
-//     };
-//   }) => {
-//     return BetterWeightTable2({
-//       layerWeights,
-//       layerBiases,
-//       selectedNeuronsLayer,
-//     });
-//   }
-// );
-
-// export default BetterWeightTable;
 
 export default function BetterWeightTable({
   layerWeights,
