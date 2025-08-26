@@ -3,7 +3,8 @@ import hi from "../../utils/photos/hi.jpeg";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
 import { useEffect, useRef, useState, memo } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
@@ -47,7 +48,7 @@ export const TrainingMetrics = ({
   chartData: TrainingMetricsChartData;
 }) => {
   return (
-    <Box>
+    <div>
       <LineGraph
         chartData={chartData.epsilonDecay}
         chartTitle="Epsilon Decay"
@@ -66,7 +67,7 @@ export const TrainingMetrics = ({
         xlabel="Episode"
         ylabel="Cumulative Reward"
       />
-    </Box>
+    </div>
   );
 };
 
