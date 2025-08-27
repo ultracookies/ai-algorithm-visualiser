@@ -1,6 +1,13 @@
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  RefObject,
+} from "react";
 
 import Slider from "@mui/material/Slider";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
@@ -9,7 +16,10 @@ import NeuralNetworkSVG from "../../utils/neural-network-components/neural-netwo
 import { getDims } from "./mockNetworkUtils";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { TrainingMetrics } from "./dqnComponents";
+import Button from "@mui/material/Button";
+import { GreedyCumulativeRewardsGraph, TrainingMetrics } from "./dqnComponents";
+import { LineGraph } from "../../utils/training-metric-components";
+import { getGreedySimulation } from "./client";
 
 const UIRoot2 = ({
   trainingNetworkInstances,
@@ -64,6 +74,8 @@ const TrainingMetricsInteractivity = ({
     return networkNodeLayers;
   });
 
+  const currentEpisodeRef = useRef(0);
+
   const handleNeuronClick = useCallback(
     (layerIndex: number, neuronIndex: number) => {
       setSelectedNeurons((prev) => {
@@ -87,6 +99,7 @@ const TrainingMetricsInteractivity = ({
 
   const handleCurrentNetworkInstanceUpdate = useCallback(
     (event, value) => {
+      currentEpisodeRef.current = value;
       setCurrentNetworkInstance(trainingNetworkInstances[value]);
       setTrainingMetricsChartValues(() => {
         const newState: TrainingMetricsChartData = {
@@ -152,8 +165,82 @@ const TrainingMetricsInteractivity = ({
           selectedNeurons={selectedNeurons}
         />
         <TrainingMetrics chartData={trainingMetricsChartValues} />
+        <GreedySimulator ref={currentEpisodeRef} />
       </Box>
     </Box>
+  );
+};
+
+async function fetchGreedySimulation(episodeIndex: number): Promise<{
+  greedyRewardsValues: number[];
+  greedySimulationVideoBytes: string;
+}> {
+  const greedySimulationData = await getGreedySimulation(episodeIndex);
+  const greedyRewardsValues: number[] = greedySimulationData.total_rewards;
+  const greedySimulationVideoBytes: string = greedySimulationData.simulation;
+  return { greedyRewardsValues, greedySimulationVideoBytes };
+}
+
+const GreedySimulator = memo(({ ref }: { ref: RefObject<number> }) => {
+  const [greedySimulationRewardsValues, setGreedySimulationRewardsValues] =
+    useState<number[]>([]);
+  const [greedySimulationBytes, setGreedySimulationBytes] = useState<
+    string | null
+  >(null);
+
+  console.log("GreedySimulator re-rendered");
+  console.log("fetched values for episode " + ref.current);
+  console.log("rewards values: " + greedySimulationRewardsValues);
+
+  const onClick = async () => {
+    const greedySimData = await fetchGreedySimulation(ref.current);
+    setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
+    setGreedySimulationBytes(greedySimData.greedySimulationVideoBytes);
+  };
+
+  return (
+    <>
+      <Button variant="contained" onClick={onClick}>
+        Play Greedy Simulation
+      </Button>
+      <GreedyRewardsGraph
+        greedySimRewardsValues={greedySimulationRewardsValues}
+      />
+    </>
+  );
+});
+
+const GreedyRewardsGraph = ({
+  greedySimRewardsValues,
+}: {
+  greedySimRewardsValues: number[];
+}) => {
+  const [displayedRewardsValues, setDisplayedRewardsValues] = useState<
+    number[]
+  >([]);
+  const indexRef = useRef(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (indexRef.current == greedySimRewardsValues.length) return;
+      setDisplayedRewardsValues(
+        greedySimRewardsValues.slice(0, indexRef.current++)
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      indexRef.current = 0;
+    };
+  }, [greedySimRewardsValues]);
+
+  return (
+    <LineGraph
+      chartData={displayedRewardsValues}
+      chartTitle="Greedy Rewards Per Episode"
+      xlabel="Episode"
+      ylabel="Greedy Reward"
+    />
   );
 };
 
