@@ -187,19 +187,32 @@ const GreedySimulator = memo(({ ref }: { ref: RefObject<number> }) => {
   const [greedySimulationBytes, setGreedySimulationBytes] = useState<
     string | null
   >(null);
+  const [simulatedEpisodeValue, setSimulatedEpisodeValue] = useState(0);
+  const reqIdRef = useRef(0);
 
-  console.log("GreedySimulator re-rendered");
-  console.log("fetched values for episode " + ref.current);
+  console.log("fetched values for episode " + simulatedEpisodeValue);
   console.log("rewards values: " + greedySimulationRewardsValues);
 
   const onClick = async () => {
-    const greedySimData = await fetchGreedySimulation(ref.current);
-    setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
-    setGreedySimulationBytes(greedySimData.greedySimulationVideoBytes);
+    const id = ++reqIdRef.current;
+    const currentSimulatedEpisodeValue = ref.current;
+    const greedySimData = await fetchGreedySimulation(
+      currentSimulatedEpisodeValue
+    );
+
+    console.log("got response for " + currentSimulatedEpisodeValue);
+    if (id === reqIdRef.current) {
+      setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
+      setGreedySimulationBytes(greedySimData.greedySimulationVideoBytes);
+      setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
+    }
   };
 
   return (
     <>
+      <div style={{ color: "white" }}>
+        Simulated Episode: {simulatedEpisodeValue}
+      </div>
       <Button variant="contained" onClick={onClick}>
         Play Greedy Simulation
       </Button>
