@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import { TableVirtuoso, TableComponents } from "react-virtuoso";
 
 const CELL_COLOR = "oklch(20.8% 0.042 265.755)";
@@ -48,7 +49,15 @@ export default function BetterWeightTable({
   const ROW_LENGTH = layerWeights[0].length;
 
   return (
-    <Paper style={{ height: GRID_HEIGHT, width: "100%" }}>
+    <Box
+      sx={{
+        height: { xs: "70vh" },
+        width: { xs: "90%", sm: "100%" },
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <TableVirtuoso
         data={layerWeights}
         components={VirtuosoTableComponents}
@@ -154,7 +163,7 @@ export default function BetterWeightTable({
         )}
         style={{ backgroundColor: CELL_COLOR }}
       />
-    </Paper>
+    </Box>
   );
 }
 

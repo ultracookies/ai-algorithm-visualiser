@@ -11,7 +11,6 @@ import WeightTablesContainer from "../../utils/weight-table-components/weight-ta
 import { Idk } from "../../utils/playback-control-components/seek-bar";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import PlayArrow from "@mui/icons-material/PlayArrow";
-import Slider from "@mui/material/Slider";
 
 export const UIRoot = ({
   network,
@@ -111,10 +110,6 @@ export const UIRoot = ({
               p: 3,
               backgroundColor: "oklch(27.9% 0.041 260.031)",
               borderRadius: "25px",
-              // width: {
-              //   md: "50%",
-              //   lg: "35%",
-              // },
             }}
           >
             <Box display="flex" justifyContent="center" alignItems="center">
