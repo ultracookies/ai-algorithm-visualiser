@@ -31,8 +31,14 @@ const VirtuosoTableComponents: TableComponents<number[]> = {
 };
 
 const ROW_LABEL_WIDTH = 50;
-const GRID_HEIGHT = 350;
 const CELL_WIDTH = 180;
+
+function computeGridHeight(numRows: number): string {
+  if (numRows <= 4) {
+    return "40vh";
+  }
+  return "50vh";
+}
 
 export default function BetterWeightTable({
   layerWeights,
@@ -47,11 +53,12 @@ export default function BetterWeightTable({
   };
 }) {
   const ROW_LENGTH = layerWeights[0].length;
+  const numRows = layerWeights.length;
 
   return (
     <Box
       sx={{
-        height: { xs: "70vh" },
+        height: computeGridHeight(numRows),
         width: { xs: "90%", sm: "100%" },
         display: "flex",
         justifyContent: "center",
