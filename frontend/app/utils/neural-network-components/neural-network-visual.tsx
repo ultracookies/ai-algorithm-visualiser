@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo } from "react";
 
-const layerRadius = 8;
+const layerRadius = 10;
 const verticalSpacing = 30;
 
 /**
