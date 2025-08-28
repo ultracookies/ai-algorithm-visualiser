@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
   RefObject,
-  MouseEventHandler,
 } from "react";
 
 import Slider from "@mui/material/Slider";
@@ -18,6 +17,7 @@ import { getDims } from "./mockNetworkUtils";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import Zoom from "@mui/material/Zoom";
 import {
   GreedyCumulativeRewardsGraph,
   SimulationStream,
@@ -43,7 +43,15 @@ const UIRoot2 = ({
 
   return (
     <Container maxWidth={false}>
-      <h1>Deep Q Network</h1>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Zoom in={true}>
+          <h1 style={{ fontSize: 40, color: "white", padding: 20 }}>
+            Deep Q Network
+          </h1>
+        </Zoom>
+      </Box>
       <TrainingMetricsInteractivity
         numEpisodes={numEpisodes}
         trainingNetworkInstances={trainingNetworkInstances}
@@ -149,10 +157,12 @@ const TrainingMetricsInteractivity = ({
 
   useEffect(() => {
     if (isPaused) return;
+    if (currentEpisodeRef.current === 138) return;
     let currentEpisode: number;
     const interval = setInterval(() => {
       currentEpisode = ++currentEpisodeRef.current;
       handleCurrentNetworkInstanceUpdate(currentEpisode);
+      if (currentEpisode === 138) return;
     }, 1500);
 
     return () => clearInterval(interval);
@@ -169,67 +179,73 @@ const TrainingMetricsInteractivity = ({
             alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
-              backgroundColor: FEATURE_BOX_COLOR,
-              borderRadius: "25px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "white",
-              mb: 3,
-              p: 2,
-            }}
-          >
-            <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-              Deep Q Network Diagram
-            </h2>
-            <NeuralNetworkDiagram
-              networkDims={networkDims}
-              selectedNeurons={selectedNeurons}
-              handleNeuronClick={handleNeuronClick}
-            />
-            <PlaybackControls
-              isPaused={isPaused}
-              handlePauseButtonOnClick={handlePauseButtonOnClick}
-            />
-            <div
-              style={{
-                width: "90%",
+          <Zoom in={true}>
+            <Box
+              sx={{
+                width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
+                backgroundColor: FEATURE_BOX_COLOR,
+                borderRadius: "25px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "white",
+                mb: 3,
+                p: 2,
+              }}
+            >
+              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                Deep Q Network Diagram
+              </h2>
+              <NeuralNetworkDiagram
+                networkDims={networkDims}
+                selectedNeurons={selectedNeurons}
+                handleNeuronClick={handleNeuronClick}
+              />
+              <PlaybackControls
+                isPaused={isPaused}
+                handlePauseButtonOnClick={handlePauseButtonOnClick}
+              />
+              <div
+                style={{
+                  width: "90%",
+                  textAlign: "center",
+                }}
+              >
+                <EpisodeSeekBar
+                  numEpisodes={numEpisodes}
+                  displayedEpisodeValue={displayedEpisodeValue}
+                  handleEpisodeSliderOnChangeCommit={
+                    handleEpisodeSliderOnChangeCommit
+                  }
+                  handleEpisodeSliderOnMouseDown={
+                    handleEpisodeSliderOnMouseDown
+                  }
+                  isPaused={isPaused}
+                />
+              </div>
+            </Box>
+          </Zoom>
+          <Zoom in={true}>
+            <Box
+              sx={{
+                width: { xs: "80vw", lg: "60%" },
+                m: { xs: 2, lg: 3 },
+                backgroundColor: FEATURE_BOX_COLOR,
+                borderRadius: "25px",
+                p: 3,
                 textAlign: "center",
               }}
             >
-              <EpisodeSeekBar
-                numEpisodes={numEpisodes}
-                displayedEpisodeValue={displayedEpisodeValue}
-                handleEpisodeSliderOnChangeCommit={
-                  handleEpisodeSliderOnChangeCommit
-                }
-                handleEpisodeSliderOnMouseDown={handleEpisodeSliderOnMouseDown}
-                isPaused={isPaused}
+              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 20 }}>
+                Weight Tables
+              </h2>
+              <WeightTables
+                network={currentNetworkInstance}
+                selectedNeurons={selectedNeurons}
               />
-            </div>
-          </Box>
-          <Box
-            sx={{
-              width: { xs: "80vw", lg: "60%" },
-              m: { xs: 2, lg: 3 },
-              backgroundColor: FEATURE_BOX_COLOR,
-              borderRadius: "25px",
-              p: 3,
-              textAlign: "center",
-            }}
-          >
-            <h2 style={{ color: "white", fontSize: 30, paddingBottom: 20 }}>
-              Weight Tables
-            </h2>
-            <WeightTables
-              network={currentNetworkInstance}
-              selectedNeurons={selectedNeurons}
-            />
-          </Box>
+            </Box>
+          </Zoom>
         </Box>
         <Box
           sx={{
@@ -239,37 +255,40 @@ const TrainingMetricsInteractivity = ({
             alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              width: { xs: "100%", lg: "50%" },
-              backgroundColor: FEATURE_BOX_COLOR,
-              borderRadius: "25px",
-              textAlign: "center",
-              p: 2,
-              m: 2,
-            }}
-          >
-            <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-              Greedy Simulation
-            </h2>
-            <GreedySimulator ref={currentEpisodeRef} />
-          </Box>
-
-          <Box
-            sx={{
-              width: { xs: "100%", lg: "50%" },
-              backgroundColor: FEATURE_BOX_COLOR,
-              borderRadius: "25px",
-              textAlign: "center",
-              p: 2,
-              m: 2,
-            }}
-          >
-            <h2 style={{ color: "white", paddingBottom: 10, fontSize: 30 }}>
-              Training Metrics
-            </h2>
-            <TrainingMetrics chartData={trainingMetricsChartValues} />
-          </Box>
+          <Zoom in={true}>
+            <Box
+              sx={{
+                width: { xs: "100%", lg: "50%" },
+                backgroundColor: FEATURE_BOX_COLOR,
+                borderRadius: "25px",
+                textAlign: "center",
+                p: 2,
+                m: 2,
+              }}
+            >
+              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                Greedy Simulation
+              </h2>
+              <GreedySimulator ref={currentEpisodeRef} />
+            </Box>
+          </Zoom>
+          <Zoom in={true}>
+            <Box
+              sx={{
+                width: { xs: "100%", lg: "50%" },
+                backgroundColor: FEATURE_BOX_COLOR,
+                borderRadius: "25px",
+                textAlign: "center",
+                p: 2,
+                m: 2,
+              }}
+            >
+              <h2 style={{ color: "white", paddingBottom: 10, fontSize: 30 }}>
+                Training Metrics
+              </h2>
+              <TrainingMetrics chartData={trainingMetricsChartValues} />
+            </Box>
+          </Zoom>
         </Box>
       </Box>
     </Container>
@@ -472,7 +491,7 @@ const EpisodeSeekBar = ({
         defaultValue={0}
         aria-label="Default"
         min={0}
-        max={numEpisodes}
+        max={numEpisodes - 1}
         value={isPaused ? sliderEpisodeValue : displayedEpisodeValue}
         onChange={(event, value, activeThumb) => setSliderEpisodeValue(value)}
         valueLabelDisplay="auto"
