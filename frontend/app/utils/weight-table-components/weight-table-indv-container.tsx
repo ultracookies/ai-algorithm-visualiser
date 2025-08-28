@@ -25,7 +25,7 @@ export default function WeightTableContainer({
     <div
       style={{
         border: "1px solid #fff",
-        borderRadius: "20px",
+        borderRadius: "25px",
       }}
       className="items-center dark:bg-slate-800 float-right w-175 p-3"
     >

@@ -133,7 +133,7 @@ const TrainingMetricsInteractivity = ({
         >
           <Box
             sx={{
-              width: { xs: "60%", lg: "40%" },
+              width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
               backgroundColor: "oklch(27.9% 0.041 260.031)",
               borderRadius: "25px",
               display: "flex",
@@ -167,7 +167,7 @@ const TrainingMetricsInteractivity = ({
               />
             </div>
           </Box>
-          <Box sx={{ width: { xs: "100%", lg: "60%" }, m: { xs: 2, lg: 3 } }}>
+          <Box sx={{ width: { xs: "80vw", lg: "60%" }, m: { xs: 2, lg: 3 } }}>
             <WeightTables
               network={currentNetworkInstance}
               selectedNeurons={selectedNeurons}
