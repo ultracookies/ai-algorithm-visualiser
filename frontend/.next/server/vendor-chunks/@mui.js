@@ -21,6 +21,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "(ssr)/./node_modules/@mui/icons-material/esm/PlayArrow.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/@mui/icons-material/esm/PlayArrow.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/createSvgIcon.js */ \"(ssr)/./node_modules/@mui/material/esm/utils/createSvgIcon.js\");\n/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ \"(ssr)/./node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js\");\n/* __next_internal_client_entry_do_not_use__ default auto */ \n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(\"path\", {\n    d: \"M8 5v14l11-7z\"\n}), 'PlayArrow'));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvQG11aS9pY29ucy1tYXRlcmlhbC9lc20vUGxheUFycm93LmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs2REFFcUQ7QUFDTDtBQUNoRCxpRUFBZUEsbUVBQWFBLENBQUMsV0FBVyxHQUFFRSxzREFBSUEsQ0FBQyxRQUFRO0lBQ3JEQyxHQUFHO0FBQ0wsSUFBSSxZQUFZLEVBQUMiLCJzb3VyY2VzIjpbIi9hcHAvbm9kZV9tb2R1bGVzL0BtdWkvaWNvbnMtbWF0ZXJpYWwvZXNtL1BsYXlBcnJvdy5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJcInVzZSBjbGllbnRcIjtcblxuaW1wb3J0IGNyZWF0ZVN2Z0ljb24gZnJvbSBcIi4vdXRpbHMvY3JlYXRlU3ZnSWNvbi5qc1wiO1xuaW1wb3J0IHsganN4IGFzIF9qc3ggfSBmcm9tIFwicmVhY3QvanN4LXJ1bnRpbWVcIjtcbmV4cG9ydCBkZWZhdWx0IGNyZWF0ZVN2Z0ljb24oLyojX19QVVJFX18qL19qc3goXCJwYXRoXCIsIHtcbiAgZDogXCJNOCA1djE0bDExLTd6XCJcbn0pLCAnUGxheUFycm93Jyk7Il0sIm5hbWVzIjpbImNyZWF0ZVN2Z0ljb24iLCJqc3giLCJfanN4IiwiZCJdLCJpZ25vcmVMaXN0IjpbMF0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/@mui/icons-material/esm/PlayArrow.js\n");
+
+/***/ }),
+
 /***/ "(ssr)/./node_modules/@mui/material/esm/Box/Box.js":
 /*!***************************************************!*\
   !*** ./node_modules/@mui/material/esm/Box/Box.js ***!
