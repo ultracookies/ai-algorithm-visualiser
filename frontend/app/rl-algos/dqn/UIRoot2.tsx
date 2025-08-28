@@ -192,6 +192,8 @@ const TrainingMetricsInteractivity = ({
           sx={{
             display: "flex",
             flexDirection: { xs: "column-reverse", lg: "row" },
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Box
