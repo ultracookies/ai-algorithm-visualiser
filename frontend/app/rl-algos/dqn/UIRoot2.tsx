@@ -26,6 +26,7 @@ import {
 import { LineGraph } from "../../utils/training-metric-components";
 import { getGreedySimulation } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
@@ -113,6 +114,7 @@ const TrainingMetricsInteractivity = ({
   const handleCurrentNetworkInstanceUpdate = useCallback(
     (value: number) => {
       currentEpisodeRef.current = value;
+      setDisplayedEpisodeValue(value);
       setCurrentNetworkInstance(trainingNetworkInstances[value]);
       setTrainingMetricsChartValues(() => {
         const newState: TrainingMetricsChartData = {
@@ -142,6 +144,8 @@ const TrainingMetricsInteractivity = ({
     () => setIsPaused((prev) => !prev),
     []
   );
+
+  const handleEpisodeSliderOnMouseDown = () => setIsPaused(true);
 
   useEffect(() => {
     if (isPaused) return;
@@ -203,6 +207,8 @@ const TrainingMetricsInteractivity = ({
                 handleEpisodeSliderOnChangeCommit={
                   handleEpisodeSliderOnChangeCommit
                 }
+                handleEpisodeSliderOnMouseDown={handleEpisodeSliderOnMouseDown}
+                isPaused={isPaused}
               />
             </div>
           </Box>
@@ -278,10 +284,13 @@ const PlaybackControls = memo(
     isPaused: boolean;
     handlePauseButtonOnClick: () => void;
   }) => {
-    console.log("PlaybackControls re-render");
     return (
       <IconButton aria-label="pause" size="large" sx={{ color: "white" }}>
-        <PauseIcon fontSize="inherit" onClick={handlePauseButtonOnClick} />
+        {!isPaused ? (
+          <PauseIcon fontSize="large" onClick={handlePauseButtonOnClick} />
+        ) : (
+          <PlayArrow fontSize="large" onClick={handlePauseButtonOnClick} />
+        )}
       </IconButton>
     );
   }
@@ -367,7 +376,6 @@ const GreedyRewardsGraph = ({
 }: {
   greedySimRewardsValues: number[];
 }) => {
-  console.log("GreedyRewardsGraph re-render");
   const [displayedRewardsValues, setDisplayedRewardsValues] = useState<
     number[]
   >([]);
@@ -436,6 +444,8 @@ const EpisodeSeekBar = ({
   numEpisodes,
   displayedEpisodeValue,
   handleEpisodeSliderOnChangeCommit,
+  handleEpisodeSliderOnMouseDown,
+  isPaused,
 }: {
   numEpisodes: number;
   displayedEpisodeValue: number;
@@ -443,8 +453,16 @@ const EpisodeSeekBar = ({
     event: React.SyntheticEvent | Event,
     value: number
   ) => void;
+  handleEpisodeSliderOnMouseDown: () => void;
+  isPaused: boolean;
 }) => {
   const [sliderEpisodeValue, setSliderEpisodeValue] = useState(0);
+
+  useEffect(() => {
+    if (isPaused) {
+      setSliderEpisodeValue(displayedEpisodeValue);
+    }
+  }, [isPaused]);
   return (
     <>
       <div style={{ padding: 20, fontSize: 20 }}>
@@ -455,10 +473,11 @@ const EpisodeSeekBar = ({
         aria-label="Default"
         min={0}
         max={numEpisodes}
-        value={sliderEpisodeValue}
+        value={isPaused ? sliderEpisodeValue : displayedEpisodeValue}
         onChange={(event, value, activeThumb) => setSliderEpisodeValue(value)}
         valueLabelDisplay="auto"
         onChangeCommitted={handleEpisodeSliderOnChangeCommit}
+        onMouseDown={handleEpisodeSliderOnMouseDown}
       />
     </>
   );
