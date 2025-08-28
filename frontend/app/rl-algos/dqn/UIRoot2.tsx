@@ -18,16 +18,14 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Zoom from "@mui/material/Zoom";
-import {
-  GreedyCumulativeRewardsGraph,
-  SimulationStream,
-  TrainingMetrics,
-} from "./dqnComponents";
+import { SimulationStream, TrainingMetrics } from "./dqnComponents";
 import { LineGraph } from "../../utils/training-metric-components";
 import { getGreedySimulation } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import InfoIcon from "@mui/icons-material/Info";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -194,9 +192,13 @@ const TrainingMetricsInteractivity = ({
                 p: 2,
               }}
             >
-              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-                Deep Q Network Diagram
-              </h2>
+              <div style={{ display: "flex" }}>
+                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                  Deep Q Network Diagram
+                </h2>
+                <InfoButtonWithToolTip message="It’s a feedforward neural network with 4 input nodes, two hidden layers of 30 nodes each, and 2 output nodes, where information flows from inputs → hidden layers → outputs." />
+              </div>
+
               <NeuralNetworkDiagram
                 networkDims={networkDims}
                 selectedNeurons={selectedNeurons}
@@ -237,9 +239,12 @@ const TrainingMetricsInteractivity = ({
                 textAlign: "center",
               }}
             >
-              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 20 }}>
-                Weight Tables
-              </h2>
+              <div style={{ display: "flex" }}>
+                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                  Weight Tables
+                </h2>
+                <InfoButtonWithToolTip message="Neural network weights are the numerical parameters that determine how strongly one neuron’s output influences another neuron’s input. They’re adjusted during training so the network can learn patterns in the data." />
+              </div>
               <WeightTables
                 network={currentNetworkInstance}
                 selectedNeurons={selectedNeurons}
@@ -266,9 +271,15 @@ const TrainingMetricsInteractivity = ({
                 m: 2,
               }}
             >
-              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-                Greedy Simulation
-              </h2>
+              <div style={{ display: "flex" }}>
+                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                  Play Greedy Simulation
+                </h2>
+                <InfoButtonWithToolTip
+                  message="It’s a simulation runner where the user clicks a button to watch the trained agent play in the Gymnasium environment, using the saved network weights from a chosen training episode.
+"
+                />
+              </div>
               <GreedySimulator ref={currentEpisodeRef} />
             </Box>
           </Zoom>
@@ -283,9 +294,20 @@ const TrainingMetricsInteractivity = ({
                 m: 2,
               }}
             >
-              <h2 style={{ color: "white", paddingBottom: 10, fontSize: 30 }}>
-                Training Metrics
-              </h2>
+              <div style={{ display: "flex" }}>
+                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                  Training Metrics
+                </h2>
+                <InfoButtonWithToolTip
+                  message="For a Deep Q-Network, the training metrics are:
+
+Epsilon decay – tracks how exploration decreases over time.
+
+Loss function – measures how well the Q-values are being approximated.
+
+Total rewards per episode – shows the agent’s performance and learning progress."
+                />
+              </div>
               <TrainingMetrics chartData={trainingMetricsChartValues} />
             </Box>
           </Zoom>
@@ -389,6 +411,25 @@ function base64ToBlob(base64: string, mime = "video/mp4"): Blob {
   const buf = Buffer.from(base64, "base64");
   return new Blob([buf], { type: mime });
 }
+
+const InfoButtonWithToolTip = memo(({ message }: { message: string }) => {
+  return (
+    <Tooltip
+      title={message}
+      slotProps={{
+        tooltip: {
+          sx: {
+            fontSize: "large",
+          },
+        },
+      }}
+    >
+      <Button>
+        <InfoIcon />
+      </Button>
+    </Tooltip>
+  );
+});
 
 const GreedyRewardsGraph = ({
   greedySimRewardsValues,
