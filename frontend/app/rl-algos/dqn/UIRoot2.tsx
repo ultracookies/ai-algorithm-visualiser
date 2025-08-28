@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   RefObject,
+  MouseEventHandler,
 } from "react";
 
 import Slider from "@mui/material/Slider";
@@ -24,6 +25,8 @@ import {
 } from "./dqnComponents";
 import { LineGraph } from "../../utils/training-metric-components";
 import { getGreedySimulation } from "./client";
+import PauseIcon from "@mui/icons-material/Pause";
+import IconButton from "@mui/material/IconButton";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -82,6 +85,10 @@ const TrainingMetricsInteractivity = ({
 
   const currentEpisodeRef = useRef(0);
 
+  const [isPaused, setIsPaused] = useState(false);
+
+  const [displayedEpisodeValue, setDisplayedEpisodeValue] = useState(0);
+
   const handleNeuronClick = useCallback(
     (layerIndex: number, neuronIndex: number) => {
       setSelectedNeurons((prev) => {
@@ -104,7 +111,7 @@ const TrainingMetricsInteractivity = ({
   );
 
   const handleCurrentNetworkInstanceUpdate = useCallback(
-    (event, value) => {
+    (value: number) => {
       currentEpisodeRef.current = value;
       setCurrentNetworkInstance(trainingNetworkInstances[value]);
       setTrainingMetricsChartValues(() => {
@@ -121,6 +128,31 @@ const TrainingMetricsInteractivity = ({
     },
     [trainingNetworkInstances, trainingMetricsData]
   );
+
+  const handleEpisodeSliderOnChangeCommit = useCallback(
+    (event: React.SyntheticEvent | Event, value: number) => {
+      setIsPaused(true);
+      setDisplayedEpisodeValue(value);
+      handleCurrentNetworkInstanceUpdate(value);
+    },
+    [trainingNetworkInstances, trainingMetricsData]
+  );
+
+  const handlePauseButtonOnClick = useCallback(
+    () => setIsPaused((prev) => !prev),
+    []
+  );
+
+  useEffect(() => {
+    if (isPaused) return;
+    let currentEpisode: number;
+    const interval = setInterval(() => {
+      currentEpisode = ++currentEpisodeRef.current;
+      handleCurrentNetworkInstanceUpdate(currentEpisode);
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, [isPaused, trainingNetworkInstances, trainingMetricsData]);
 
   return (
     <Container maxWidth={false}>
@@ -155,6 +187,10 @@ const TrainingMetricsInteractivity = ({
               selectedNeurons={selectedNeurons}
               handleNeuronClick={handleNeuronClick}
             />
+            <PlaybackControls
+              isPaused={isPaused}
+              handlePauseButtonOnClick={handlePauseButtonOnClick}
+            />
             <div
               style={{
                 width: "90%",
@@ -163,8 +199,9 @@ const TrainingMetricsInteractivity = ({
             >
               <EpisodeSeekBar
                 numEpisodes={numEpisodes}
-                handleCurrentNetworkInstanceUpdate={
-                  handleCurrentNetworkInstanceUpdate
+                displayedEpisodeValue={displayedEpisodeValue}
+                handleEpisodeSliderOnChangeCommit={
+                  handleEpisodeSliderOnChangeCommit
                 }
               />
             </div>
@@ -233,58 +270,22 @@ const TrainingMetricsInteractivity = ({
   );
 };
 
-function Diagram({
-  networkDims,
-  selectedNeurons,
-  handleNeuronClick,
-  numEpisodes,
-  handleCurrentNetworkInstanceUpdate,
-}: {
-  networkDims: number[];
-  selectedNeurons: Set<number>[];
-  handleNeuronClick: (i: number, j: number) => void;
-  numEpisodes: number;
-  handleCurrentNetworkInstanceUpdate: (
-    event: React.SyntheticEvent | Event,
-    value: number
-  ) => void;
-}) {
-  return (
-    <>
-      <h2 style={{ color: "white", paddingBottom: 20, fontSize: 30 }}>
-        Deep Q Network Diagram
-      </h2>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <NeuralNetworkDiagram
-          networkDims={networkDims}
-          selectedNeurons={selectedNeurons}
-          handleNeuronClick={handleNeuronClick}
-        />
-      </div>
-      <div
-        style={{
-          width: "100%",
-          padding: "30px",
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        <EpisodeSeekBar
-          numEpisodes={numEpisodes}
-          handleCurrentNetworkInstanceUpdate={
-            handleCurrentNetworkInstanceUpdate
-          }
-        />
-      </div>
-    </>
-  );
-}
+const PlaybackControls = memo(
+  ({
+    isPaused,
+    handlePauseButtonOnClick,
+  }: {
+    isPaused: boolean;
+    handlePauseButtonOnClick: () => void;
+  }) => {
+    console.log("PlaybackControls re-render");
+    return (
+      <IconButton aria-label="pause" size="large" sx={{ color: "white" }}>
+        <PauseIcon fontSize="inherit" onClick={handlePauseButtonOnClick} />
+      </IconButton>
+    );
+  }
+);
 
 async function fetchGreedySimulation(episodeIndex: number): Promise<{
   greedyRewardsValues: number[];
@@ -297,6 +298,7 @@ async function fetchGreedySimulation(episodeIndex: number): Promise<{
 }
 
 const GreedySimulator = memo(({ ref }: { ref: RefObject<number> }) => {
+  console.log("GreedySimulator re-render");
   const [greedySimulationRewardsValues, setGreedySimulationRewardsValues] =
     useState<number[]>([]);
   const [greedySimulationURL, setGreedySimulationURL] = useState<string | null>(
@@ -365,6 +367,7 @@ const GreedyRewardsGraph = ({
 }: {
   greedySimRewardsValues: number[];
 }) => {
+  console.log("GreedyRewardsGraph re-render");
   const [displayedRewardsValues, setDisplayedRewardsValues] = useState<
     number[]
   >([]);
@@ -374,7 +377,7 @@ const GreedyRewardsGraph = ({
     const interval = setInterval(() => {
       if (indexRef.current == greedySimRewardsValues.length) return;
       setDisplayedRewardsValues(
-        greedySimRewardsValues.slice(0, indexRef.current++)
+        greedySimRewardsValues.slice(0, ++indexRef.current)
       );
     }, 1000);
 
@@ -431,16 +434,17 @@ const WeightTables = ({
 
 const EpisodeSeekBar = ({
   numEpisodes,
-  handleCurrentNetworkInstanceUpdate,
+  displayedEpisodeValue,
+  handleEpisodeSliderOnChangeCommit,
 }: {
   numEpisodes: number;
-  handleCurrentNetworkInstanceUpdate: (
+  displayedEpisodeValue: number;
+  handleEpisodeSliderOnChangeCommit: (
     event: React.SyntheticEvent | Event,
     value: number
   ) => void;
 }) => {
-  const [displayedEpisodeValue, setDisplayedEpisodeValue] = useState(0);
-
+  const [sliderEpisodeValue, setSliderEpisodeValue] = useState(0);
   return (
     <>
       <div style={{ padding: 20, fontSize: 20 }}>
@@ -451,11 +455,10 @@ const EpisodeSeekBar = ({
         aria-label="Default"
         min={0}
         max={numEpisodes}
-        value={displayedEpisodeValue}
-        onChange={(event: Event, value: number, activeThumb: number) =>
-          setDisplayedEpisodeValue(value)
-        }
-        onChangeCommitted={handleCurrentNetworkInstanceUpdate}
+        value={sliderEpisodeValue}
+        onChange={(event, value, activeThumb) => setSliderEpisodeValue(value)}
+        valueLabelDisplay="auto"
+        onChangeCommitted={handleEpisodeSliderOnChangeCommit}
       />
     </>
   );
