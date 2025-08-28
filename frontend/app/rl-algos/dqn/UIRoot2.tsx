@@ -25,6 +25,8 @@ import {
 import { LineGraph } from "../../utils/training-metric-components";
 import { getGreedySimulation } from "./client";
 
+const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
+
 const UIRoot2 = ({
   trainingNetworkInstances,
   trainingMetricsData,
@@ -134,7 +136,7 @@ const TrainingMetricsInteractivity = ({
           <Box
             sx={{
               width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
-              backgroundColor: "oklch(27.9% 0.041 260.031)",
+              backgroundColor: FEATURE_BOX_COLOR,
               borderRadius: "25px",
               display: "flex",
               flexDirection: "column",
@@ -167,7 +169,19 @@ const TrainingMetricsInteractivity = ({
               />
             </div>
           </Box>
-          <Box sx={{ width: { xs: "80vw", lg: "60%" }, m: { xs: 2, lg: 3 } }}>
+          <Box
+            sx={{
+              width: { xs: "80vw", lg: "60%" },
+              m: { xs: 2, lg: 3 },
+              backgroundColor: FEATURE_BOX_COLOR,
+              borderRadius: "25px",
+              p: 3,
+              textAlign: "center",
+            }}
+          >
+            <h2 style={{ color: "white", fontSize: 30, paddingBottom: 20 }}>
+              Weight Tables
+            </h2>
             <WeightTables
               network={currentNetworkInstance}
               selectedNeurons={selectedNeurons}
@@ -183,7 +197,7 @@ const TrainingMetricsInteractivity = ({
           <Box
             sx={{
               width: { xs: "100%", lg: "50%" },
-              backgroundColor: "oklch(27.9% 0.041 260.031)",
+              backgroundColor: FEATURE_BOX_COLOR,
               borderRadius: "25px",
               textAlign: "center",
               p: 2,
@@ -199,7 +213,7 @@ const TrainingMetricsInteractivity = ({
           <Box
             sx={{
               width: { xs: "100%", lg: "50%" },
-              backgroundColor: "oklch(27.9% 0.041 260.031)",
+              backgroundColor: FEATURE_BOX_COLOR,
               borderRadius: "25px",
               textAlign: "center",
               p: 2,
