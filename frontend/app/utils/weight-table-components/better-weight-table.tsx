@@ -8,6 +8,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableVirtuoso, TableComponents } from "react-virtuoso";
 
+const CELL_COLOR = "oklch(20.8% 0.042 265.755)";
+
 const VirtuosoTableComponents: TableComponents<number[]> = {
   Scroller: forwardRef<HTMLDivElement>((props, ref) => (
     <TableContainer component={Paper} {...props} ref={ref} />
@@ -57,7 +59,7 @@ export default function BetterWeightTable({
               align={"center"}
               style={{ width: ROW_LABEL_WIDTH, position: "sticky", left: 0 }}
               sx={{
-                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                backgroundColor: CELL_COLOR,
                 color: "white",
                 borderRight: "1px white solid",
               }}
@@ -71,7 +73,7 @@ export default function BetterWeightTable({
                 align={"center"}
                 style={{ width: CELL_WIDTH }}
                 sx={{
-                  backgroundColor: "oklch(27.9% 0.041 260.031)",
+                  backgroundColor: CELL_COLOR,
                   color: "white",
                   borderRight: "1px white solid",
                   borderTop: "1px white solid",
@@ -85,7 +87,7 @@ export default function BetterWeightTable({
               align={"center"}
               style={{ width: CELL_WIDTH }}
               sx={{
-                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                backgroundColor: CELL_COLOR,
                 color: "white",
                 borderRight: "1px white solid",
                 borderTop: "1px white solid",
@@ -103,7 +105,7 @@ export default function BetterWeightTable({
                 width: ROW_LABEL_WIDTH,
                 position: "sticky",
                 left: 0,
-                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                backgroundColor: CELL_COLOR,
                 color: "white",
                 border: " 1px white solid",
               }}
@@ -123,7 +125,7 @@ export default function BetterWeightTable({
                     selectedNeuronsLayer.outputNeurons
                   )
                     ? "cyan"
-                    : "oklch(27.9% 0.041 260.031)",
+                    : CELL_COLOR,
                   color: isSelected(
                     _index,
                     i,
@@ -141,7 +143,7 @@ export default function BetterWeightTable({
             <TableCell
               align={"center"}
               sx={{
-                backgroundColor: "oklch(27.9% 0.041 260.031)",
+                backgroundColor: CELL_COLOR,
                 color: "white",
                 borderRight: "1px white solid",
               }}
@@ -150,7 +152,7 @@ export default function BetterWeightTable({
             </TableCell>
           </Fragment>
         )}
-        style={{ backgroundColor: "oklch(27.9% 0.041 260.031)" }}
+        style={{ backgroundColor: CELL_COLOR }}
       />
     </Paper>
   );
