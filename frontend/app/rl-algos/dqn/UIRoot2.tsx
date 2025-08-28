@@ -17,7 +17,11 @@ import { getDims } from "./mockNetworkUtils";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import { GreedyCumulativeRewardsGraph, TrainingMetrics } from "./dqnComponents";
+import {
+  GreedyCumulativeRewardsGraph,
+  SimulationStream,
+  TrainingMetrics,
+} from "./dqnComponents";
 import { LineGraph } from "../../utils/training-metric-components";
 import { getGreedySimulation } from "./client";
 
@@ -117,59 +121,154 @@ const TrainingMetricsInteractivity = ({
   );
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", sm: "column", md: "column", lg: "row" },
-        p: 3,
-      }}
-    >
-      <Box
-        sx={{
-          width: { xs: "100%", lg: "40%" },
-          backgroundColor: "oklch(27.9% 0.041 260.031)",
-          borderRadius: "25px",
+    <Container maxWidth={false}>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: { xs: "60%", lg: "40%" },
+              backgroundColor: "oklch(27.9% 0.041 260.031)",
+              borderRadius: "25px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "white",
+              mb: 3,
+              p: 2,
+            }}
+          >
+            <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+              Deep Q Network Diagram
+            </h2>
+            <NeuralNetworkDiagram
+              networkDims={networkDims}
+              selectedNeurons={selectedNeurons}
+              handleNeuronClick={handleNeuronClick}
+            />
+            <div
+              style={{
+                width: "90%",
+                textAlign: "center",
+              }}
+            >
+              <EpisodeSeekBar
+                numEpisodes={numEpisodes}
+                handleCurrentNetworkInstanceUpdate={
+                  handleCurrentNetworkInstanceUpdate
+                }
+              />
+            </div>
+          </Box>
+          <Box sx={{ width: { xs: "100%", lg: "60%" }, m: { xs: 2, lg: 3 } }}>
+            <WeightTables
+              network={currentNetworkInstance}
+              selectedNeurons={selectedNeurons}
+            />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column-reverse", lg: "row" },
+          }}
+        >
+          <Box
+            sx={{
+              width: { xs: "100%", lg: "50%" },
+              backgroundColor: "oklch(27.9% 0.041 260.031)",
+              borderRadius: "25px",
+              textAlign: "center",
+              p: 2,
+              m: 2,
+            }}
+          >
+            <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+              Greedy Simulation
+            </h2>
+            <GreedySimulator ref={currentEpisodeRef} />
+          </Box>
+
+          <Box
+            sx={{
+              width: { xs: "100%", lg: "50%" },
+              backgroundColor: "oklch(27.9% 0.041 260.031)",
+              borderRadius: "25px",
+              textAlign: "center",
+              p: 2,
+              m: 2,
+            }}
+          >
+            <h2 style={{ color: "white", paddingBottom: 10, fontSize: 30 }}>
+              Training Metrics
+            </h2>
+            <TrainingMetrics chartData={trainingMetricsChartValues} />
+          </Box>
+        </Box>
+      </Box>
+    </Container>
+  );
+};
+
+function Diagram({
+  networkDims,
+  selectedNeurons,
+  handleNeuronClick,
+  numEpisodes,
+  handleCurrentNetworkInstanceUpdate,
+}: {
+  networkDims: number[];
+  selectedNeurons: Set<number>[];
+  handleNeuronClick: (i: number, j: number) => void;
+  numEpisodes: number;
+  handleCurrentNetworkInstanceUpdate: (
+    event: React.SyntheticEvent | Event,
+    value: number
+  ) => void;
+}) {
+  return (
+    <>
+      <h2 style={{ color: "white", paddingBottom: 20, fontSize: 30 }}>
+        Deep Q Network Diagram
+      </h2>
+      <div
+        style={{
           display: "flex",
-          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+        }}
+      >
+        <NeuralNetworkDiagram
+          networkDims={networkDims}
+          selectedNeurons={selectedNeurons}
+          handleNeuronClick={handleNeuronClick}
+        />
+      </div>
+      <div
+        style={{
+          width: "100%",
+          padding: "30px",
+          textAlign: "center",
           color: "white",
         }}
       >
-        <h2 style={{ padding: 10, fontSize: 30 }}>Deep Q Network Diagram</h2>
-        <div style={{ padding: 20 }}>
-          <NeuralNetworkDiagram
-            networkDims={networkDims}
-            selectedNeurons={selectedNeurons}
-            handleNeuronClick={handleNeuronClick}
-          />
-        </div>
-
-        <div
-          style={{
-            padding: "30px",
-            width: "95%",
-          }}
-        >
-          <EpisodeSeekBar
-            numEpisodes={numEpisodes}
-            handleCurrentNetworkInstanceUpdate={
-              handleCurrentNetworkInstanceUpdate
-            }
-          />
-        </div>
-      </Box>
-      <Box sx={{ width: { xs: "100%", lg: "60%" }, m: 3 }}>
-        <WeightTables
-          network={currentNetworkInstance}
-          selectedNeurons={selectedNeurons}
+        <EpisodeSeekBar
+          numEpisodes={numEpisodes}
+          handleCurrentNetworkInstanceUpdate={
+            handleCurrentNetworkInstanceUpdate
+          }
         />
-        <TrainingMetrics chartData={trainingMetricsChartValues} />
-        <GreedySimulator ref={currentEpisodeRef} />
-      </Box>
-    </Box>
+      </div>
+    </>
   );
-};
+}
 
 async function fetchGreedySimulation(episodeIndex: number): Promise<{
   greedyRewardsValues: number[];
@@ -184,14 +283,11 @@ async function fetchGreedySimulation(episodeIndex: number): Promise<{
 const GreedySimulator = memo(({ ref }: { ref: RefObject<number> }) => {
   const [greedySimulationRewardsValues, setGreedySimulationRewardsValues] =
     useState<number[]>([]);
-  const [greedySimulationBytes, setGreedySimulationBytes] = useState<
-    string | null
-  >(null);
+  const [greedySimulationURL, setGreedySimulationURL] = useState<string | null>(
+    null
+  );
   const [simulatedEpisodeValue, setSimulatedEpisodeValue] = useState(0);
   const reqIdRef = useRef(0);
-
-  console.log("fetched values for episode " + simulatedEpisodeValue);
-  console.log("rewards values: " + greedySimulationRewardsValues);
 
   const onClick = async () => {
     const id = ++reqIdRef.current;
@@ -200,28 +296,53 @@ const GreedySimulator = memo(({ ref }: { ref: RefObject<number> }) => {
       currentSimulatedEpisodeValue
     );
 
-    console.log("got response for " + currentSimulatedEpisodeValue);
     if (id === reqIdRef.current) {
       setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
-      setGreedySimulationBytes(greedySimData.greedySimulationVideoBytes);
+
+      const blob = base64ToBlob(
+        greedySimData.greedySimulationVideoBytes,
+        "video/mp4"
+      );
+
+      setGreedySimulationURL(URL.createObjectURL(blob));
       setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
     }
   };
 
   return (
-    <>
-      <div style={{ color: "white" }}>
-        Simulated Episode: {simulatedEpisodeValue}
+    <div>
+      <div>
+        <div>
+          <div
+            style={{
+              color: "white",
+              fontSize: 20,
+              padding: 10,
+              paddingBottom: 20,
+            }}
+          >
+            Simulated Episode: {simulatedEpisodeValue}
+          </div>
+          <Button variant="contained" onClick={onClick} sx={{ mb: 3 }}>
+            Play Greedy Simulation
+          </Button>
+        </div>
+        <SimulationStream
+          greedySimURL={greedySimulationURL}
+          isLoading={false}
+        />
       </div>
-      <Button variant="contained" onClick={onClick}>
-        Play Greedy Simulation
-      </Button>
       <GreedyRewardsGraph
         greedySimRewardsValues={greedySimulationRewardsValues}
       />
-    </>
+    </div>
   );
 });
+
+function base64ToBlob(base64: string, mime = "video/mp4"): Blob {
+  const buf = Buffer.from(base64, "base64");
+  return new Blob([buf], { type: mime });
+}
 
 const GreedyRewardsGraph = ({
   greedySimRewardsValues,
@@ -268,13 +389,11 @@ const NeuralNetworkDiagram = memo(
     handleNeuronClick: (i: number, j: number) => void;
   }) => {
     return (
-      <div style={{ backgroundColor: "" }}>
-        <NeuralNetworkSVG
-          networkDims={networkDims}
-          selectedNeurons={selectedNeurons}
-          handleNeuronClick={handleNeuronClick}
-        />
-      </div>
+      <NeuralNetworkSVG
+        networkDims={networkDims}
+        selectedNeurons={selectedNeurons}
+        handleNeuronClick={handleNeuronClick}
+      />
     );
   }
 );
@@ -308,7 +427,9 @@ const EpisodeSeekBar = ({
 
   return (
     <>
-      <div>Current Episode: {displayedEpisodeValue}</div>
+      <div style={{ padding: 20, fontSize: 20 }}>
+        Current Episode: {displayedEpisodeValue}
+      </div>
       <Slider
         defaultValue={0}
         aria-label="Default"
