@@ -155,13 +155,17 @@ const TrainingMetricsInteractivity = ({
 
   useEffect(() => {
     if (isPaused) return;
-    if (currentEpisodeRef.current === 138) return;
+    if (currentEpisodeRef.current === 138) {
+      return;
+    }
     let currentEpisode: number;
     const interval = setInterval(() => {
       currentEpisode = ++currentEpisodeRef.current;
       handleCurrentNetworkInstanceUpdate(currentEpisode);
-      if (currentEpisode === 138) return;
-    }, 1500);
+      if (currentEpisode === 138) {
+        clearInterval(interval);
+      }
+    }, 250);
 
     return () => clearInterval(interval);
   }, [isPaused, trainingNetworkInstances, trainingMetricsData]);
@@ -192,7 +196,13 @@ const TrainingMetricsInteractivity = ({
                 p: 2,
               }}
             >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
                   Deep Q Network Diagram
                 </h2>
@@ -239,7 +249,13 @@ const TrainingMetricsInteractivity = ({
                 textAlign: "center",
               }}
             >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
                   Weight Tables
                 </h2>
@@ -271,7 +287,13 @@ const TrainingMetricsInteractivity = ({
                 m: 2,
               }}
             >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
                   Play Greedy Simulation
                 </h2>
@@ -294,7 +316,13 @@ const TrainingMetricsInteractivity = ({
                 m: 2,
               }}
             >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
                   Training Metrics
                 </h2>
