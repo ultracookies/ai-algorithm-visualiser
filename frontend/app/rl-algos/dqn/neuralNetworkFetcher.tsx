@@ -3,7 +3,6 @@
 import { getTrainingMetrics } from "./client";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import { useEffect, useState } from "react";
-import DataReceiver from "./DataReceiver";
 import DataReceiver2 from "./DataReceiver2";
 import { initMockNetwork, generateRandomList } from "./mockNetworkUtils";
 
@@ -25,18 +24,21 @@ export default function NeuralNetworkFetcher() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [display, setDisplay] = useState(displayData);
 
+  const [isError, setIsError] = useState(false);
+
   const toggleIsLoading = () => {
     setIsLoading((prev) => !prev);
   };
 
   useEffect(() => {
     const getData = async () => {
-      try {
-        const data = await getTrainingMetrics();
+      const data = await getTrainingMetrics();
+      if (data === undefined) {
+        setIsError(true);
+      } else {
         const preprocessedData = preprocessRetrievedData(data, displayData);
         setDisplay(preprocessedData);
-      } catch (error) {
-        console.error("Error fetching network data:", error);
+        setIsError(false);
       }
     };
 
@@ -47,6 +49,7 @@ export default function NeuralNetworkFetcher() {
     <DataReceiver2
       networkInstances={display.networkInstances}
       chartDataValues={display.chartDataValues}
+      isError={isError}
       // isLoading={isLoading}
       // toggleIsLoading={toggleIsLoading}
     />

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "http://localhost:8000",
-  timeout: 50000,
+  timeout: 10000,
 });
 
 export async function getTrainingMetrics() {
@@ -10,7 +10,19 @@ export async function getTrainingMetrics() {
     const response = await instance.get("/rl/vdqn/cartpole");
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      const errorResponse = error.response;
+      console.error(errorResponse.data);
+      console.error(errorResponse.status);
+      console.error(errorResponse.headers);
+    } else if (error.request) {
+      console.log("Error with no response");
+      console.error(error.request);
+    } else {
+      console.error("Error with request: " + error.message);
+    }
+    console.log("Error config");
+    console.error(error.config);
   }
 }
 
@@ -21,6 +33,18 @@ export async function getGreedySimulation(currentEpisode: number) {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      const errorResponse = error.response;
+      console.error(errorResponse.data);
+      console.error(errorResponse.status);
+      console.error(errorResponse.headers);
+    } else if (error.request) {
+      console.log("Error with no response");
+      console.error(error.request);
+    } else {
+      console.error("Error with request: " + error.message);
+    }
+    console.log("Error config");
+    console.error(error.config);
   }
 }

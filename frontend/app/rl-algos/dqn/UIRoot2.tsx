@@ -26,6 +26,7 @@ import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
+import Alert from "@mui/material/Alert";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -155,193 +156,191 @@ const TrainingMetricsInteractivity = ({
 
   useEffect(() => {
     if (isPaused) return;
-    if (currentEpisodeRef.current === 138) {
+    if (currentEpisodeRef.current === numEpisodes - 1) {
       return;
     }
     let currentEpisode: number;
     const interval = setInterval(() => {
       currentEpisode = ++currentEpisodeRef.current;
       handleCurrentNetworkInstanceUpdate(currentEpisode);
-      if (currentEpisode === 138) {
+      if (currentEpisode === numEpisodes - 1) {
         clearInterval(interval);
       }
-    }, 250);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [isPaused, trainingNetworkInstances, trainingMetricsData]);
 
   return (
-    <Container maxWidth={false}>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", lg: "row" },
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Zoom in={true}>
-            <Box
-              sx={{
-                width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
-                backgroundColor: FEATURE_BOX_COLOR,
-                borderRadius: "25px",
+    // <Container maxWidth={false}>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Zoom in={true}>
+          <Box
+            sx={{
+              width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
+              backgroundColor: FEATURE_BOX_COLOR,
+              borderRadius: "25px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "white",
+              mb: 3,
+              p: 2,
+            }}
+          >
+            <div
+              style={{
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "white",
-                mb: 3,
-                p: 2,
+                padding: 10,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-                  Deep Q Network Diagram
-                </h2>
-                <InfoButtonWithToolTip message="It’s a feedforward neural network with 4 input nodes, two hidden layers of 30 nodes each, and 2 output nodes, where information flows from inputs → hidden layers → outputs." />
-              </div>
+              <h2 style={{ color: "white", fontSize: 30 }}>
+                Deep Q Network Diagram
+              </h2>
+              <InfoButtonWithToolTip message="It’s a Deep Q-Network (DQN) architecture with 4 input nodes, two hidden layers of 30 nodes each, and 2 output nodes, where the inputs represent the environment state, the hidden layers extract features, and the outputs correspond to the Q-values for each possible action." />
+            </div>
 
-              <NeuralNetworkDiagram
-                networkDims={networkDims}
-                selectedNeurons={selectedNeurons}
-                handleNeuronClick={handleNeuronClick}
-              />
-              <PlaybackControls
+            <NeuralNetworkDiagram
+              networkDims={networkDims}
+              selectedNeurons={selectedNeurons}
+              handleNeuronClick={handleNeuronClick}
+            />
+            <PlaybackControls
+              isPaused={isPaused}
+              handlePauseButtonOnClick={handlePauseButtonOnClick}
+            />
+            <div
+              style={{
+                width: "90%",
+                textAlign: "center",
+              }}
+            >
+              <EpisodeSeekBar
+                numEpisodes={numEpisodes}
+                displayedEpisodeValue={displayedEpisodeValue}
+                handleEpisodeSliderOnChangeCommit={
+                  handleEpisodeSliderOnChangeCommit
+                }
+                handleEpisodeSliderOnMouseDown={handleEpisodeSliderOnMouseDown}
                 isPaused={isPaused}
-                handlePauseButtonOnClick={handlePauseButtonOnClick}
               />
-              <div
-                style={{
-                  width: "90%",
-                  textAlign: "center",
-                }}
-              >
-                <EpisodeSeekBar
-                  numEpisodes={numEpisodes}
-                  displayedEpisodeValue={displayedEpisodeValue}
-                  handleEpisodeSliderOnChangeCommit={
-                    handleEpisodeSliderOnChangeCommit
-                  }
-                  handleEpisodeSliderOnMouseDown={
-                    handleEpisodeSliderOnMouseDown
-                  }
-                  isPaused={isPaused}
-                />
-              </div>
-            </Box>
-          </Zoom>
-          <Zoom in={true}>
-            <Box
-              sx={{
-                width: { xs: "80vw", lg: "60%" },
-                m: { xs: 2, lg: 3 },
-                backgroundColor: FEATURE_BOX_COLOR,
-                borderRadius: "25px",
-                p: 3,
-                textAlign: "center",
+            </div>
+          </Box>
+        </Zoom>
+        <Zoom in={true}>
+          <Box
+            sx={{
+              width: { xs: "80vw", lg: "60%" },
+              m: { xs: 2, lg: 3 },
+              backgroundColor: FEATURE_BOX_COLOR,
+              borderRadius: "25px",
+              p: 3,
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-                  Weight Tables
-                </h2>
-                <InfoButtonWithToolTip message="Neural network weights are the numerical parameters that determine how strongly one neuron’s output influences another neuron’s input. They’re adjusted during training so the network can learn patterns in the data." />
-              </div>
-              <WeightTables
-                network={currentNetworkInstance}
-                selectedNeurons={selectedNeurons}
-              />
-            </Box>
-          </Zoom>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column-reverse", lg: "row" },
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Zoom in={true}>
-            <Box
-              sx={{
-                width: { xs: "100%", lg: "50%" },
-                backgroundColor: FEATURE_BOX_COLOR,
-                borderRadius: "25px",
-                textAlign: "center",
-                p: 2,
-                m: 2,
+              <h2 style={{ color: "white", fontSize: 30 }}>Weight Tables</h2>
+              <InfoButtonWithToolTip message="Neural network weights are the numerical parameters that determine how strongly one neuron’s output influences another neuron’s input. They’re adjusted during training so the network can learn patterns in the data." />
+            </div>
+            <WeightTables
+              network={currentNetworkInstance}
+              selectedNeurons={selectedNeurons}
+            />
+          </Box>
+        </Zoom>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column-reverse", lg: "row" },
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Zoom in={true}>
+          <Box
+            sx={{
+              width: { xs: "100%", lg: "50%" },
+              backgroundColor: FEATURE_BOX_COLOR,
+              borderRadius: "25px",
+              textAlign: "center",
+              p: 2,
+              m: 2,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-                  Play Greedy Simulation
-                </h2>
-                <InfoButtonWithToolTip
-                  message="It’s a simulation runner where the user clicks a button to watch the trained agent play in the Gymnasium environment, using the saved network weights from a chosen training episode.
+              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                Play Greedy Simulation
+              </h2>
+              <InfoButtonWithToolTip
+                message="It’s a simulation runner where the user clicks a button to watch the trained agent play in the Gymnasium environment, using the saved network weights from a chosen training episode.
 "
-                />
-              </div>
-              <GreedySimulator ref={currentEpisodeRef} />
-            </Box>
-          </Zoom>
-          <Zoom in={true}>
-            <Box
-              sx={{
-                width: { xs: "100%", lg: "50%" },
-                backgroundColor: FEATURE_BOX_COLOR,
-                borderRadius: "25px",
-                textAlign: "center",
-                p: 2,
-                m: 2,
+              />
+            </div>
+            <GreedySimulator ref={currentEpisodeRef} isPaused={isPaused} />
+          </Box>
+        </Zoom>
+        <Zoom in={true}>
+          <Box
+            sx={{
+              width: { xs: "100%", lg: "50%" },
+              backgroundColor: FEATURE_BOX_COLOR,
+              borderRadius: "25px",
+              textAlign: "center",
+              p: 2,
+              m: 2,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
-                  Training Metrics
-                </h2>
-                <InfoButtonWithToolTip
-                  message="For a Deep Q-Network, the training metrics are:
+              <h2 style={{ color: "white", fontSize: 30, paddingBottom: 10 }}>
+                Training Metrics
+              </h2>
+              <InfoButtonWithToolTip
+                message="For a Deep Q-Network, the training metrics are:
 
 Epsilon decay – tracks how exploration decreases over time.
 
 Loss function – measures how well the Q-values are being approximated.
 
 Total rewards per episode – shows the agent’s performance and learning progress."
-                />
-              </div>
-              <TrainingMetrics chartData={trainingMetricsChartValues} />
-            </Box>
-          </Zoom>
-        </Box>
+              />
+            </div>
+            <TrainingMetrics chartData={trainingMetricsChartValues} />
+          </Box>
+        </Zoom>
       </Box>
-    </Container>
+    </Box>
+    // </Container>
   );
 };
 
@@ -370,70 +369,95 @@ async function fetchGreedySimulation(episodeIndex: number): Promise<{
   greedySimulationVideoBytes: string;
 }> {
   const greedySimulationData = await getGreedySimulation(episodeIndex);
+  if (greedySimulationData === undefined) return null;
   const greedyRewardsValues: number[] = greedySimulationData.total_rewards;
   const greedySimulationVideoBytes: string = greedySimulationData.simulation;
   return { greedyRewardsValues, greedySimulationVideoBytes };
 }
 
-const GreedySimulator = memo(({ ref }: { ref: RefObject<number> }) => {
-  console.log("GreedySimulator re-render");
-  const [greedySimulationRewardsValues, setGreedySimulationRewardsValues] =
-    useState<number[]>([]);
-  const [greedySimulationURL, setGreedySimulationURL] = useState<string | null>(
-    null
-  );
-  const [simulatedEpisodeValue, setSimulatedEpisodeValue] = useState(0);
-  const reqIdRef = useRef(0);
+const GreedySimulator = memo(
+  ({ ref, isPaused }: { ref: RefObject<number>; isPaused: boolean }) => {
+    const [greedySimulationRewardsValues, setGreedySimulationRewardsValues] =
+      useState<number[]>([]);
+    const [greedySimulationURL, setGreedySimulationURL] = useState<
+      string | null
+    >(null);
+    const [simulatedEpisodeValue, setSimulatedEpisodeValue] = useState(0);
+    const reqIdRef = useRef(0);
 
-  const onClick = async () => {
-    const id = ++reqIdRef.current;
-    const currentSimulatedEpisodeValue = ref.current;
-    const greedySimData = await fetchGreedySimulation(
-      currentSimulatedEpisodeValue
-    );
+    const [isError, setIsError] = useState(false);
 
-    if (id === reqIdRef.current) {
-      setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
-
-      const blob = base64ToBlob(
-        greedySimData.greedySimulationVideoBytes,
-        "video/mp4"
+    const onClick = async () => {
+      const id = ++reqIdRef.current;
+      const currentSimulatedEpisodeValue = ref.current;
+      const greedySimData = await fetchGreedySimulation(
+        currentSimulatedEpisodeValue
       );
 
-      setGreedySimulationURL(URL.createObjectURL(blob));
-      setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
-    }
-  };
+      if (greedySimData === null) {
+        setIsError(true);
+      } else {
+        if (id === reqIdRef.current) {
+          setIsError(false);
+          setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
 
-  return (
-    <div>
+          const blob = base64ToBlob(
+            greedySimData.greedySimulationVideoBytes,
+            "video/mp4"
+          );
+
+          setGreedySimulationURL(URL.createObjectURL(blob));
+          setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
+        }
+      }
+    };
+
+    return (
       <div>
         <div>
-          <div
-            style={{
-              color: "white",
-              fontSize: 20,
-              padding: 10,
-              paddingBottom: 20,
-            }}
-          >
-            Simulated Episode: {simulatedEpisodeValue}
+          <div>
+            <div
+              style={{
+                color: "white",
+                fontSize: 20,
+                padding: 10,
+                paddingBottom: 20,
+              }}
+            >
+              Simulated Episode: {simulatedEpisodeValue}
+            </div>
+            <Button
+              variant="contained"
+              onClick={onClick}
+              sx={{ mb: 3, borderColor: "1px solid red" }}
+              disabled={!isPaused}
+            >
+              Play Greedy Simulation
+            </Button>
+            {isError ? (
+              <div style={{ marginBottom: 20 }}>
+                <Zoom in={true}>
+                  <Alert variant="filled" severity="error">
+                    Could not fetch greedy simulation.
+                  </Alert>
+                </Zoom>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
-          <Button variant="contained" onClick={onClick} sx={{ mb: 3 }}>
-            Play Greedy Simulation
-          </Button>
+          <SimulationStream
+            greedySimURL={greedySimulationURL}
+            isLoading={false}
+          />
         </div>
-        <SimulationStream
-          greedySimURL={greedySimulationURL}
-          isLoading={false}
+        <GreedyRewardsGraph
+          greedySimRewardsValues={greedySimulationRewardsValues}
         />
       </div>
-      <GreedyRewardsGraph
-        greedySimRewardsValues={greedySimulationRewardsValues}
-      />
-    </div>
-  );
-});
+    );
+  }
+);
 
 function base64ToBlob(base64: string, mime = "video/mp4"): Blob {
   const buf = Buffer.from(base64, "base64");
