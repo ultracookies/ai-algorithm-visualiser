@@ -3,6 +3,8 @@ import hi from "../../utils/photos/hi.jpeg";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
 import { useEffect, useRef, useState, memo } from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
@@ -19,11 +21,51 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
         network={network}
         selectedNeurons={selectedNeurons}
       />
-      <LineGraph chartData={chartData.epsilonDecay} label="Epsilon" />
-      <LineGraph chartData={chartData.lossFn} label="Loss" />
+    </div>
+  );
+};
+
+export const GreedySimulationComponent = ({
+  greedySimURL,
+  greedyChartDataValues,
+  isLoading,
+}: {
+  greedySimURL: string;
+  greedyChartDataValues: number[];
+  isLoading: boolean;
+}) => {
+  return (
+    <>
+      <SimulationStream greedySimURL={greedySimURL} isLoading={isLoading} />
+      <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
+    </>
+  );
+};
+
+export const TrainingMetrics = ({
+  chartData,
+}: {
+  chartData: TrainingMetricsChartData;
+}) => {
+  return (
+    <div>
+      <LineGraph
+        chartData={chartData.epsilonDecay}
+        chartTitle="Epsilon Decay"
+        xlabel="Episode"
+        ylabel="Epsilon"
+      />
+      <LineGraph
+        chartData={chartData.lossFn}
+        chartTitle="Loss Curve"
+        xlabel="Episode"
+        ylabel="Loss"
+      />
       <LineGraph
         chartData={chartData.cumulativeRewards}
-        label="Cumulative Rewards Per Episode"
+        chartTitle="Cumulative Rewards Per Episode"
+        xlabel="Episode"
+        ylabel="Cumulative Reward"
       />
     </div>
   );
@@ -49,7 +91,7 @@ export const GreedySimulationContainer = ({
       >
         Play Greedy Simulation
       </button>
-      <SimulationStream greedySimURL={greedySimURL} />
+      {/* <SimulationStream greedySimURL={greedySimURL} /> */}
       <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
     </>
   );
@@ -77,17 +119,44 @@ export const GreedyCumulativeRewardsGraph = memo(
     }, [chartDataValues]);
 
     return (
-      <LineGraph chartData={chartDataRef.current} label="Greedy Rewards" />
+      <LineGraph
+        chartData={chartDataRef.current}
+        chartTitle="Greedy Rewards Per Episode"
+        xlabel="Episode"
+        ylabel="Greedy Reward"
+      />
     );
   }
 );
 
-const SimulationStream = ({ greedySimURL }: { greedySimURL: string }) => {
+export const SimulationStream = ({
+  greedySimURL,
+  isLoading,
+}: {
+  greedySimURL: string;
+  isLoading: boolean;
+}) => {
   return (
     <div
       className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
-      style={{ width: "auto" }}
+      style={{
+        width: "auto",
+        position: "relative",
+      }}
     >
+      {/* {isLoading && (
+        <div
+          style={{
+            zIndex: 1,
+            backgroundColor: "blue",
+            top: "50%",
+            left: "50%",
+            transform: new CSSTranslate(new CSSNumericValue(), 50, 0);
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )} */}
       <video
         src={greedySimURL}
         className="w-full h-full object-cover rounded-md"

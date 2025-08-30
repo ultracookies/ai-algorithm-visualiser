@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { title } from "process";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -25,16 +24,20 @@ ChartJS.register(
 
 export function LineGraph({
   chartData,
-  label,
+  chartTitle,
+  xlabel,
+  ylabel,
 }: {
   chartData: number[];
-  label: string;
+  chartTitle: string;
+  xlabel: string;
+  ylabel: string;
 }) {
   const data = {
-    labels: Array.from(chartData, (_, i) => i),
+    labels: Array.from(chartData, (_, i) => i + 1),
     datasets: [
       {
-        label: label,
+        label: chartTitle,
         data: chartData,
         borderColor: "blue",
       },
@@ -50,11 +53,11 @@ export function LineGraph({
     scales: {
       x: {
         ticks: { color: "white" },
-        title: { display: true, text: "Episode" },
+        title: { display: true, text: xlabel },
       },
       y: {
         ticks: { color: "white" },
-        title: { display: true, text: "Epsilon" },
+        title: { display: true, text: ylabel },
       },
     },
   };
