@@ -3,7 +3,7 @@
 import { getTrainingMetrics } from "./client";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import { useEffect, useState } from "react";
-import DataReceiver from "./DataReceiver";
+import DataReceiver2 from "./DataReceiver2";
 import { initMockNetwork, generateRandomList } from "./mockNetworkUtils";
 
 export default function NeuralNetworkFetcher() {
@@ -21,55 +21,74 @@ export default function NeuralNetworkFetcher() {
       cumulativeRewards: generateRandomList(5),
     },
   };
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [display, setDisplay] = useState(displayData);
+
+  const [isError, setIsError] = useState(false);
+
+  const toggleIsLoading = () => {
+    setIsLoading((prev) => !prev);
+  };
 
   useEffect(() => {
     const getData = async () => {
       const data = await getTrainingMetrics();
-      console.log("hi");
-      const networkInstances = data.network_instances;
-      const displayInstances: WeightTableContainerProps[][] = [];
-      for (let i = 0; i < networkInstances.length; ++i) {
-        const instanceObj: Object = networkInstances[i];
-        const instanceDisplay: WeightTableContainerProps[] = [];
-        for (let layer = 0; layer < 4; ++layer) {
-          const weights: number[][] = instanceObj["layer" + layer]["weights"];
-          const biases: number[] = instanceObj["layer" + layer]["biases"];
-          let layerName = "Hidden Layer";
-          if (layer == 0) {
-            layerName = "Input Layer";
-          }
-          if (layer == 3) {
-            layerName = "Output Layer";
-          }
-          const layerDisplay: WeightTableContainerProps = {
-            layerWeights: weights,
-            layerBiases: biases,
-            layerName: layerName,
-          };
-          instanceDisplay.push(layerDisplay);
-        }
-        displayInstances.push(instanceDisplay);
+      if (data === undefined) {
+        setIsError(true);
+      } else {
+        const preprocessedData = preprocessRetrievedData(data, displayData);
+        setDisplay(preprocessedData);
+        setIsError(false);
       }
-
-      const displayChartDataValues: TrainingMetricsChartData = {
-        epsilonDecay: data.epsilon_values,
-        lossFn: data.loss_values_per_episode,
-        cumulativeRewards: data.total_rewards,
-      };
-
-      displayData.chartDataValues = displayChartDataValues;
-      displayData.networkInstances = displayInstances;
-      setDisplay(displayData);
     };
 
     getData();
   }, []);
 
   return (
-    <DataReceiver
+    <DataReceiver2
       networkInstances={display.networkInstances}
       chartDataValues={display.chartDataValues}
+      isError={isError}
+      // isLoading={isLoading}
+      // toggleIsLoading={toggleIsLoading}
     />
   );
+}
+
+function preprocessRetrievedData(data, displayData) {
+  const networkInstances = data.network_instances;
+  const displayInstances: WeightTableContainerProps[][] = [];
+  for (let i = 0; i < networkInstances.length; ++i) {
+    const instanceObj: Object = networkInstances[i];
+    const instanceDisplay: WeightTableContainerProps[] = [];
+    for (let layer = 0; layer < 4; ++layer) {
+      const weights: number[][] = instanceObj["layer" + layer]["weights"];
+      const biases: number[] = instanceObj["layer" + layer]["biases"];
+      let layerName = "Hidden Layer";
+      if (layer == 0) {
+        layerName = "Input Layer";
+      }
+      if (layer == 3) {
+        layerName = "Output Layer";
+      }
+      const layerDisplay: WeightTableContainerProps = {
+        layerWeights: weights,
+        layerBiases: biases,
+        layerName: layerName,
+      };
+      instanceDisplay.push(layerDisplay);
+    }
+    displayInstances.push(instanceDisplay);
+  }
+
+  const displayChartDataValues: TrainingMetricsChartData = {
+    epsilonDecay: data.epsilon_values,
+    lossFn: data.loss_values_per_episode,
+    cumulativeRewards: data.total_rewards,
+  };
+
+  displayData.chartDataValues = displayChartDataValues;
+  displayData.networkInstances = displayInstances;
+  return displayData;
 }

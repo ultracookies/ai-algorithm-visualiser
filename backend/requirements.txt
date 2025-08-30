@@ -4,7 +4,6 @@ pytest
 pytest-asyncio
 httpx
 asgi-lifespan 
-coverage
 pydantic
 orjson
 gymnasium
@@ -13,3 +12,4 @@ torch
 torchvision
 imageio
 imageio[ffmpeg]
+slowapi

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { memo, useMemo } from "react";
 
-const layerRadius = 8;
+const layerRadius = 10;
 const verticalSpacing = 30;
 
 /**
@@ -13,6 +13,50 @@ const getNeuronYPositions = (count: number): number[] => {
   const startY = 300 - totalHeight / 2;
   return Array.from({ length: count }, (_, i) => startY + i * verticalSpacing);
 };
+
+const getNeuronFill = (
+  layerIndex: number,
+  neuronIndex: number,
+  selectedNeurons: Set<number>[]
+) => {
+  return selectedNeurons[layerIndex].has(neuronIndex) ? "#ef4444" : "#1d4ed8";
+};
+
+const getNeuronClass = (
+  layerIndex: number,
+  neuronIndex: number,
+  selectedNeurons: Set<number>[]
+) => {
+  return selectedNeurons[layerIndex].has(neuronIndex)
+    ? "neuron selected"
+    : "neuron";
+};
+
+const NeuronStyle = memo(() => {
+  return (
+    <style jsx>{`
+      .neuron {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .neuron.selected {
+        filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 16px #ef4444);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 16px #ef4444);
+        }
+        50% {
+          filter: drop-shadow(0 0 12px #ef4444) drop-shadow(0 0 24px #ef4444);
+        }
+      }
+    `}</style>
+  );
+});
 
 const NeuralNetworkSVG = ({
   networkDims,
@@ -32,45 +76,22 @@ const NeuralNetworkSVG = ({
     return startX + i * step;
   });
 
-  const neurons: number[][] = networkDims.map((count) =>
-    getNeuronYPositions(count)
+  const neurons: number[][] = useMemo(
+    () => networkDims.map((count) => getNeuronYPositions(count)),
+    []
   );
 
-  const getNeuronFill = (layerIndex: number, neuronIndex: number) => {
-    return selectedNeurons[layerIndex].has(neuronIndex) ? "#ef4444" : "#1d4ed8";
-  };
-
-  const getNeuronClass = (layerIndex: number, neuronIndex: number) => {
-    return selectedNeurons[layerIndex].has(neuronIndex)
-      ? "neuron selected"
-      : "neuron";
-  };
-
   return (
-    <div className="flex flex-col gap-4">
-      <style jsx>{`
-        .neuron {
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
+    <div
+      className="flex"
+      style={{
+        width: "400px",
+        height: "auto",
+      }}
+    >
+      <NeuronStyle />
 
-        .neuron.selected {
-          filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 16px #ef4444);
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-          0%,
-          100% {
-            filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 16px #ef4444);
-          }
-          50% {
-            filter: drop-shadow(0 0 12px #ef4444) drop-shadow(0 0 24px #ef4444);
-          }
-        }
-      `}</style>
-
-      <svg viewBox="0 0 600 600" className="w-150 h-auto">
+      <svg viewBox="0 0 600 600" className="h-150">
         {/* Connections */}
         {neurons.map((layer, layerIndex) => {
           if (layerIndex === neurons.length - 1) return null;
@@ -98,9 +119,9 @@ const NeuralNetworkSVG = ({
               cx={layerPositions[layerIndex]}
               cy={y}
               r={layerRadius}
-              fill={getNeuronFill(layerIndex, i)}
+              fill={getNeuronFill(layerIndex, i, selectedNeurons)}
               onClick={() => handleNeuronClick(layerIndex, i)}
-              className={getNeuronClass(layerIndex, i)}
+              className={getNeuronClass(layerIndex, i, selectedNeurons)}
             />
           ))
         )}

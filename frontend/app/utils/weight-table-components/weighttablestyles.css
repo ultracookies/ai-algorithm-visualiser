@@ -4,3 +4,17 @@
   justify-content: center;
   border: 1px solid #ccc;
 }
+
+.row-label {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.column-label {
+  position: sticky;
+  position: -webkit-sticky;
+  left: 0;
+  z-index: 100;
+}
