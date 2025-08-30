@@ -4,26 +4,35 @@ from fastapi.responses import ORJSONResponse
 import imageio.v3 as iio
 import io
 
+from fastapi import Request
+
 from pathlib import Path
 
 import app.algorithms.rl.vanlla_dqn.greedy_sim as greedy_sim
 import base64
 
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
 router = APIRouter()
+
+limiter = Limiter(key_func=get_remote_address)
 
 @router.get("/ping")
 async def ping():
     return {"message": "pong"}
 
 @router.get('/rl/vdqn/cartpole', response_class=ORJSONResponse)
-async def vdqn():
+@limiter.exempt
+async def vdqn(request: Request):
     file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_transposed_data.bin'
     with open(file_path, 'rb') as f:
         obj = orjson.loads(f.read())
         return ORJSONResponse(obj)
 
 @router.get('/rl/vdqn/cartpole/greedy_simulation/{index}')
-async def greedy_simulation(index: int, epsilon: float = 0.0):
+@limiter.limit('3/6 seconds')
+async def greedy_simulation(request: Request, index: int, epsilon: float = 0.0):
     file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_data.bin'
     with open(file_path, 'rb') as f:
         obj = orjson.loads(f.read())

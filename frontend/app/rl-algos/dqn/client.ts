@@ -11,18 +11,18 @@ export async function getTrainingMetrics() {
     return response.data;
   } catch (error) {
     if (error.response) {
-      const errorResponse = error.response;
-      console.error(errorResponse.data);
-      console.error(errorResponse.status);
-      console.error(errorResponse.headers);
+      // const errorResponse = error.response;
+      // console.error(errorResponse.data);
+      // console.error(errorResponse.status);
+      // console.error(errorResponse.headers);
     } else if (error.request) {
       console.log("Error with no response");
-      console.error(error.request);
+      // console.error(error.request);
     } else {
-      console.error("Error with request: " + error.message);
+      console.error("Error with request");
     }
-    console.log("Error config");
-    console.error(error.config);
+    // console.log("Error config");
+    // console.error(error.config);
   }
 }
 
