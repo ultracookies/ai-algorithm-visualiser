@@ -19,11 +19,51 @@ export const NeuralNetworkTrainingMetricsDisplay = ({
         network={network}
         selectedNeurons={selectedNeurons}
       />
-      <LineGraph chartData={chartData.epsilonDecay} label="Epsilon" />
-      <LineGraph chartData={chartData.lossFn} label="Loss" />
+    </div>
+  );
+};
+
+export const GreedySimulationComponent = ({
+  greedySimURL,
+  greedyChartDataValues,
+  isLoading,
+}: {
+  greedySimURL: string;
+  greedyChartDataValues: number[];
+  isLoading: boolean;
+}) => {
+  return (
+    <>
+      <SimulationStream greedySimURL={greedySimURL} isLoading={isLoading} />
+      <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
+    </>
+  );
+};
+
+export const TrainingMetrics = ({
+  chartData,
+}: {
+  chartData: TrainingMetricsChartData;
+}) => {
+  return (
+    <div>
+      <LineGraph
+        chartData={chartData.epsilonDecay}
+        chartTitle="Epsilon Decay"
+        xlabel="Episode"
+        ylabel="Epsilon"
+      />
+      <LineGraph
+        chartData={chartData.lossFn}
+        chartTitle="Loss Curve"
+        xlabel="Episode"
+        ylabel="Loss"
+      />
       <LineGraph
         chartData={chartData.cumulativeRewards}
-        label="Cumulative Rewards Per Episode"
+        chartTitle="Cumulative Rewards Per Episode"
+        xlabel="Episode"
+        ylabel="Cumulative Reward"
       />
     </div>
   );
@@ -33,10 +73,12 @@ export const GreedySimulationContainer = ({
   isPaused,
   greedyChartDataValues,
   playGreedySimulationHandler,
+  greedySimURL,
 }: {
   isPaused: boolean;
   greedyChartDataValues: number[];
   playGreedySimulationHandler: () => void;
+  greedySimURL: string;
 }) => {
   return (
     <>
@@ -47,7 +89,7 @@ export const GreedySimulationContainer = ({
       >
         Play Greedy Simulation
       </button>
-      <SimulationStream />
+      {/* <SimulationStream greedySimURL={greedySimURL} /> */}
       <GreedyCumulativeRewardsGraph chartDataValues={greedyChartDataValues} />
     </>
   );
@@ -59,18 +101,15 @@ export const GreedyCumulativeRewardsGraph = memo(
     const chartDataRef = useRef<number[]>([]);
     const indexRef = useRef(0);
     const [, forceRender] = useState(0);
-    console.log("fuck");
 
     useEffect(() => {
       const interval = setInterval(() => {
-        console.log("hhddhd");
         if (indexRef.current === chartDataValues.length) return;
         chartDataRef.current.push(chartDataValues[indexRef.current++]);
         forceRender((prev) => prev + 1);
       }, 1000);
 
       return () => {
-        console.log("JHFDSH");
         clearInterval(interval);
         indexRef.current = 0;
         chartDataRef.current = [];
@@ -78,21 +117,48 @@ export const GreedyCumulativeRewardsGraph = memo(
     }, [chartDataValues]);
 
     return (
-      <LineGraph chartData={chartDataRef.current} label="Greedy Rewards" />
+      <LineGraph
+        chartData={chartDataRef.current}
+        chartTitle="Greedy Rewards Per Episode"
+        xlabel="Episode"
+        ylabel="Greedy Reward"
+      />
     );
   }
 );
 
-const SimulationStream = () => {
+export const SimulationStream = ({
+  greedySimURL,
+  isLoading,
+}: {
+  greedySimURL: string;
+  isLoading: boolean;
+}) => {
   return (
     <div
       className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
-      style={{ width: "auto" }}
+      style={{
+        width: "auto",
+        position: "relative",
+      }}
     >
-      <img
-        src={hi.src}
-        alt="Gym Environment Stream"
+      {/* {isLoading && (
+        <div
+          style={{
+            zIndex: 1,
+            backgroundColor: "blue",
+            top: "50%",
+            left: "50%",
+            transform: new CSSTranslate(new CSSNumericValue(), 50, 0);
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )} */}
+      <video
+        src={greedySimURL}
         className="w-full h-full object-cover rounded-md"
+        controls
       />
     </div>
   );

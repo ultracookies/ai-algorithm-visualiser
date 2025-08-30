@@ -10,7 +10,7 @@ import {
 
 export function MyNav() {
   return (
-    <div className="w-full bg-slate-900">
+    <div className="w-full bg-slate-950">
       <div className="flex flex-row items-center justify-center">
         <a
           href=""

@@ -1,17 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import WeightTable from "./weight-table";
 
 import "./weight-tables-style.css";
+import BetterWeightTable from "./better-weight-table";
+
+import Box from "@mui/material/Box";
 
 export default function WeightTableContainer({
   layerName,
   layerWeights,
+  layerBiases,
   selectedNeuronsLayer,
 }: {
   layerName: string;
   layerWeights: number[][];
+  layerBiases: number[];
   selectedNeuronsLayer: {
     inputNeurons: Set<number>;
     outputNeurons: Set<number>;
@@ -19,14 +23,26 @@ export default function WeightTableContainer({
 }) {
   const [isDropped, setIsDropped] = useState(true);
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         border: "1px solid #fff",
-        borderRadius: "20px",
+        borderRadius: "25px",
+        display: "flex",
+        flexDirection: "column",
+        width: { xs: "70vw", lg: "50vw" },
+        p: 2,
       }}
-      className="items-center dark:bg-slate-800 float-right w-175 p-3"
     >
-      <div className="flex gap-x-4">
+      <div
+        className="flex mx-auto items-center sm:mx-0 sm:items-right"
+        style={
+          {
+            // display: "flex",
+            // justifyContent: "center",
+            // alignItems: "center",
+          }
+        }
+      >
         <button
           onClick={() => setIsDropped((prev) => !prev)}
           // style={{ color: "white" }}
@@ -38,19 +54,32 @@ export default function WeightTableContainer({
             <i className="arrow right"></i>
           )}
         </button>
-        <p className="text-3xl text-white">{layerName}</p>
+        <p className="text-3xl text-white" style={{ marginLeft: 15 }}>
+          {layerName}
+        </p>
       </div>
 
       <div
-        className={`grid-slide-container ${
-          isDropped ? "open" : "closed"
-        } mx-auto flex mt-3 max-w-200 items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10`}
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 20,
+        }}
+        className={`grid-slide-container ${isDropped ? "open" : "closed"}`}
       >
-        <WeightTable
+        <BetterWeightTable
+          layerBiases={layerBiases}
           layerWeights={layerWeights}
           selectedNeuronsLayer={selectedNeuronsLayer}
         />
+        {/* <WeightTable
+          layerBiases={layerBiases}
+          layerWeights={layerWeights}
+          selectedNeuronsLayer={selectedNeuronsLayer}
+        /> */}
       </div>
-    </div>
+    </Box>
   );
 }

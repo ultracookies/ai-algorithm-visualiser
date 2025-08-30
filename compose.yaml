@@ -9,8 +9,6 @@ services:
       - /app/node_modules
     working_dir: /app
     command: yarn dev
-    depends_on:
-      - backend
 
   backend:
     build:

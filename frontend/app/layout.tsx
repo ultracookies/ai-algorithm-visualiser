@@ -1,7 +1,7 @@
 import React from "react";
 
 import "./globals.css";
-import Example, { MyNav } from "./nav";
+import { MyNav } from "./nav";
 
 export default function RootLayout({
   children,
@@ -9,9 +9,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark bg-slate-900">
       <body>
-        <div className="dark:bg-black">
+        <div className="bg-slate-900">
           <MyNav />
           <div>{children}</div>
         </div>
