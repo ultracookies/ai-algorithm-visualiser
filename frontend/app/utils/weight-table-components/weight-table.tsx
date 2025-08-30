@@ -58,7 +58,7 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
           style={{
             ...style,
           }}
-          className="cell"
+          className="cell column-label"
         >
           <div>Bias</div>
         </div>
@@ -69,7 +69,7 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
         style={{
           ...style,
         }}
-        className="cell"
+        className="cell column-label"
       >
         <div>{columnIndex}</div>
       </div>
@@ -79,7 +79,7 @@ function GridCell({ columnIndex, data, rowIndex, style }: GridCellProps) {
   // column labels
   if (columnIndex === 0 && rowIndex > 0) {
     return (
-      <div className="cell" style={{ ...style }}>
+      <div className="cell row-label" style={{ ...style }}>
         {rowIndex}
       </div>
     );

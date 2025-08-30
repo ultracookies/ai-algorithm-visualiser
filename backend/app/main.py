@@ -1,14 +1,18 @@
 from fastapi import FastAPI
 from app.api.routes import router as api_router
+from app.api.routes import limiter
 from fastapi.middleware.cors import CORSMiddleware
-# from app.core.socket import sio_app
-# import socketio
-# from socketio import ASGIApp
 import logging
+
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 logger = logging.getLogger('uvicorn.error')
 
 app = FastAPI()
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = [
     "http://localhost:8000",
@@ -25,5 +29,3 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(api_router)
-
-# app = ASGIApp(sio_app, app)
