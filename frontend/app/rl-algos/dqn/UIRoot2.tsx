@@ -27,6 +27,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -386,14 +387,16 @@ const GreedySimulator = memo(
     const reqIdRef = useRef(0);
 
     const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onClick = async () => {
+      setIsLoading(true);
       const id = ++reqIdRef.current;
       const currentSimulatedEpisodeValue = ref.current;
       const greedySimData = await fetchGreedySimulation(
         currentSimulatedEpisodeValue
       );
-
+      setIsLoading(false);
       if (greedySimData === null) {
         setIsError(true);
       } else {
@@ -414,7 +417,7 @@ const GreedySimulator = memo(
 
     return (
       <div>
-        <div>
+        <div style={{ width: "100%", height: "100%" }}>
           <div>
             <div
               style={{
@@ -446,9 +449,10 @@ const GreedySimulator = memo(
               <></>
             )}
           </div>
+
           <SimulationStream
             greedySimURL={greedySimulationURL}
-            isLoading={false}
+            isLoading={isLoading}
           />
         </div>
         <GreedyRewardsGraph

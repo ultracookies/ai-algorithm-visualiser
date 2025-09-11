@@ -3,6 +3,8 @@ import hi from "../../utils/photos/hi.jpeg";
 import { WeightTableContainerProps } from "../../utils/weight-table-types";
 import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
 import { useEffect, useRef, useState, memo } from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
   network,
@@ -140,21 +142,22 @@ export const SimulationStream = ({
       style={{
         width: "auto",
         position: "relative",
+        display: "flex",
       }}
     >
-      {/* {isLoading && (
+      {isLoading && (
         <div
           style={{
             zIndex: 1,
-            backgroundColor: "blue",
-            top: "50%",
-            left: "50%",
-            transform: new CSSTranslate(new CSSNumericValue(), 50, 0);
+            display: "flex",
+            position: "absolute",
+            top: 170,
+            left: 295,
           }}
         >
           <CircularProgress />
         </div>
-      )} */}
+      )}
       <video
         src={greedySimURL}
         className="w-full h-full object-cover rounded-md"
