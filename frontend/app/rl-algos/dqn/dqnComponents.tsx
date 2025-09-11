@@ -138,24 +138,20 @@ export const SimulationStream = ({
 }) => {
   return (
     <div
-      className="flex h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
-      style={{
-        width: "auto",
-        position: "relative",
-        display: "flex",
-      }}
+      className="h-96 p-4 border-2 border-gray-300 rounded-md mb-4 bg-white"
+      style={{ position: "relative" }}
     >
       {isLoading && (
         <div
           style={{
-            zIndex: 1,
-            display: "flex",
+            zIndex: 20,
             position: "absolute",
-            top: 170,
-            left: 295,
+            top: "50%",
+            left: "50%",
+            transform: `translate(-50%, -50%)`,
           }}
         >
-          <CircularProgress />
+          <CircularProgress size="4rem" />
         </div>
       )}
       <video
