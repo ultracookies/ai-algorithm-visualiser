@@ -2,6 +2,7 @@
 /backend/__pycache__/
 *.pyc
 .env
+/frontend/.next
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
