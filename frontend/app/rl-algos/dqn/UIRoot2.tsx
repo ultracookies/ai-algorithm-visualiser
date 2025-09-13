@@ -20,7 +20,7 @@ import Button from "@mui/material/Button";
 import Zoom from "@mui/material/Zoom";
 import { SimulationStream, TrainingMetrics } from "./dqnComponents";
 import { LineGraph } from "../../utils/training-metric-components";
-import { getGreedySimulation } from "./client";
+import { getGreedySimulation, idk } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
@@ -388,32 +388,71 @@ const GreedySimulator = memo(
 
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
-    const onClick = async () => {
+    const onClick = () => {
       setIsLoading(true);
       const id = ++reqIdRef.current;
       const currentSimulatedEpisodeValue = ref.current;
-      const greedySimData = await fetchGreedySimulation(
-        currentSimulatedEpisodeValue
-      );
-      setIsLoading(false);
-      if (greedySimData === null) {
-        setIsError(true);
-      } else {
-        if (id === reqIdRef.current) {
-          setIsError(false);
-          setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
 
-          const blob = base64ToBlob(
-            greedySimData.greedySimulationVideoBytes,
-            "video/mp4"
-          );
+      idk(currentSimulatedEpisodeValue)
+        .then((value) => {
+          setIsLoading(false);
 
-          setGreedySimulationURL(URL.createObjectURL(blob));
-          setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
-        }
-      }
+          if (id === reqIdRef.current) {
+            setIsError(false);
+            const data = value.data;
+            setGreedySimulationRewardsValues(data.total_rewards);
+            const blob = base64ToBlob(data.simulation, "video/mp4");
+
+            setGreedySimulationURL(URL.createObjectURL(blob));
+            setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
+          }
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          setIsError(true);
+          if (error.response) {
+            if (error.response.status === 429) {
+              setErrorMsg(
+                "You've sent too many requests, please wait a few seconds."
+              );
+            } else {
+              setErrorMsg(
+                "Could not fetch greedy simulation. Please try again."
+              );
+            }
+          } else {
+            setErrorMsg("Could not fetch greedy simulation. Please try again.");
+          }
+        });
     };
+
+    // const onClick = async () => {
+    //   setIsLoading(true);
+    //   const id = ++reqIdRef.current;
+    //   const currentSimulatedEpisodeValue = ref.current;
+    //   const greedySimData = await fetchGreedySimulation(
+    //     currentSimulatedEpisodeValue
+    //   );
+    //   setIsLoading(false);
+    //   if (greedySimData === null) {
+    //     setIsError(true);
+    //   } else {
+    //     if (id === reqIdRef.current) {
+    //       setIsError(false);
+    //       setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
+
+    //   const blob = base64ToBlob(
+    //     greedySimData.greedySimulationVideoBytes,
+    //     "video/mp4"
+    //   );
+
+    //   setGreedySimulationURL(URL.createObjectURL(blob));
+    //   setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
+    // }
+    //   }
+    // };
 
     return (
       <div>
@@ -437,16 +476,14 @@ const GreedySimulator = memo(
             >
               Play Greedy Simulation
             </Button>
-            {isError ? (
+            {isError && (
               <div style={{ marginBottom: 20 }}>
                 <Zoom in={true}>
                   <Alert variant="filled" severity="error">
-                    Could not fetch greedy simulation.
+                    {errorMsg}
                   </Alert>
                 </Zoom>
               </div>
-            ) : (
-              <></>
             )}
           </div>
 
