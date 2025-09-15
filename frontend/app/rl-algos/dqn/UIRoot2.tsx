@@ -582,6 +582,7 @@ const GreedySimulator = memo(
             setErrorMsg("Could not fetch greedy simulation. Please try again.");
           }
         });
+    };
 
     return (
       <div>
