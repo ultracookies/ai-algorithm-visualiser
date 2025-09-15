@@ -366,26 +366,25 @@ const AlgorithmDescription = () => {
     <div className="text-white h-screen">
       <h1 className="text-center text-4xl">Description</h1>
       <div className="flex items-center justify-center">
-        <div className="w-1/2">
+        <div className=" xs:w-1 md:w-2/3">
           <p>
-            Imagine that you're playing a game where the goal is to balance a
-            stick on your hand for as long as possible. For simplicity sake,
-            let's say both your hand and the stick are restricted to moving left
-            and right.
+            Imagine that you're playing a game where you control a cart with a
+            remote on a track with a pole balanced on it, moving left or right
+            to keep the pole upright as long as possible.
           </p>
           <br></br>
           <p> Here are the rules:</p>
           <ol type="1">
             <li>
-              For every move you make that keeps the stick upright, you score 1
+              For every move you make that keeps the pole upright, you score 1
               point
             </li>
-            <li> If the stick falls, the game ends.</li>
+            <li> If the pole falls, the game ends.</li>
           </ol>
           <br></br>
           <p>
             Obviously, the idea is to maximize your score, therefore doing what
-            you can to keep the stick upright for as long as possible. This
+            you can to keep the pole upright for as long as possible. This
             painfully obvious detail is in fact{" "}
             <u>
               <b>very critical</b>
@@ -401,32 +400,90 @@ const AlgorithmDescription = () => {
           </p>
           <br></br>
           <p>
-            For instance, you would learn that if the stick tilts too far to the
-            left too fast, you would want to move your hand to the left. You
-            would also know how much to the left you'd move by. In pursuit of
+            For instance, you would learn that if the pole tilts too far to the
+            left too fast, you would want to move the cart to the left. You
+            would also know how much to the left you'd move it by. In pursuit of
             maximizing your score, and after all of that <b>trial and error</b>,
             you will eventually learn to achieve good performance in whatever
-            task is presented to you, the stick and hand game in this case.
-          </p>
-          <br></br>
-          <p>
-            Besides just achieving a high score and good performance, you would
-            end up with a really good understanding and intuition as to what the
-            game is and how to play optimally.
+            task is presented to you, the cart-pole game in this case. Besides
+            just achieving a high score and good performance, you would end up
+            with a really good understanding and intuition as to what the game
+            is and how to play optimally.
           </p>
           <br></br>
           <p>
             You may be wondering by now "this is basically what <b>learning</b>{" "}
             is" and you're absolutely correct for thinking so! What is so
             profound here about it is that this is what a{" "}
-            <b>Deep Q Network (DQN)</b> is doing. All of those complicated
-            figures and tables above basically describe what the learning looks
-            like for a DQN. It's okay if you don't understand all or any of it
-            as the main takeaway here is that there exists a mathematical model
-            that can learn; learn through trial and error just like us!
+            <b>Deep Q Network (DQN)</b> is doing. What is a DQN? A DQN is
+            basically a giant mathematical model and a special type of neural
+            network that can learn to output some desired result given some
+            input through trial and error. As was mentioned in the rules of the
+            game, you would get 1 point for every move made that keeps the pole
+            upright. This point is referred to as a <b>reward</b> value.
           </p>
           <br></br>
-          {/* <p>If this mathematical model that I am speaking of were to be the "brain" of the cart, where its "eyes" are where</p> */}
+          <p>
+            In the case of the cart-pole example, the inputs would take the form
+            of 4 continuous numerical values:
+          </p>
+          <ol type="1">
+            <li>Position of the cart.</li>
+            <li>Velocity of the cart.</li>
+            <li>Angle of the pole.</li>
+            <li>Angular velocity of the pole.</li>
+          </ol>
+          <br></br>
+          <p>
+            Each of these values in conjunction represent the current{" "}
+            <b>state</b> of the cart in some given moment. Based upon some given
+            state, the DQN will choose an <b>action</b> (in this case, left or
+            right) that the cart will take. Once the action is taken, the cart
+            will <b>step</b> into a new state ready to take another action. This
+            logic is exactly what takes place in the <a href="">simulator</a>{" "}
+            above.
+          </p>
+          <br />
+          <p>
+            Now how does the DQN just <i>learn</i> like that? It learns through
+            trial and error so there must be some way to for it to learn from
+            its <b>experience</b>. For every step taken, it records the state it
+            was originally at, the action it had taken, the reward it got for
+            taking that action and the new state it is now in.
+          </p>
+          <br />
+          <p>
+            Once a threshold of these steps have been taken, there will be a
+            series of mathematical calculations performed on the DQN to help it
+            learn from the bad or not-so-good decisions it made. It will learn
+            little by little so it does take a bit of time and quite a number of
+            trials. Eventually (assuming that the calculations were configured
+            to run optimally), you have yourself a trained DQN.
+          </p>
+          <br />
+          <p>
+            A common misconception is that these DQNs "store" the data of all of
+            these transitions and recalls it when thrown out into the wild. This
+            is simply not true as its "understanding" is actually embedded in
+            its <b>weights</b> (or parameters). The idea is that all that is
+            needed is the model itself (which includes the weights) which itself
+            carries understanding that it has developed throughout its training.
+          </p>
+          <br />
+          <p>
+            The weights are where the magic is really happening. You can think
+            of them as numbers that describe a compressed representation of what
+            it has learned from its trial and error experience(s). This
+            compressed representation has the patterns that it has found in
+            experience data during its training and ultimately some form of{" "}
+            <b>understanding</b> that is used to make the decision for the cart
+            to go either right or left!
+          </p>
+          <br />
+          <p>
+            The tooling above allows you to see how the DQN performs (and
+            ultimately the cartpole) at different points of its training.
+          </p>
         </div>
       </div>
     </div>
