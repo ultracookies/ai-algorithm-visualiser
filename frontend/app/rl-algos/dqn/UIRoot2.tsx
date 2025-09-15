@@ -20,14 +20,13 @@ import Button from "@mui/material/Button";
 import Zoom from "@mui/material/Zoom";
 import { SimulationStream, TrainingMetrics } from "./dqnComponents";
 import { LineGraph } from "../../utils/training-metric-components";
-import { getGreedySimulation } from "./client";
+import { idk } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -44,12 +43,27 @@ const UIRoot2 = ({
   return (
     <Container maxWidth={false}>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+        }}
       >
         <Zoom in={true}>
-          <h1 style={{ fontSize: 40, color: "white", padding: 20 }}>
-            Deep Q Network
-          </h1>
+          <div>
+            <h1 style={{ fontSize: 40, color: "white", padding: 20 }}>
+              Deep Q Network
+            </h1>
+            <div className="pb-4">
+              <a
+                href="#description"
+                className="text-md underline text-white hover:text-xl transition-all duration-300 hover:no-underline"
+              >
+                Read More
+              </a>
+            </div>
+          </div>
         </Zoom>
       </Box>
       <TrainingMetricsInteractivity
@@ -174,7 +188,13 @@ const TrainingMetricsInteractivity = ({
 
   return (
     // <Container maxWidth={false}>
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        scrollBehavior: "smooth",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -340,8 +360,154 @@ Total rewards per episode – shows the agent’s performance and learning progr
           </Box>
         </Zoom>
       </Box>
+      <AlgorithmDescription />
     </Box>
     // </Container>
+  );
+};
+
+const AlgorithmDescription = () => {
+  return (
+    <div className="text-white h-screen">
+      <h1 id="description" className="text-center text-4xl p-8">
+        Description
+      </h1>
+      <div className="flex items-center justify-center">
+        <div className=" xs:w-1 md:w-2/3">
+          <p>
+            Imagine that you're playing a game where you control a cart with a
+            remote on a track with a pole balanced on it, moving left or right
+            to keep the pole upright as long as possible.
+          </p>
+          <br></br>
+          <p> Here are the rules:</p>
+          <ol type="1">
+            <li>
+              For every move you make that keeps the pole upright, you score 1
+              point
+            </li>
+            <li> If the pole falls, the game ends.</li>
+          </ol>
+          <br />
+          <div className="flex items-center justify-center p-4">
+            <img
+              src="https://gymnasium.farama.org/_images/cart_pole.gif"
+              alt="Gymnasium CartPole gif"
+            />
+          </div>
+
+          <p>
+            Obviously, the idea is to maximize your score, therefore doing what
+            you can to keep the pole upright for as long as possible. This
+            painfully obvious detail is in fact{" "}
+            <u>
+              <b>very critical</b>
+            </u>{" "}
+            and foundational to understanding what's going on here.
+          </p>
+          <br></br>
+          <p>
+            Assuming this is your first time playing such a game, you will
+            likely perform very poorly and wound up with a very bad score. If
+            you were to practice (assuming you had nothing else better to do),
+            over time, you would get better.
+          </p>
+          <br></br>
+          <p>
+            For instance, you would learn that if the pole tilts too far to the
+            left too fast, you would want to move the cart to the left. You
+            would also know how much to the left you'd move it by. In pursuit of
+            maximizing your score, and after all of that <b>trial and error</b>,
+            you will eventually learn to achieve good performance in whatever
+            task is presented to you, the cart-pole game in this case. Besides
+            just achieving a high score and good performance, you would end up
+            with a really good understanding and intuition as to what the game
+            is and how to play optimally.
+          </p>
+          <br></br>
+          <p>
+            You may be wondering by now "this is basically what <b>learning</b>{" "}
+            is" and you're absolutely correct for thinking so! What is so
+            profound here about it is that this is what a{" "}
+            <b>Deep Q Network (DQN)</b> is doing. What is a DQN? A DQN is
+            basically a giant mathematical model and a special type of neural
+            network that can learn to output some desired result given some
+            input through trial and error. As was mentioned in the rules of the
+            game, you would get 1 point for every move made that keeps the pole
+            upright. This point is referred to as a <b>reward</b> value.
+          </p>
+          <br></br>
+          <p>
+            In the case of the cart-pole example, the inputs would take the form
+            of 4 continuous numerical values:
+          </p>
+          <ol type="1">
+            <li>Position of the cart.</li>
+            <li>Velocity of the cart.</li>
+            <li>Angle of the pole.</li>
+            <li>Angular velocity of the pole.</li>
+          </ol>
+          <br></br>
+          <p>
+            Each of these values in conjunction represent the current{" "}
+            <b>state</b> of the cart in some given moment. Based upon some given
+            state, the DQN will choose an <b>action</b> (in this case, left or
+            right) that the cart will take. Once the action is taken, the cart
+            will <b>step</b> into a new state ready to take another action. This
+            logic is exactly what takes place in the <a href="">simulator</a>{" "}
+            above.
+          </p>
+          <br />
+          <p>
+            Now how does the DQN just <i>learn</i> like that? It learns through
+            trial and error so there must be some way to for it to learn from
+            its <b>experience</b>. For every step taken, it records the state it
+            was originally at, the action it had taken, the reward it got for
+            taking that action and the new state it is now in.
+          </p>
+          <br />
+          <p>
+            Once a threshold of these steps have been taken, there will be a
+            series of mathematical calculations involving the recorded
+            transitions performed on the DQN to help it learn from the bad or
+            not-so-good decisions it made. It will learn little by little so it
+            does take a bit of time and quite a number of trials. Eventually
+            (assuming that the calculations were configured to run optimally),
+            you have yourself a trained DQN.
+          </p>
+          <br />
+          <p>
+            A common misconception is that these DQNs "store" the data of all of
+            these transitions and recalls it when thrown out into the wild. This
+            is simply not true as its "understanding" is actually embedded in
+            its <b>weights</b> (or parameters). The idea is that all that is
+            needed is the model itself (which includes the weights) which itself
+            carries understanding that it has developed throughout its training.
+          </p>
+          <br />
+          <p>
+            The weights are where the magic is really happening. You can think
+            of them as numbers that describe a compressed representation of what
+            it has learned from its trial and error experience(s). This
+            compressed representation has the patterns that it has found in
+            experience data during its training and ultimately some form of{" "}
+            <b>understanding</b> that is used to make the decision for the cart
+            to go either right or left!
+          </p>
+          <br />
+          <p>
+            The tooling above allows you to see how the DQN performs (and
+            ultimately the cartpole) at different points of its training. Each
+            of these points is referred to as <b>episodes</b>. In each of these
+            episodes, the cart is allowed to take a maximum of 500 steps. If the
+            pole were to tilt past a certain threshold angle, the episode will
+            terminate and the cart will be brought back to the center, and so a
+            new epsisode will begin.
+          </p>
+          <br />
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -365,17 +531,6 @@ const PlaybackControls = memo(
   }
 );
 
-async function fetchGreedySimulation(episodeIndex: number): Promise<{
-  greedyRewardsValues: number[];
-  greedySimulationVideoBytes: string;
-}> {
-  const greedySimulationData = await getGreedySimulation(episodeIndex);
-  if (greedySimulationData === undefined) return null;
-  const greedyRewardsValues: number[] = greedySimulationData.total_rewards;
-  const greedySimulationVideoBytes: string = greedySimulationData.simulation;
-  return { greedyRewardsValues, greedySimulationVideoBytes };
-}
-
 const GreedySimulator = memo(
   ({ ref, isPaused }: { ref: RefObject<number>; isPaused: boolean }) => {
     const [greedySimulationRewardsValues, setGreedySimulationRewardsValues] =
@@ -389,31 +544,44 @@ const GreedySimulator = memo(
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const onClick = async () => {
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const onClick = () => {
       setIsLoading(true);
       const id = ++reqIdRef.current;
       const currentSimulatedEpisodeValue = ref.current;
-      const greedySimData = await fetchGreedySimulation(
-        currentSimulatedEpisodeValue
-      );
-      setIsLoading(false);
-      if (greedySimData === null) {
-        setIsError(true);
-      } else {
-        if (id === reqIdRef.current) {
-          setIsError(false);
-          setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
 
-          const blob = base64ToBlob(
-            greedySimData.greedySimulationVideoBytes,
-            "video/mp4"
-          );
+      idk(currentSimulatedEpisodeValue)
+        .then((value) => {
+          setIsLoading(false);
 
-          setGreedySimulationURL(URL.createObjectURL(blob));
-          setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
-        }
-      }
-    };
+          if (id === reqIdRef.current) {
+            setIsError(false);
+            const data = value.data;
+            setGreedySimulationRewardsValues(data.total_rewards);
+            const blob = base64ToBlob(data.simulation, "video/mp4");
+
+            setGreedySimulationURL(URL.createObjectURL(blob));
+            setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
+          }
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          setIsError(true);
+          if (error.response) {
+            if (error.response.status === 429) {
+              setErrorMsg(
+                "You've sent too many requests, please wait a few seconds."
+              );
+            } else {
+              setErrorMsg(
+                "Could not fetch greedy simulation. Please try again."
+              );
+            }
+          } else {
+            setErrorMsg("Could not fetch greedy simulation. Please try again.");
+          }
+        });
 
     return (
       <div>
@@ -437,16 +605,14 @@ const GreedySimulator = memo(
             >
               Play Greedy Simulation
             </Button>
-            {isError ? (
+            {isError && (
               <div style={{ marginBottom: 20 }}>
                 <Zoom in={true}>
                   <Alert variant="filled" severity="error">
-                    Could not fetch greedy simulation.
+                    {errorMsg}
                   </Alert>
                 </Zoom>
               </div>
-            ) : (
-              <></>
             )}
           </div>
 
@@ -481,7 +647,9 @@ const InfoButtonWithToolTip = memo(({ message }: { message: string }) => {
       }}
     >
       <Button>
-        <InfoIcon />
+        <InfoIcon
+          sx={{ color: "cyan", filter: `drop-shadow(0 0 15px cyan)` }}
+        />
       </Button>
     </Tooltip>
   );

@@ -26,6 +26,10 @@ export async function getTrainingMetrics() {
   }
 }
 
+export function idk(currentEpisode: number) {
+  return instance.get("/rl/vdqn/cartpole/greedy_simulation/" + currentEpisode);
+}
+
 export async function getGreedySimulation(currentEpisode: number) {
   try {
     const response = await instance.get(
@@ -38,6 +42,7 @@ export async function getGreedySimulation(currentEpisode: number) {
       // console.error(errorResponse.data);
       // console.error(errorResponse.status);
       // console.error(errorResponse.headers);
+      return error.response;
     } else if (error.request) {
       console.log("Error with no response");
       // console.error(error.request);
