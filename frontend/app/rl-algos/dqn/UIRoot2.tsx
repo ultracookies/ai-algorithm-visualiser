@@ -390,10 +390,13 @@ const AlgorithmDescription = () => {
             <li> If the pole falls, the game ends.</li>
           </ol>
           <br />
-          <img
-            src="https://gymnasium.farama.org/_images/cart_pole.gif"
-            alt="Gymnasium CartPole gif"
-          />
+          <div className="flex items-center justify-center p-4">
+            <img
+              src="https://gymnasium.farama.org/_images/cart_pole.gif"
+              alt="Gymnasium CartPole gif"
+            />
+          </div>
+
           <p>
             Obviously, the idea is to maximize your score, therefore doing what
             you can to keep the pole upright for as long as possible. This
@@ -466,11 +469,12 @@ const AlgorithmDescription = () => {
           <br />
           <p>
             Once a threshold of these steps have been taken, there will be a
-            series of mathematical calculations performed on the DQN to help it
-            learn from the bad or not-so-good decisions it made. It will learn
-            little by little so it does take a bit of time and quite a number of
-            trials. Eventually (assuming that the calculations were configured
-            to run optimally), you have yourself a trained DQN.
+            series of mathematical calculations involving the recorded
+            transitions performed on the DQN to help it learn from the bad or
+            not-so-good decisions it made. It will learn little by little so it
+            does take a bit of time and quite a number of trials. Eventually
+            (assuming that the calculations were configured to run optimally),
+            you have yourself a trained DQN.
           </p>
           <br />
           <p>
@@ -494,8 +498,14 @@ const AlgorithmDescription = () => {
           <br />
           <p>
             The tooling above allows you to see how the DQN performs (and
-            ultimately the cartpole) at different points of its training.
+            ultimately the cartpole) at different points of its training. Each
+            of these points is referred to as <b>episodes</b>. In each of these
+            episodes, the cart is allowed to take a maximum of 500 steps. If the
+            pole were to tilt past a certain threshold angle, the episode will
+            terminate and the cart will be brought back to the center, and so a
+            new epsisode will begin.
           </p>
+          <br />
         </div>
       </div>
     </div>
