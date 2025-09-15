@@ -44,12 +44,27 @@ const UIRoot2 = ({
   return (
     <Container maxWidth={false}>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+        }}
       >
         <Zoom in={true}>
-          <h1 style={{ fontSize: 40, color: "white", padding: 20 }}>
-            Deep Q Network
-          </h1>
+          <div>
+            <h1 style={{ fontSize: 40, color: "white", padding: 20 }}>
+              Deep Q Network
+            </h1>
+            <div className="pb-4">
+              <a
+                href=""
+                className="text-md underline text-white hover:text-xl transition-all duration-300 hover:no-underline"
+              >
+                Read More
+              </a>
+            </div>
+          </div>
         </Zoom>
       </Box>
       <TrainingMetricsInteractivity
@@ -340,8 +355,81 @@ Total rewards per episode – shows the agent’s performance and learning progr
           </Box>
         </Zoom>
       </Box>
+      <AlgorithmDescription />
     </Box>
     // </Container>
+  );
+};
+
+const AlgorithmDescription = () => {
+  return (
+    <div className="text-white h-screen">
+      <h1 className="text-center text-4xl">Description</h1>
+      <div className="flex items-center justify-center">
+        <div className="w-1/2">
+          <p>
+            Imagine that you're playing a game where the goal is to balance a
+            stick on your hand for as long as possible. For simplicity sake,
+            let's say both your hand and the stick are restricted to moving left
+            and right.
+          </p>
+          <br></br>
+          <p> Here are the rules:</p>
+          <ol type="1">
+            <li>
+              For every move you make that keeps the stick upright, you score 1
+              point
+            </li>
+            <li> If the stick falls, the game ends.</li>
+          </ol>
+          <br></br>
+          <p>
+            Obviously, the idea is to maximize your score, therefore doing what
+            you can to keep the stick upright for as long as possible. This
+            painfully obvious detail is in fact{" "}
+            <u>
+              <b>very critical</b>
+            </u>{" "}
+            and foundational to understanding what's going on here.
+          </p>
+          <br></br>
+          <p>
+            Assuming this is your first time playing such a game, you will
+            likely perform very poorly and wound up with a very bad score. If
+            you were to practice (assuming you had nothing else better to do),
+            over time, you would get better.
+          </p>
+          <br></br>
+          <p>
+            For instance, you would learn that if the stick tilts too far to the
+            left too fast, you would want to move your hand to the left. You
+            would also know how much to the left you'd move by. In pursuit of
+            maximizing your score, and after all of that <b>trial and error</b>,
+            you will eventually learn to achieve good performance in whatever
+            task is presented to you, the stick and hand game in this case.
+          </p>
+          <br></br>
+          <p>
+            Besides just achieving a high score and good performance, you would
+            end up with a really good understanding and intuition as to what the
+            game is and how to play optimally.
+          </p>
+          <br></br>
+          <p>
+            You may be wondering by now "this is basically what <b>learning</b>{" "}
+            is" and you're absolutely correct for thinking so! What is so
+            profound here about it is that this is what a{" "}
+            <b>Deep Q Network (DQN)</b> is doing. All of those complicated
+            figures and tables above basically describe what the learning looks
+            like for a DQN. It's okay if you don't understand all or any of it
+            as the main takeaway here is that there exists a mathematical model
+            that can learn; learn through trial and error just like us!
+          </p>
+          <br></br>
+          {/* <p>If this mathematical model that I am speaking of were to be the "brain" of the cart, where its "eyes" are where</p> */}
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -364,17 +452,6 @@ const PlaybackControls = memo(
     );
   }
 );
-
-async function fetchGreedySimulation(episodeIndex: number): Promise<{
-  greedyRewardsValues: number[];
-  greedySimulationVideoBytes: string;
-}> {
-  const greedySimulationData = await getGreedySimulation(episodeIndex);
-  if (greedySimulationData === undefined) return null;
-  const greedyRewardsValues: number[] = greedySimulationData.total_rewards;
-  const greedySimulationVideoBytes: string = greedySimulationData.simulation;
-  return { greedyRewardsValues, greedySimulationVideoBytes };
-}
 
 const GreedySimulator = memo(
   ({ ref, isPaused }: { ref: RefObject<number>; isPaused: boolean }) => {
@@ -427,32 +504,6 @@ const GreedySimulator = memo(
           }
         });
     };
-
-    // const onClick = async () => {
-    //   setIsLoading(true);
-    //   const id = ++reqIdRef.current;
-    //   const currentSimulatedEpisodeValue = ref.current;
-    //   const greedySimData = await fetchGreedySimulation(
-    //     currentSimulatedEpisodeValue
-    //   );
-    //   setIsLoading(false);
-    //   if (greedySimData === null) {
-    //     setIsError(true);
-    //   } else {
-    //     if (id === reqIdRef.current) {
-    //       setIsError(false);
-    //       setGreedySimulationRewardsValues(greedySimData.greedyRewardsValues);
-
-    //   const blob = base64ToBlob(
-    //     greedySimData.greedySimulationVideoBytes,
-    //     "video/mp4"
-    //   );
-
-    //   setGreedySimulationURL(URL.createObjectURL(blob));
-    //   setSimulatedEpisodeValue(currentSimulatedEpisodeValue);
-    // }
-    //   }
-    // };
 
     return (
       <div>
@@ -518,7 +569,9 @@ const InfoButtonWithToolTip = memo(({ message }: { message: string }) => {
       }}
     >
       <Button>
-        <InfoIcon />
+        <InfoIcon
+          sx={{ color: "cyan", filter: `drop-shadow(0 0 15px cyan)` }}
+        />
       </Button>
     </Tooltip>
   );
