@@ -20,14 +20,14 @@ import Button from "@mui/material/Button";
 import Zoom from "@mui/material/Zoom";
 import { SimulationStream, TrainingMetrics } from "./dqnComponents";
 import { LineGraph } from "../../utils/training-metric-components";
-import { getGreedySimulation, idk } from "./client";
+import { idk } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
+import cartpole_gif from "./cart_pole.gif";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -58,7 +58,7 @@ const UIRoot2 = ({
             </h1>
             <div className="pb-4">
               <a
-                href=""
+                href="#description"
                 className="text-md underline text-white hover:text-xl transition-all duration-300 hover:no-underline"
               >
                 Read More
@@ -189,7 +189,13 @@ const TrainingMetricsInteractivity = ({
 
   return (
     // <Container maxWidth={false}>
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        scrollBehavior: "smooth",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -364,7 +370,9 @@ Total rewards per episode – shows the agent’s performance and learning progr
 const AlgorithmDescription = () => {
   return (
     <div className="text-white h-screen">
-      <h1 className="text-center text-4xl">Description</h1>
+      <h1 id="description" className="text-center text-4xl p-8">
+        Description
+      </h1>
       <div className="flex items-center justify-center">
         <div className=" xs:w-1 md:w-2/3">
           <p>
@@ -381,7 +389,11 @@ const AlgorithmDescription = () => {
             </li>
             <li> If the pole falls, the game ends.</li>
           </ol>
-          <br></br>
+          <br />
+          <img
+            src="https://gymnasium.farama.org/_images/cart_pole.gif"
+            alt="Gymnasium CartPole gif"
+          />
           <p>
             Obviously, the idea is to maximize your score, therefore doing what
             you can to keep the pole upright for as long as possible. This
