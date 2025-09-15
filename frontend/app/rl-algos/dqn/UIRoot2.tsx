@@ -27,7 +27,6 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import Alert from "@mui/material/Alert";
-import cartpole_gif from "./cart_pole.gif";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
@@ -544,6 +543,7 @@ const GreedySimulator = memo(
 
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
     const [errorMsg, setErrorMsg] = useState("");
 
     const onClick = () => {
@@ -582,7 +582,6 @@ const GreedySimulator = memo(
             setErrorMsg("Could not fetch greedy simulation. Please try again.");
           }
         });
-    };
 
     return (
       <div>
