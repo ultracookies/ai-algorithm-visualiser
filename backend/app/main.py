@@ -16,7 +16,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = [
     "http://localhost:8000",
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://ai-algorithm-visualiser.vercel.app'
 ]
 
 app.add_middleware(
