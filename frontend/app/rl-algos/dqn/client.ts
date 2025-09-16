@@ -1,9 +1,19 @@
 import axios from "axios";
 
+const ENV = process.env.NODE_ENV;
+
+let baseUrl = process.env.NEXT_PUBLIC_DEV_BACKEND_URL;
+
+if (ENV === "production") {
+  baseUrl: "https://ai-algorithm-visualiser-1.onrender.com";
+}
+
 const instance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: baseUrl,
   timeout: 10000,
 });
+
+console.log(process.env.NODE_ENV);
 
 export async function getTrainingMetrics() {
   try {
