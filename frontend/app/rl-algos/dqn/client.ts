@@ -5,7 +5,7 @@ const ENV = process.env.NODE_ENV;
 let baseUrl = process.env.NEXT_PUBLIC_DEV_BACKEND_URL;
 
 if (ENV === "production") {
-  baseUrl: "https://ai-algorithm-visualiser-1.onrender.com";
+  baseUrl = "https://ai-algorithm-visualiser-1.onrender.com";
 }
 
 const instance = axios.create({
