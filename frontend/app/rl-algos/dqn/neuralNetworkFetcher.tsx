@@ -21,14 +21,9 @@ export default function NeuralNetworkFetcher() {
       cumulativeRewards: generateRandomList(5),
     },
   };
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [display, setDisplay] = useState(displayData);
 
   const [isError, setIsError] = useState(false);
-
-  const toggleIsLoading = () => {
-    setIsLoading((prev) => !prev);
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -90,5 +85,13 @@ function preprocessRetrievedData(data, displayData) {
 
   displayData.chartDataValues = displayChartDataValues;
   displayData.networkInstances = displayInstances;
-  return displayData;
+
+  const preprocessedData: {
+    networkInstances: WeightTableContainerProps[][];
+    chartDataValues: TrainingMetricsChartData;
+  } = {
+    networkInstances: displayInstances,
+    chartDataValues: displayChartDataValues,
+  };
+  return preprocessedData;
 }
