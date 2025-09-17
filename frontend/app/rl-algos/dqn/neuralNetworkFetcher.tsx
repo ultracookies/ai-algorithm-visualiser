@@ -90,5 +90,13 @@ function preprocessRetrievedData(data, displayData) {
 
   displayData.chartDataValues = displayChartDataValues;
   displayData.networkInstances = displayInstances;
-  return displayData;
+
+  const preprocessedData: {
+    networkInstances: WeightTableContainerProps[][];
+    chartDataValues: TrainingMetricsChartData;
+  } = {
+    networkInstances: displayInstances,
+    chartDataValues: displayChartDataValues,
+  };
+  return preprocessedData;
 }
