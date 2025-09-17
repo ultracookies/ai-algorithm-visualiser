@@ -8,8 +8,8 @@ pydantic
 orjson
 gymnasium
 gymnasium[classic-control]
-torch
-torchvision
+torch==2.8.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
 imageio
 imageio[ffmpeg]
 slowapi
