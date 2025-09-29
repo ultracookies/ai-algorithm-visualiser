@@ -1,4 +1,4 @@
-import { WeightTableContainerProps } from "../../utils/weight-table-types";
+import { WeightTableContainerProps } from "../../../utils/weight-table-types";
 import { initMockNetwork } from "./mockNetworkUtils";
 
 export function getNeuralNetworkData(networkDims: number[]): {

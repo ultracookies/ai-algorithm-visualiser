@@ -4,6 +4,7 @@
 .env
 /frontend/.next
 /frontend/.env
+/backend/app/algorithms/rl/vanlla_dqn/cartpole_training.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

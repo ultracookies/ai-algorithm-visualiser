@@ -1,9 +1,7 @@
-import { LineGraph } from "../../utils/training-metric-components";
-import hi from "../../utils/photos/hi.jpeg";
-import { WeightTableContainerProps } from "../../utils/weight-table-types";
-import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
+import { LineGraph } from "../../../utils/training-metric-components";
+import { WeightTableContainerProps } from "../../../utils/weight-table-types";
+import WeightTablesContainer from "../../../utils/weight-table-components/weight-tables-container";
 import { useEffect, useRef, useState, memo } from "react";
-import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const NeuralNetworkTrainingMetricsDisplay = ({
