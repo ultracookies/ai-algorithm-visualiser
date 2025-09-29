@@ -1,5 +1,6 @@
 import React from "react";
 
+// @ts-ignore
 import "./globals.css";
 import { MyNav } from "./nav";
 

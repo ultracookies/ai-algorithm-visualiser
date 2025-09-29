@@ -14,9 +14,19 @@ import base64
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
+from memory_profiler import memory_usage
+
 router = APIRouter()
 
 limiter = Limiter(key_func=get_remote_address)
+
+file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_transposed_data.bin'
+with open(file_path) as f:
+    cartpole_transposed_data = orjson.loads(f.read())
+
+file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_data.bin'
+with open(file_path) as f:
+    cartpole_data = orjson.loads(f.read())
 
 @router.get("/ping")
 async def ping():
@@ -25,27 +35,25 @@ async def ping():
 @router.get('/rl/vdqn/cartpole', response_class=ORJSONResponse)
 @limiter.exempt
 async def vdqn(request: Request):
-    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_transposed_data.bin'
-    with open(file_path, 'rb') as f:
-        obj = orjson.loads(f.read())
-        return ORJSONResponse(obj)
+    return ORJSONResponse(cartpole_transposed_data)
 
 @router.get('/rl/vdqn/cartpole/greedy_simulation/{index}')
 @limiter.limit('3/6 seconds')
 async def greedy_simulation(request: Request, index: int, epsilon: float = 0.0):
-    file_path = Path(__file__).parent / '..' / 'algorithms' / 'rl' / 'vanlla_dqn' / 'cartpole_vdqn_data.bin'
-    with open(file_path, 'rb') as f:
-        obj = orjson.loads(f.read())
-        index_network_instance = obj['network_instances'][index]
-        simulation_frames, total_rewards = greedy_sim.simulate_cartpole(index_network_instance, epsilon, steps=100)
-        video_buffer = io.BytesIO()
-        with iio.imopen(video_buffer, 'w', extension='.mp4') as writer:
-            writer.write(simulation_frames)
+    index_network_instance = cartpole_data['network_instances'][index]
 
-        video_bytes = video_buffer.getvalue()
-        video_b64 = base64.b64encode(video_bytes).decode('ascii')
+    mem_usage, (simulation_frames, total_rewards) = memory_usage((greedy_sim.simulate_cartpole, (index_network_instance, epsilon), {'steps': 100}), retval=True, max_usage=True)
+    print(mem_usage)
 
-        return ORJSONResponse({
-            'simulation': video_b64,
-            'total_rewards': total_rewards
-        })
+    # simulation_frames, total_rewards = greedy_sim.simulate_cartpole(index_network_instance, epsilon, steps=100)
+    video_buffer = io.BytesIO()
+
+    iio.imwrite(video_buffer, simulation_frames, extension='.mp4', macro_block_size=1)
+
+    video_bytes = video_buffer.getvalue()
+    video_b64 = base64.b64encode(video_bytes).decode('ascii')
+
+    return ORJSONResponse({
+        'simulation': video_b64,
+        'total_rewards': total_rewards
+    })

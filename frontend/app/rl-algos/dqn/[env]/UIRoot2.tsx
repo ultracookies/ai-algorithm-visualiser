@@ -10,16 +10,16 @@ import {
 } from "react";
 
 import Slider from "@mui/material/Slider";
-import { WeightTableContainerProps } from "../../utils/weight-table-types";
-import WeightTablesContainer from "../../utils/weight-table-components/weight-tables-container";
-import NeuralNetworkSVG from "../../utils/neural-network-components/neural-network-visual";
+import { WeightTableContainerProps } from "../../../utils/weight-table-types";
+import WeightTablesContainer from "../../../utils/weight-table-components/weight-tables-container";
+import NeuralNetworkSVG from "../../../utils/neural-network-components/neural-network-visual";
 import { getDims } from "./mockNetworkUtils";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Zoom from "@mui/material/Zoom";
 import { SimulationStream, TrainingMetrics } from "./dqnComponents";
-import { LineGraph } from "../../utils/training-metric-components";
+import { LineGraph } from "../../../utils/training-metric-components";
 import { idk } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
@@ -30,12 +30,14 @@ import Alert from "@mui/material/Alert";
 
 const FEATURE_BOX_COLOR = "oklch(27.9% 0.041 260.031)";
 
-const UIRoot2 = ({
+export const UIRoot2 = ({
   trainingNetworkInstances,
   trainingMetricsData,
+  env,
 }: {
   trainingNetworkInstances: WeightTableContainerProps[][];
   trainingMetricsData: TrainingMetricsChartData;
+  env: string;
 }) => {
   const numEpisodes = trainingNetworkInstances.length;
   const networkDims = getDims(trainingNetworkInstances[0]);
@@ -71,6 +73,7 @@ const UIRoot2 = ({
         trainingNetworkInstances={trainingNetworkInstances}
         trainingMetricsData={trainingMetricsData}
         networkDims={networkDims}
+        env={env}
       />
     </Container>
   );
@@ -78,16 +81,18 @@ const UIRoot2 = ({
 
 export default UIRoot2;
 
-const TrainingMetricsInteractivity = ({
+export const TrainingMetricsInteractivity = ({
   numEpisodes,
   trainingNetworkInstances,
   trainingMetricsData,
   networkDims,
+  env,
 }: {
   numEpisodes: number;
   trainingNetworkInstances: WeightTableContainerProps[][];
   trainingMetricsData: TrainingMetricsChartData;
   networkDims: number[];
+  env: string;
 }) => {
   const [currentNetworkInstance, setCurrentNetworkInstance] = useState<
     WeightTableContainerProps[]
