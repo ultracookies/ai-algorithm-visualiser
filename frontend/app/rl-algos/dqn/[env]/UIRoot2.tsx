@@ -20,7 +20,7 @@ import Button from "@mui/material/Button";
 import Zoom from "@mui/material/Zoom";
 import { SimulationStream, TrainingMetrics } from "./dqnComponents";
 import { LineGraph } from "../../../utils/training-metric-components";
-import { idk } from "./client";
+import { getGreedySim } from "./client";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import IconButton from "@mui/material/IconButton";
@@ -556,7 +556,7 @@ const GreedySimulator = memo(
       const id = ++reqIdRef.current;
       const currentSimulatedEpisodeValue = ref.current;
 
-      idk(currentSimulatedEpisodeValue)
+      getGreedySim(currentSimulatedEpisodeValue)
         .then((value) => {
           setIsLoading(false);
 
